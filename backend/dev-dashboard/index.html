@@ -194,6 +194,23 @@
             overflow-y: auto;
             white-space: pre-wrap;
         }
+
+        .calc-item {
+            cursor: pointer;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .calc-item:hover {
+            background: #e5e7eb;
+        }
+
+        .calc-item.selected {
+            background: #dbeafe;
+            border: 1px solid #2563eb;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +297,59 @@
             <div class="state-section">
                 <h3>Property Domain (property.py)</h3>
                 <div class="state-value">CAL-PFL-104: Negative gearing benefit</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>🧮 Calculation Browser</h2>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <h3>Available Calculations</h3>
+                <div id="calculationList" class="engine-state" style="max-height: 1600px; overflow-y: auto;">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-001')">
+                        <strong>CAL-PIT-001</strong> - PAYG Tax Calculation
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-002')">
+                        <strong>CAL-PIT-002</strong> - Medicare Levy
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-004')">
+                        <strong>CAL-PIT-004</strong> - Tax Offsets (LITO)
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-005')">
+                        <strong>CAL-PIT-005</strong> - Net Tax Payable
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-001')">
+                        <strong>CAL-CGT-001</strong> - Capital Gain/Loss
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-002')">
+                        <strong>CAL-CGT-002</strong> - CGT Discount
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-002')">
+                        <strong>CAL-SUP-002</strong> - Total Concessional Contributions
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-003')">
+                        <strong>CAL-SUP-003</strong> - Concessional Cap Utilisation
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-007')">
+                        <strong>CAL-SUP-007</strong> - Contributions Tax
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-008')">
+                        <strong>CAL-SUP-008</strong> - Division 293 Tax
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-009')">
+                        <strong>CAL-SUP-009</strong> - Net Super Contribution
+                    </div>
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PFL-104')">
+                        <strong>CAL-PFL-104</strong> - Negative Gearing Benefit
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 3;">
+                <h3>Calculation Details</h3>
+                <div id="calculationDetails" class="json-viewer" style="max-height: 1600px; overflow-y: auto;">
+                    <em>Click on a calculation above to view details</em>
+                </div>
             </div>
         </div>
     </div>
@@ -499,6 +569,341 @@
 
         function clearErrors() {
             document.getElementById('errorContainer').innerHTML = '';
+        }
+
+        function showCalculationDetails(calcId) {
+            // Remove selected class from all items
+            document.querySelectorAll('.calc-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Add selected class to clicked item
+            event.target.classList.add('selected');
+
+            const detailsContainer = document.getElementById('calculationDetails');
+
+            // Calculation details database
+            const calculationDetails = {
+                'CAL-PIT-001': {
+                    id: 'CAL-PIT-001',
+                    name: 'PAYG Tax Calculation',
+                    domain: 'Personal Income Tax (tax_personal.py)',
+                    description: 'Calculates Australian PAYG (Pay As You Go) income tax for residents using progressive tax brackets.',
+                    inputs: [
+                        'CalculationState with cashflow data',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Extract assessable income from salary/wages',
+                        'Calculate taxable income (assessable - deductions)',
+                        'Apply progressive tax brackets from RuleLoader',
+                        'Calculate tax using marginal rates'
+                    ],
+                    outputs: 'CalculationResult with tax_payable (Decimal)',
+                    rules_used: [
+                        'Tax brackets (min/max/rate)',
+                        'Taxable income calculation rules'
+                    ],
+                    dependencies: 'None',
+                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                },
+                'CAL-PIT-002': {
+                    id: 'CAL-PIT-002',
+                    name: 'Medicare Levy',
+                    domain: 'Personal Income Tax (tax_personal.py)',
+                    description: 'Calculates Medicare levy with threshold exemption.',
+                    inputs: [
+                        'CalculationState with tax results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get taxable income from CAL-PIT-001 results',
+                        'Apply Medicare levy rate from RuleLoader',
+                        'Check threshold exemption',
+                        'Calculate levy if income exceeds threshold'
+                    ],
+                    outputs: 'CalculationResult with medicare_levy (Decimal)',
+                    rules_used: [
+                        'Medicare levy rate',
+                        'Medicare levy thresholds (single/family)'
+                    ],
+                    dependencies: 'CAL-PIT-001 (taxable income)',
+                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                },
+                'CAL-PIT-004': {
+                    id: 'CAL-PIT-004',
+                    name: 'Tax Offsets (LITO)',
+                    domain: 'Personal Income Tax (tax_personal.py)',
+                    description: 'Calculates Low Income Tax Offset (LITO) with phase-out rules.',
+                    inputs: [
+                        'CalculationState with tax results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get taxable income from CAL-PIT-001 results',
+                        'Apply LITO parameters from RuleLoader',
+                        'Calculate offset amount with phase-out rules',
+                        'Apply income limits and reduction rates'
+                    ],
+                    outputs: 'CalculationResult with tax_offsets (Decimal)',
+                    rules_used: [
+                        'LITO max offset amount',
+                        'LITO income limit and phase-out parameters',
+                        'LITO phase-out rate'
+                    ],
+                    dependencies: 'CAL-PIT-001 (taxable income)',
+                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                },
+                'CAL-PIT-005': {
+                    id: 'CAL-PIT-005',
+                    name: 'Net Tax Payable',
+                    domain: 'Personal Income Tax (tax_personal.py)',
+                    description: 'Calculates final net tax position including withholdings and offsets.',
+                    inputs: [
+                        'CalculationState with tax results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Sum PAYG tax and Medicare levy',
+                        'Subtract tax offsets',
+                        'Subtract PAYG withholdings',
+                        'Determine if refund or additional payment required'
+                    ],
+                    outputs: 'CalculationResult with net_tax_payable (Decimal)',
+                    rules_used: 'None (aggregation calculation)',
+                    dependencies: 'CAL-PIT-001, CAL-PIT-002, CAL-PIT-004',
+                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                },
+                'CAL-CGT-001': {
+                    id: 'CAL-CGT-001',
+                    name: 'Capital Gain/Loss',
+                    domain: 'Capital Gains Tax (cgt.py)',
+                    description: 'Calculates capital gain or loss on asset disposal.',
+                    inputs: [
+                        'CalculationState with asset data',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Extract asset disposal data',
+                        'Calculate gain/loss: proceeds - cost_base',
+                        'Apply any reductions or adjustments',
+                        'Return net capital gain/loss'
+                    ],
+                    outputs: 'CalculationResult with capital_gain (Decimal)',
+                    rules_used: 'Asset disposal valuation rules',
+                    dependencies: 'Asset disposal data in state',
+                    file: 'backend/src/engines/calculation/domains/cgt.py'
+                },
+                'CAL-CGT-002': {
+                    id: 'CAL-CGT-002',
+                    name: 'CGT Discount',
+                    domain: 'Capital Gains Tax (cgt.py)',
+                    description: 'Applies 50% CGT discount for individuals on capital gains.',
+                    inputs: [
+                        'CalculationState with CGT results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get capital gain from CAL-CGT-001',
+                        'Apply CGT discount rate from RuleLoader',
+                        'Calculate discounted gain',
+                        'Return both original and discounted amounts'
+                    ],
+                    outputs: 'CalculationResult with discounted_gain (Decimal)',
+                    rules_used: [
+                        'CGT discount rate for individuals (50%)'
+                    ],
+                    dependencies: 'CAL-CGT-001 (capital gain)',
+                    file: 'backend/src/engines/calculation/domains/cgt.py'
+                },
+                'CAL-SUP-002': {
+                    id: 'CAL-SUP-002',
+                    name: 'Total Concessional Contributions',
+                    domain: 'Superannuation (superannuation.py)',
+                    description: 'Sums all concessional (pre-tax) superannuation contributions.',
+                    inputs: [
+                        'CalculationState with cashflow data',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Extract employer SG contributions',
+                        'Extract salary sacrifice amounts',
+                        'Extract personal deductible contributions',
+                        'Sum all concessional contributions'
+                    ],
+                    outputs: 'CalculationResult with total_concessional (Decimal)',
+                    rules_used: 'Concessional contribution definitions',
+                    dependencies: 'Cashflow data with super contributions',
+                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                },
+                'CAL-SUP-003': {
+                    id: 'CAL-SUP-003',
+                    name: 'Concessional Cap Utilisation',
+                    domain: 'Superannuation (superannuation.py)',
+                    description: 'Checks utilisation against concessional contributions cap.',
+                    inputs: [
+                        'CalculationState with super results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get total concessional from CAL-SUP-002',
+                        'Compare against concessional cap from RuleLoader',
+                        'Calculate utilised, remaining, and excess amounts'
+                    ],
+                    outputs: 'CalculationResult with utilised_amount (Decimal)',
+                    rules_used: [
+                        'Concessional contributions cap limit'
+                    ],
+                    dependencies: 'CAL-SUP-002 (total concessional)',
+                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                },
+                'CAL-SUP-007': {
+                    id: 'CAL-SUP-007',
+                    name: 'Contributions Tax',
+                    domain: 'Superannuation (superannuation.py)',
+                    description: 'Calculates 15% contributions tax on concessional contributions.',
+                    inputs: [
+                        'CalculationState with super results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get total concessional from CAL-SUP-002',
+                        'Apply 15% contributions tax rate from RuleLoader',
+                        'Calculate tax amount'
+                    ],
+                    outputs: 'CalculationResult with contributions_tax (Decimal)',
+                    rules_used: [
+                        'Super contributions tax rate (15%)'
+                    ],
+                    dependencies: 'CAL-SUP-002 (total concessional)',
+                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                },
+                'CAL-SUP-008': {
+                    id: 'CAL-SUP-008',
+                    name: 'Division 293 Tax',
+                    domain: 'Superannuation (superannuation.py)',
+                    description: 'Calculates Division 293 additional tax for high income earners.',
+                    inputs: [
+                        'CalculationState with tax and super results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get adjusted taxable income (ATI)',
+                        'Check against Division 293 threshold',
+                        'If ATI > threshold, apply additional tax rate',
+                        'Tax amount = concessional contributions × additional rate'
+                    ],
+                    outputs: 'CalculationResult with division_293_tax (Decimal)',
+                    rules_used: [
+                        'Division 293 threshold',
+                        'Division 293 additional tax rate'
+                    ],
+                    dependencies: 'CAL-PIT-001 (ATI), CAL-SUP-002 (concessional)',
+                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                },
+                'CAL-SUP-009': {
+                    id: 'CAL-SUP-009',
+                    name: 'Net Super Contribution',
+                    domain: 'Superannuation (superannuation.py)',
+                    description: 'Calculates net super balance increase after all taxes.',
+                    inputs: [
+                        'CalculationState with super results',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get gross concessional contributions',
+                        'Subtract contributions tax (15%)',
+                        'Subtract Division 293 tax (if applicable)',
+                        'Return net amount added to super balance'
+                    ],
+                    outputs: 'CalculationResult with net_contribution (Decimal)',
+                    rules_used: 'Tax rate calculations',
+                    dependencies: 'CAL-SUP-002, CAL-SUP-007, CAL-SUP-008',
+                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                },
+                'CAL-PFL-104': {
+                    id: 'CAL-PFL-104',
+                    name: 'Negative Gearing Benefit',
+                    domain: 'Property Investment (property.py)',
+                    description: 'Calculates tax benefit from negative gearing on investment properties.',
+                    inputs: [
+                        'CalculationState with property and tax data',
+                        'entity_id (string)',
+                        'year_index (int, default 0)'
+                    ],
+                    logic: [
+                        'Get property interest expenses',
+                        'Get rental income from property',
+                        'Calculate deductible loss',
+                        'Apply marginal tax rate from RuleLoader',
+                        'Return tax benefit amount'
+                    ],
+                    outputs: 'CalculationResult with tax_benefit (Decimal)',
+                    rules_used: [
+                        'Marginal tax rate for property calculations'
+                    ],
+                    dependencies: 'Property loan and income data',
+                    file: 'backend/src/engines/calculation/domains/property.py'
+                }
+            };
+
+            const details = calculationDetails[calcId];
+            if (details) {
+                detailsContainer.innerHTML = `
+                    <div style="margin-bottom: 12px;">
+                        <strong style="color: #2563eb; font-size: 14px;">${details.id}</strong>
+                        <span style="color: #6b7280;">- ${details.name}</span>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Domain:</strong> ${details.domain}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Description:</strong> ${details.description}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Inputs:</strong>
+                        <ul style="margin: 4px 0; padding-left: 20px;">
+                            ${details.inputs.map(input => `<li>${input}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Logic:</strong>
+                        <ol style="margin: 4px 0; padding-left: 20px;">
+                            ${details.logic.map(step => `<li>${step}</li>`).join('')}
+                        </ol>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Outputs:</strong> ${details.outputs}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Rules Used:</strong>
+                        ${Array.isArray(details.rules_used) ?
+                            `<ul style="margin: 4px 0; padding-left: 20px;">
+                                ${details.rules_used.map(rule => `<li>${rule}</li>`).join('')}
+                            </ul>` :
+                            details.rules_used}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Dependencies:</strong> ${details.dependencies}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>File:</strong> <code>${details.file}</code>
+                    </div>
+                `;
+            } else {
+                detailsContainer.innerHTML = `<em>Details not available for ${calcId}</em>`;
+            }
         }
 
         // Keyboard shortcuts

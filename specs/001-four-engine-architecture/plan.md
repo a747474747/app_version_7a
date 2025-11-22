@@ -402,7 +402,7 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 
 5.  **Update Consumers**: Refactor `projection.py` and API routers to use the Registry instead of direct imports.
 
-6. Follow @conditional_rules/calc_architecture_guide.md
+6. Follow @specs/conditional_rules/calc_architecture_guide.md
 
 ## **Phase 2.4: LLM Integration**
 

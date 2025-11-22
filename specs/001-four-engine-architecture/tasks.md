@@ -63,7 +63,7 @@ description: "Task list for Four-Engine System Architecture implementation"
 
 ## Phase 2.35: Calculation Engine Refactor (Critical Tech Debt)
 
-**Purpose**: Refactor the Calculation Engine from monolithic `__init__.py` to modular structure defined in @conditional_rules/calc_architecture_guide.md to support Extended Tier growth.
+**Purpose**: Refactor the Calculation Engine from monolithic `__init__.py` to modular structure defined in @specs/conditional_rules/calc_architecture_guide.md to support Extended Tier growth.
 
 **⚠️ CRITICAL**: This phase must complete before Extended Tier calculations can be implemented. Addresses technical debt from MVP Core tier implementation.
 
