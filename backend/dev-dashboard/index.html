@@ -307,40 +307,40 @@
             <div style="flex: 1;">
                 <h3>Available Calculations</h3>
                 <div id="calculationList" class="engine-state" style="max-height: 1600px; overflow-y: auto;">
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-001')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-001', event)">
                         <strong>CAL-PIT-001</strong> - PAYG Tax Calculation
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-002')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-002', event)">
                         <strong>CAL-PIT-002</strong> - Medicare Levy
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-004')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-004', event)">
                         <strong>CAL-PIT-004</strong> - Tax Offsets (LITO)
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-005')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PIT-005', event)">
                         <strong>CAL-PIT-005</strong> - Net Tax Payable
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-001')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-001', event)">
                         <strong>CAL-CGT-001</strong> - Capital Gain/Loss
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-002')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-CGT-002', event)">
                         <strong>CAL-CGT-002</strong> - CGT Discount
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-002')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-002', event)">
                         <strong>CAL-SUP-002</strong> - Total Concessional Contributions
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-003')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-003', event)">
                         <strong>CAL-SUP-003</strong> - Concessional Cap Utilisation
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-007')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-007', event)">
                         <strong>CAL-SUP-007</strong> - Contributions Tax
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-008')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-008', event)">
                         <strong>CAL-SUP-008</strong> - Division 293 Tax
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-009')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-SUP-009', event)">
                         <strong>CAL-SUP-009</strong> - Net Super Contribution
                     </div>
-                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PFL-104')">
+                    <div class="state-value calc-item" onclick="showCalculationDetails('CAL-PFL-104', event)">
                         <strong>CAL-PFL-104</strong> - Negative Gearing Benefit
                     </div>
                 </div>
@@ -571,14 +571,14 @@
             document.getElementById('errorContainer').innerHTML = '';
         }
 
-        function showCalculationDetails(calcId) {
+        function showCalculationDetails(calcId, event) {
             // Remove selected class from all items
             document.querySelectorAll('.calc-item').forEach(item => {
                 item.classList.remove('selected');
             });
 
-            // Add selected class to clicked item
-            event.target.classList.add('selected');
+            // Add selected class to clicked item (use closest to ensure we get the parent .calc-item)
+            event.target.closest('.calc-item').classList.add('selected');
 
             const detailsContainer = document.getElementById('calculationDetails');
 

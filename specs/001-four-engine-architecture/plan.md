@@ -624,3 +624,21 @@ The `calculation_catalog.md` now serves as the definitive functional specificati
 - ✅ Single source of truth for financial rules
 
 **Next Steps**: Proceed to Phase 2.1 Golden Four implementation - all data model gaps resolved.
+
+---
+
+## Implementation Support Rules and Guides
+
+The following rules and guides provide critical operational frameworks that ensure consistent, auditable, and scalable implementation of the four-engine architecture:
+
+**Python Scripts Rule** (`@.cursor/rules/python-scripts.mdc`) establishes mandatory location requirements and tracking mechanisms for all Python code implementing the four-engine architecture. By enforcing that all backend scripts reside in the `/backend` folder with proper engine-based organization and requiring entries in `script_tracking.json`, it ensures clear separation of concerns, prevents architectural drift, and enables automated validation of implementation completeness across the LLM Orchestrator, Calculation Engine, Strategy Engine, and Advice Engine components.
+
+**LLM Prompts Rule** (`@.cursor/rules/llm-prompts.mdc`) serves as the gateway to comprehensive prompt management practices, directing developers to the detailed rules in `@specs/conditional_rules/llm-prompt-management.md`. This rule ensures that probabilistic LLM interactions remain strictly separated from deterministic calculation logic, maintaining the constitutional boundary between the LLM Orchestrator's interpretive role and the Calculation Engine's authoritative mathematical results.
+
+**Calculations Rule** (`@.cursor/rules/calculations.mdc`) enforces the CAL-* ID traceability system that forms the backbone of the four-engine architecture's auditability. By mandating the `run_CAL_XXX_YYY` function naming pattern, requiring TraceLog entries for every calculation, and ensuring pure functional programming of CalculationState inputs, this rule guarantees that all financial computations remain deterministic, traceable, and constitutionally compliant with the separation between probabilistic and deterministic layers.
+
+**Markdown Specs Rule** (`@.cursor/rules/markdown-specs.mdc`) provides the documentation framework that supports the spec-driven development approach outlined in the constitution. By requiring all specification files to reside in the `/specs` folder with mandatory tracking in `spec_tracking.json`, it ensures that architectural decisions, API contracts, and design documents remain versioned, discoverable, and aligned with the four-engine implementation phases, enabling solo development velocity while maintaining institutional knowledge.
+
+**Calculation Architecture Guide** (`@specs/conditional_rules/calc_architecture_guide.md`) defines the domain-driven modular structure that transforms the Calculation Engine from a monolithic implementation into a scalable, testable system. By establishing the `domains/` directory structure, Registry pattern for CAL-* ID mapping, and RuleLoader service for externalized configuration, this guide supports the critical Phase 2.1 refactor that enables Extended Tier calculation expansion while maintaining the deterministic purity required for regulatory compliance and audit trails.
+
+**LLM Prompt Management Guide** (`@specs/conditional_rules/llm-prompt-management.md`) establishes the comprehensive framework for managing the probabilistic layer of the four-engine architecture. By requiring all prompts to be stored as separate files in `/specs/001-four-engine-architecture/llm-prompts/` with catalog tracking, and maintaining internal source materials in `/specs/001-four-engine-architecture/llm-source-materials/`, this guide ensures that the LLM Orchestrator can safely interact with external AI services while preserving the separation principle that prevents financial calculations from being influenced by probabilistic reasoning.

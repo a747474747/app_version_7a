@@ -9,8 +9,8 @@ All calculation functions are now organized in domain modules and accessed via t
 
 from decimal import Decimal
 from typing import Optional, Any
-from shared.schemas.calculation import CalculationState
-from shared.schemas.orchestration import TraceEntry
+from calculation_engine.schemas.calculation import CalculationState
+from calculation_engine.schemas.orchestration import TraceEntry
 from .registry import run_calculation as _run_calculation
 
 # Import calculation result schema for backward compatibility

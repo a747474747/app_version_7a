@@ -3,11 +3,11 @@
 import sys
 import os
 
-# Add backend/src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'backend', 'src'))
+# Add backend to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 try:
-    from engines.calculation.registry import get_registered_calculations, run_calculation
+    from calculation_engine.registry import get_registered_calculations, run_calculation
     print('PASS: Registry import successful')
 
     registered = get_registered_calculations()

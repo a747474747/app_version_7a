@@ -1,0 +1,83 @@
+name: Validate Python Scripts Rule
+
+on:
+  push:
+    branches: [ main, develop, day-1-spec-1-phase-2 ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**/*.py'
+      - '.cursor/rules/python-scripts.mdc'
+  pull_request:
+    branches: [ main, develop, day-1-spec-1-phase-2 ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**/*.py'
+      - '.cursor/rules/python-scripts.mdc'
+
+jobs:
+  validate-python-rules:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        pip install -r requirements.txt
+
+    - name: Validate Python Scripts Rule
+      run: |
+        cd backend
+        python validate_python_rules.py
+
+    - name: Comment on PR (if validation fails)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '❌ **Python Scripts Rule Validation Failed**\n\n' +
+                  'The Python Scripts Rule validation failed. Please ensure:\n\n' +
+                  '1. ✅ Backend Python scripts are in `/backend` folder with tracking entries\n' +
+                  '2. ✅ Frontend Python scripts are in `/frontend` folder with tracking entries\n' +
+                  '3. ✅ Frontend scripts do not contain 4-engine architecture logic\n' +
+                  '4. ✅ All scripts have valid tracking entries in `script_tracking.json`\n' +
+                  '5. ✅ Tracking file is valid JSON with required fields\n' +
+                  '6. ✅ No duplicate script names\n' +
+                  '7. ✅ All `interacts_with` paths are valid\n\n' +
+                  'Run `python backend/validate_python_rules.py` locally to see detailed errors.\n\n' +
+                  'Generate tracking entries: `python backend/create_script_tracking.py <script_path> --add-to-tracking`'
+          })
+
+  validate-rule-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check rule documentation format
+      run: |
+        # Check that the rule file exists and is properly formatted
+        if [ ! -f ".cursor/rules/python-scripts.mdc" ]; then
+          echo "❌ Python scripts rule file not found"
+          exit 1
+        fi
+
+        # Check that it has the required frontmatter
+        if ! head -5 ".cursor/rules/python-scripts.mdc" | grep -q "alwaysApply: true"; then
+          echo "❌ Rule file missing required frontmatter"
+          exit 1
+        fi
+
+        echo "✅ Rule documentation format is valid"

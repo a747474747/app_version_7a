@@ -45,7 +45,7 @@ class Scenario(BaseModel):
 
     # Metadata
     tags = Column(JSON, default=list)  # List of tags for organization
-    metadata = Column(JSON, default=dict)  # Additional metadata
+    scenario_metadata = Column(JSON, default=dict)  # Additional metadata
 
     # Audit trail
     created_by_clerk_id = Column(String(255), nullable=False)

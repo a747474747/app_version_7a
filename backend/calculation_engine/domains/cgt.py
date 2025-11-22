@@ -8,9 +8,9 @@ This module contains calculations for capital gains tax, including:
 
 from decimal import Decimal
 from typing import Optional
-from shared.schemas.calculation import CalculationState
-from shared.schemas.orchestration import TraceEntry
-from services.rule_loader import rule_loader
+from calculation_engine.schemas.calculation import CalculationState
+from calculation_engine.schemas.orchestration import TraceEntry
+from src.services.rule_loader import rule_loader
 
 # Import calculation result schema
 # TODO: This should be in shared/schemas once defined

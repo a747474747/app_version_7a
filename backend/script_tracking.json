@@ -7,5 +7,378 @@
     "engine": "shared",
     "interacts_with": [],
     "purpose": "Maintains metadata for all Python scripts including creation dates, descriptions, and dependencies"
+  },
+  {
+    "script_name": "src/main.py",
+    "description": "Main FastAPI application entry point",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/routers/api.py",
+      "src/routers/health.py",
+      "src/middleware.py",
+      "src/auth/middleware.py"
+    ],
+    "purpose": "Initializes and configures the FastAPI application with all routes and middleware"
+  },
+  {
+    "script_name": "src/middleware.py",
+    "description": "Global middleware components for the FastAPI application",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Provides global middleware functionality for CORS, logging, and request processing"
+  },
+  {
+    "script_name": "shared/minimal_server.py",
+    "description": "Minimal FastAPI server for development and testing",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Provides a minimal server implementation for development dashboard testing"
+  },
+  {
+    "script_name": "src/auth/middleware.py",
+    "description": "Authentication middleware for protecting API endpoints",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/auth/clerk_middleware.py"
+    ],
+    "purpose": "Handles user authentication and authorization for API requests"
+  },
+  {
+    "script_name": "src/auth/clerk_middleware.py",
+    "description": "Clerk authentication integration middleware",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Integrates with Clerk authentication service for user management"
+  },
+  {
+    "script_name": "src/config/settings.py",
+    "description": "Application configuration and environment settings",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Manages application configuration, environment variables, and settings"
+  },
+  {
+    "script_name": "calculation_engine/registry.py",
+    "description": "Registry for all CAL-* calculation functions",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/domains/tax_personal.py",
+      "calculation_engine/domains/cgt.py",
+      "calculation_engine/domains/superannuation.py",
+      "calculation_engine/domains/property.py"
+    ],
+    "purpose": "Maintains registry of all calculation functions and provides access by CAL-ID"
+  },
+  {
+    "script_name": "calculation_engine/projection.py",
+    "description": "Multi-year financial projection engine",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/registry.py",
+      "calculation_engine/utils/calculation_trace.py"
+    ],
+    "purpose": "Executes multi-year financial projections using registered calculation functions"
+  },
+  {
+    "script_name": "calculation_engine/domains/tax_personal.py",
+    "description": "Personal income tax calculations (CAL-PIT-001, CAL-PIT-002, etc.)",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/utils/calculation_trace.py"
+    ],
+    "purpose": "Implements personal income tax calculation functions for different tax brackets and scenarios"
+  },
+  {
+    "script_name": "calculation_engine/domains/cgt.py",
+    "description": "Capital gains tax calculations (CAL-CGT-001, CAL-CGT-002)",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/utils/calculation_trace.py"
+    ],
+    "purpose": "Implements capital gains tax calculations with different CGT methods and exemptions"
+  },
+  {
+    "script_name": "calculation_engine/domains/superannuation.py",
+    "description": "Superannuation calculations (CAL-SUP-002, CAL-SUP-003, etc.)",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/utils/calculation_trace.py"
+    ],
+    "purpose": "Implements superannuation contribution limits, tax calculations, and pension projections"
+  },
+  {
+    "script_name": "calculation_engine/domains/property.py",
+    "description": "Property-related financial calculations",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/utils/calculation_trace.py"
+    ],
+    "purpose": "Implements property investment calculations including rental yields and equity projections"
+  },
+  {
+    "script_name": "calculation_engine/schemas/calculation.py",
+    "description": "Core calculation schemas for CalculationState and ProjectionOutput",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/entities.py",
+      "calculation_engine/schemas/assets.py",
+      "calculation_engine/schemas/cashflow.py"
+    ],
+    "purpose": "Defines CalculationState and ProjectionOutput models used by all CAL functions"
+  },
+  {
+    "script_name": "calculation_engine/schemas/entities.py",
+    "description": "Entity schemas for persons, companies, trusts, and SMSFs",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Defines data models for legal entities and persons in the calculation engine"
+  },
+  {
+    "script_name": "calculation_engine/schemas/assets.py",
+    "description": "Asset and liability schemas for financial positions",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Defines asset, loan, and financial position models for the calculation engine"
+  },
+  {
+    "script_name": "calculation_engine/schemas/cashflow.py",
+    "description": "Cashflow schemas for income, expenses, and contributions",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Defines cashflow models for income, deductions, and contribution flows"
+  },
+  {
+    "script_name": "calculation_engine/schemas/orchestration.py",
+    "description": "Orchestration schemas for LLM integration and scenario management",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Defines schemas for scenario management and LLM orchestration integration"
+  },
+  {
+    "script_name": "calculation_engine/utils/calculation_state.py",
+    "description": "Complete calculation state schema definitions",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Provides comprehensive schema definitions for calculation state management"
+  },
+  {
+    "script_name": "calculation_engine/utils/calculation_trace.py",
+    "description": "Trace logging utilities for calculation functions",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/utils/calculation_state.py"
+    ],
+    "purpose": "Provides utilities for adding trace entries to calculation results for debugging and explanation"
+  },
+  {
+    "script_name": "src/models/base.py",
+    "description": "Base SQLAlchemy models and database configuration",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Provides base classes and database setup for all SQLAlchemy models"
+  },
+  {
+    "script_name": "src/models/user_profile.py",
+    "description": "User profile database model",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/base.py"
+    ],
+    "purpose": "Defines the user profile data model for storing user information"
+  },
+  {
+    "script_name": "src/models/scenario.py",
+    "description": "Financial scenario database model",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/base.py"
+    ],
+    "purpose": "Defines the scenario data model for storing financial planning scenarios"
+  },
+  {
+    "script_name": "src/models/strategy.py",
+    "description": "Investment strategy database model",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/base.py"
+    ],
+    "purpose": "Defines the strategy data model for storing investment strategies"
+  },
+  {
+    "script_name": "src/models/advice_outcome.py",
+    "description": "Advice outcome database model",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/base.py"
+    ],
+    "purpose": "Defines the advice outcome data model for storing advice results"
+  },
+  {
+    "script_name": "src/routers/api.py",
+    "description": "Main API router aggregating all endpoint routes",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/routers/health.py",
+      "src/routers/scenarios/__init__.py",
+      "src/routers/strategies/__init__.py",
+      "src/routers/advice/__init__.py",
+      "src/routers/chat/__init__.py",
+      "src/routers/qa/__init__.py",
+      "src/routers/references/__init__.py",
+      "src/routers/trace/__init__.py",
+      "src/routers/modes/__init__.py"
+    ],
+    "purpose": "Aggregates all API routes into a single router for the FastAPI application"
+  },
+  {
+    "script_name": "src/routers/health.py",
+    "description": "Health check API endpoints",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Provides health check endpoints for monitoring application status"
+  },
+  {
+    "script_name": "src/services/rule_loader.py",
+    "description": "Rule loading service for tax and financial rules",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Loads and manages tax rules, superannuation rules, and other financial calculation rules"
+  },
+  {
+    "script_name": "src/services/scenario_service.py",
+    "description": "Scenario management service",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/scenario.py",
+      "src/engines/calculation/projection.py"
+    ],
+    "purpose": "Manages financial scenarios, including creation, storage, and execution"
+  },
+  {
+    "script_name": "tests/test_registry.py",
+    "description": "Test script for calculation registry validation",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/engines/calculation/registry.py"
+    ],
+    "purpose": "Validates that all expected CAL-* calculation functions are properly registered"
+  },
+  {
+    "script_name": "alembic/env.py",
+    "description": "Alembic environment configuration for database migrations",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Configures Alembic migration environment and database connections"
+  },
+  {
+    "script_name": "alembic/versions/initial_migration_create_all_tables.py",
+    "description": "Initial database migration creating all tables",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/models/base.py",
+      "src/models/user_profile.py",
+      "src/models/scenario.py",
+      "src/models/strategy.py",
+      "src/models/advice_outcome.py"
+    ],
+    "purpose": "Creates initial database schema with all required tables for the application"
+  },
+  {
+    "script_name": "validate_python_rules.py",
+    "description": "Automated validation script for Python Scripts Rule compliance",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Validates compliance with Python Scripts Rule including file locations, tracking completeness, and data integrity"
+  },
+  {
+    "script_name": "create_script_tracking.py",
+    "description": "Automated script tracking entry generator",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "script_tracking.json"
+    ],
+    "purpose": "Automatically generates and validates tracking entries for Python scripts to ensure rule compliance"
+  },
+  {
+    "script_name": "frontend/scripts/test_frontend_script.py",
+    "description": "Example frontend build script for testing type generation",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "frontend",
+    "interacts_with": [
+      "../backend/src/models/"
+    ],
+    "purpose": "Demonstrates a legitimate frontend Python script for build tooling that generates TypeScript types from backend schemas"
   }
 ]

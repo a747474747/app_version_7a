@@ -8,13 +8,13 @@ and recalculating financial metrics for each year.
 
 from decimal import Decimal
 from typing import List
-from shared.schemas.calculation import (
+from calculation_engine.schemas.calculation import (
     CalculationState,
     ProjectionOutput,
     YearSnapshot,
     CalculatedIntermediariesContext
 )
-from shared.schemas.orchestration import TraceEntry
+from calculation_engine.schemas.orchestration import TraceEntry
 from .registry import run_calculation
 
 

@@ -7,7 +7,7 @@ corresponding functions, enabling modular organization and dynamic lookup.
 """
 
 from typing import Dict, Callable, Any
-from shared.schemas.calculation import CalculationState
+from calculation_engine.schemas.calculation import CalculationState
 
 # Import all domain modules
 from .domains import tax_personal, cgt, superannuation, property

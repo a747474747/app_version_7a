@@ -2,11 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from ..models.calculation_state import (
-    CalculationState,
-    TraceEntry,
-    TraceSeverity,
-)
+from calculation_engine.schemas.calculation import CalculationState
+from calculation_engine.schemas.orchestration import TraceEntry, TraceSeverity
 
 
 def add_trace(

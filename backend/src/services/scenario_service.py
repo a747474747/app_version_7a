@@ -12,9 +12,9 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from models.scenario import Scenario
-from models.user_profile import UserProfile
-from shared.schemas.calculation import CalculationState
+from ..models.scenario import Scenario
+from ..models.user_profile import UserProfile
+from calculation_engine.schemas.calculation import CalculationState
 
 
 class ScenarioService:
@@ -27,8 +27,8 @@ class ScenarioService:
         self,
         user_profile_id: int,
         name: str,
-        description: Optional[str] = None,
-        created_by_clerk_id: str
+        created_by_clerk_id: str,
+        description: Optional[str] = None
     ) -> Scenario:
         """
         Create a new scenario.
