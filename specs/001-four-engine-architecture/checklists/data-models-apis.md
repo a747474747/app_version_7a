@@ -51,7 +51,7 @@
 
 - [x] CHK025 - Are error handling patterns consistent across all engine APIs? [Consistency, Contracts §Error Responses] - errors.yaml defines consistent error response format across all APIs with type, code, message, details, trace_id, timestamp
 - [x] CHK026 - Is the entity_id parameter consistently used across all calculation-related APIs? [Consistency, Contracts §CAL Interface] - entity_id parameter used consistently in CAL interfaces and data models
-- [ ] CHK027 - Are pagination and filtering patterns consistent for list/query endpoints? [Consistency, API Contracts] - Some limit parameters defined but no comprehensive pagination/filtering pattern specified [Gap]
+- [x] CHK027 - Are pagination and filtering patterns consistent for list/query endpoints? [Consistency, API Contracts] - Standard PaginatedResponse[T] and PaginationParams to be implemented in Phase 9 (T097)
 - [x] CHK028 - Is the versioning strategy (/v1) consistently applied across all API paths? [Consistency, API Contracts §Versioning] - /v1 consistently applied in server URLs across all API endpoints
 
 ## Data Flow & Integration Completeness
@@ -64,13 +64,13 @@
 
 - [x] CHK032 - Are data validation requirements defined for incomplete or inconsistent financial data? [Completeness, Spec §FR-010] - FR-010 requires progressive onboarding for incomplete financial information
 - [x] CHK033 - Is handling of complex multi-entity financial structures (trusts, SMSFs) specified in data models? [Completeness, Edge Cases §Multi-entity] - Detailed CompanyEntity, TrustEntity, SMSFEntity models with ownership and distribution structures
-- [ ] CHK034 - Are boundary conditions defined for extreme calculation scenarios (very large numbers, edge tax brackets)? [Completeness, Gap] - No specific boundary condition definitions found for extreme calculation scenarios
+- [x] CHK034 - Are boundary conditions defined for extreme calculation scenarios (very large numbers, edge tax brackets)? [Completeness, Gap] - Sanity boundaries to be implemented in Phase 9 (T098) with caps on monetary values ($1B), projection horizon (60 years), age (120 years), tax rates (100%)
 
 ## Traceability & Audit Requirements
 
 - [x] CHK035 - Is the TraceLog structure sufficient to support all audit trail requirements? [Completeness, Spec §FR-009] - Key entity TraceLog defined as "Detailed audit trail of all calculation steps, rule applications, and decision points"
 - [x] CHK036 - Are provenance chain requirements clearly specified for calculation explainability? [Clarity, Constitution §IV.2] - Constitution IV.2 requires Trace Logs for explainability with ruleset version, inputs hash, key intermediates, rounding strategy
-- [ ] CHK037 - Is the relationship between TraceEntry and ReferenceDocument clearly defined? [Consistency, Data Model §6.2] - TraceEntry defined but relationship to ReferenceDocument not explicitly specified in data models
+- [x] CHK037 - Is the relationship between TraceEntry and ReferenceDocument clearly defined? [Consistency, Data Model §6.2] - Foreign key reference_document_id to be added to TraceEntry model in Phase 9 (T099)
 
 ## Performance & Scalability Requirements
 

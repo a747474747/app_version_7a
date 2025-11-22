@@ -386,7 +386,25 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 - Create rule/policy configuration system
 - Add compliance validation logic
 
-**Phase 2.4: LLM Integration**
+### Phase 2.35: Calculation Engine Refactor (Critical Tech Debt)
+
+**Goal**: Move from monolithic `__init__.py` to domain-driven module structure to support Extended Tier growth.
+
+**Implementation Tasks**:
+
+1.  **Create Directory Structure**: Set up `backend/src/engines/calculation/domains/`.
+
+2.  **Implement RuleLoader**: Build service to read `specs/rules/*.yaml` instead of hardcoding values (Completes T009b).
+
+3.  **Migrate Core Calculations**: Move existing CAL-PIT/SUP/CGT functions from `__init__.py` to their respective domain files (`tax_personal.py`, etc.).
+
+4.  **Build Registry**: Implement `registry.py` to map string IDs to functions.
+
+5.  **Update Consumers**: Refactor `projection.py` and API routers to use the Registry instead of direct imports.
+
+6. Follow @conditional_rules/calc_architecture_guide.md
+
+## **Phase 2.4: LLM Integration**
 
 ### 2.4.1 Domain Knowledge Base Creation
 **Create comprehensive internal source materials for LLM prompt development:**
@@ -458,25 +476,97 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 - Implement Hypothesis-Driven Logic Factory (LLM writes the math code)
 - Integrate RAG for educational responses
 
-**Phase 2.5: API Layer**
+**Phase 2.5: LLM Connection & Future Workflow Integration**
+
+### 2.5.1 Domain Knowledge Base Setup
+**Create comprehensive internal source materials for LLM prompt development:**
+
+- Create Australian Financial System primer (`/specs/001-four-engine-architecture/llm-source-materials/australian-financial-system.md`)
+  - Overview of Australian financial institutions and products
+  - Key financial concepts and terminology
+  - Tax system fundamentals (PAYG, CGT, superannuation)
+  - Investment vehicles and structures
+
+- Create Financial Advice Process guide (`/specs/001-four-engine-architecture/llm-source-materials/financial-advice-process.md`)
+  - Stages of financial advice (fact-finding, needs analysis, strategy development, implementation)
+  - Adviser responsibilities and obligations
+  - Client communication patterns
+  - Documentation and disclosure requirements
+
+- Create Regulatory Environment overview (`/specs/001-four-engine-architecture/llm-source-materials/regulatory-environment.md`)
+  - ASIC regulatory framework and RG 175 (Financial Advice)
+  - Best Interest Duty (BID) requirements
+  - AFSL and ACL requirements
+  - Consumer protection laws
+  - Privacy and data handling requirements
+
+- Create Interaction Pattern library (`/specs/001-four-engine-architecture/llm-source-materials/interaction-patterns.md`)
+  - Common user question types and appropriate responses
+  - Educational content delivery patterns
+  - Risk communication frameworks
+  - Goal-setting and strategy discussion flows
+
+- Create domain-specific knowledge bases (`/specs/001-four-engine-architecture/llm-source-materials/domain-knowledge/`)
+  - `tax-regime.md`: Detailed tax rules and thresholds
+  - `superannuation.md`: Super contribution strategies and rules
+  - `property-investment.md`: Property investment considerations
+  - `retirement-planning.md`: Retirement income strategies
+  - `insurance.md`: Insurance product types and suitability
+
+- Track all source materials in `/specs/001-four-engine-architecture/llm-source-materials/catalog.json`
+
+**Purpose**: These materials provide comprehensive context for developers creating and maintaining LLM prompts, ensuring consistent understanding of Australian financial services without exposing sensitive internal knowledge to external LLMs.
+
+### 2.5.2 Prompt Management System Setup
+**Create structured system for managing LLM prompts:**
+
+- Create prompt directory structure:
+  - `/specs/001-four-engine-architecture/llm-prompts/core-orchestrator/` - Core LLM Orchestrator function prompts
+  - `/specs/001-four-engine-architecture/llm-prompts/mode-prompts/` - All 26 mode-specific prompts aligned with workflows_and_modes.md
+  - `/specs/001-four-engine-architecture/llm-prompts/shared-utilities/` - Cross-cutting prompt utilities
+
+- Set up catalog tracking system (`/specs/001-four-engine-architecture/llm-prompts/catalog.json`)
+  - Track all prompt files with metadata (prompt_id, title, description, mode_id, category, version, etc.)
+  - Link prompts to related specification files
+
+- Create prompt templates aligned with 26 operational modes:
+  - Core orchestrator prompts (intent recognition, state hydration, strategy nomination, narrative generation)
+  - Mode-specific prompts (modes 1-26 from workflows_and_modes.md)
+  - Shared utility prompts (privacy filter, RAG retrieval, error handling, conversation context)
+
+- Implement prompt loading utilities in backend
+  - Scripts must load prompts from files, never embed prompt text directly
+  - Each unique prompt/primer gets its own file
+  - Prompts must be in format suitable for LLMs (markdown with clear sections)
+
+**Purpose**: Ensure prompts are separated from scripts, catalogued, reusable, and aligned with the 26 operational modes defined in workflows_and_modes.md.
+
+### 2.5.3 LLM Orchestrator Implementation
+- Implement LLM Orchestrator (intent classification)
+- Add state hydration capabilities
+- Create narrative generation templates
+- Implement Hypothesis-Driven Logic Factory (LLM writes the math code)
+- Integrate RAG for educational responses
+
+**Phase 2.6: API Layer**
 - Build FastAPI endpoints following contracts
 - Implement authentication and authorization
 - Add request validation and error handling
 - Create API documentation
 
-**Phase 2.6: Frontend Development**
+**Phase 2.7: Frontend Development**
 - Set up Next.js application structure
 - Implement Veris adviser interface
 - Build Dev/Compliance dashboard
 
-**Phase 2.7: Testing & Quality Assurance**
+**Phase 2.8: Testing & Quality Assurance**
 - Implement golden test cases using CAL-* IDs as primary keys (Mode 17: Calculation Harness)
 - Create unit test files for every Core calculation (CAL-PIT-001 to 005, CAL-CGT-001 to 002, CAL-SUP-002 to 009, CAL-PFL-104)
 - Create stub functions for Extended calculations returning estimated values per calculation_catalog.md
 - Build integration tests for engines using calculation catalog as checklist
 - Add performance testing framework targeting SC-001 (5-second fact checks) and SC-002 (30-second optimizations)
 
-**Phase 2.8: Deployment & Operations**
+**Phase 2.9: Deployment & Operations**
 - Configure Render backend deployment
 - Set up Vercel frontend deployment
 - Implement monitoring and alerting

@@ -1,0 +1,4 @@
+# Property Investment Rules
+
+# Default marginal tax rate for negative gearing calculations
+marginal_tax_rate: 0.32

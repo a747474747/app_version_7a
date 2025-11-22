@@ -1,0 +1,12 @@
+# Superannuation Calculation Rules
+# Based on 2023-24 superannuation parameters
+
+# Concessional (before-tax) contributions cap
+concessional_cap: 11000
+
+# Contributions tax rate (15% inside super fund)
+contributions_tax_rate: 0.15
+
+# Division 293 additional tax threshold and rate
+division_293_threshold: 250000
+division_293_rate: 0.15

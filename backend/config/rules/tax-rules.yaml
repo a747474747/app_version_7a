@@ -1,0 +1,35 @@
+# Tax Calculation Rules - Australian Resident Income Tax
+# Based on 2023-24 tax year parameters
+
+# Progressive tax brackets for residents
+brackets:
+  - min: 0
+    max: 18200
+    rate: 0.0
+  - min: 18201
+    max: 45000
+    rate: 0.16
+  - min: 45001
+    max: 135000
+    rate: 0.30
+  - min: 135001
+    max: 190000
+    rate: 0.37
+  - min: 190001
+    rate: 0.45
+
+# Medicare levy settings
+medicare_levy:
+  rate: 0.02
+  thresholds:
+    single: 24300
+    family: 48600
+    each_child: 3877
+
+# Low Income Tax Offset (LITO) parameters
+lito:
+  max_offset: 700
+  income_limit: 37500
+  phase_out_start: 37500
+  phase_out_end: 67500
+  phase_out_rate: 0.05
