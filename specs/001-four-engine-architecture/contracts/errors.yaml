@@ -1,0 +1,327 @@
+# Error Handling Contracts
+
+This document defines the error handling contracts across all API endpoints and internal components.
+
+## 1. Error Response Format
+
+All API errors follow this standard format:
+
+```json
+{
+  "error": {
+    "type": "ErrorClassName",
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": {
+      "field": "specific_field_name",
+      "provided_value": "invalid_value",
+      "expected_format": "expected_format_description"
+    },
+    "trace_id": "uuid-for-log-correlation",
+    "timestamp": "2025-11-21T10:30:00Z"
+  }
+}
+```
+
+## 2. HTTP Status Code Mapping
+
+| Status Code | General Meaning | Common Usage |
+|-------------|----------------|--------------|
+| **400 Bad Request** | Client error in request | Invalid parameters, missing fields |
+| **401 Unauthorized** | Authentication required | Missing/invalid token |
+| **403 Forbidden** | Authorization failed | Insufficient permissions |
+| **404 Not Found** | Resource not found | Invalid scenario/user ID |
+| **409 Conflict** | Resource state conflict | Concurrent modification |
+| **422 Unprocessable Entity** | Business rule violation | Invalid financial data |
+| **429 Too Many Requests** | Rate limit exceeded | API quota exceeded |
+| **500 Internal Server Error** | Server error | Calculation failures, DB errors |
+| **502 Bad Gateway** | External service error | LLM service down |
+| **503 Service Unavailable** | Service temporarily down | Maintenance, overload |
+
+## 3. Error Code Categories
+
+### Authentication & Authorization (AUTH-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `AUTH-001` | 401 | Missing authentication token |
+| `AUTH-002` | 401 | Invalid authentication token |
+| `AUTH-003` | 401 | Expired authentication token |
+| `AUTH-004` | 403 | Insufficient permissions for operation |
+| `AUTH-005` | 403 | User account disabled |
+| `AUTH-006` | 429 | Rate limit exceeded |
+
+### Validation Errors (VAL-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `VAL-001` | 400 | Required field missing |
+| `VAL-002` | 400 | Invalid field format |
+| `VAL-003` | 400 | Field value out of range |
+| `VAL-004` | 400 | Invalid enum value |
+| `VAL-005` | 422 | Business rule violation |
+| `VAL-006` | 422 | Cross-field validation failed |
+
+### Calculation Errors (CALC-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `CALC-001` | 422 | Invalid calculation state |
+| `CALC-002` | 422 | Entity not found in scenario |
+| `CALC-003` | 500 | Calculation engine failure |
+| `CALC-004` | 500 | Mathematical computation error |
+| `CALC-005` | 422 | Tax rule violation |
+| `CALC-006` | 422 | Contribution cap exceeded |
+
+### Scenario Errors (SCEN-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `SCEN-001` | 404 | Scenario not found |
+| `SCEN-002` | 409 | Scenario currently locked for editing |
+| `SCEN-003` | 422 | Invalid scenario state transition |
+| `SCEN-004` | 400 | Duplicate scenario name |
+| `SCEN-005` | 422 | Scenario data integrity violation |
+
+### Strategy Errors (STRAT-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `STRAT-001` | 404 | Strategy template not found |
+| `STRAT-002` | 422 | Strategy not applicable to scenario |
+| `STRAT-003` | 500 | Optimization failed to converge |
+| `STRAT-004` | 422 | Strategy constraints violated |
+| `STRAT-005` | 400 | Invalid optimization parameters |
+
+### Advice/Compliance Errors (ADV-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `ADV-001` | 422 | Regulatory rule violation |
+| `ADV-002` | 500 | Compliance engine failure |
+| `ADV-003` | 422 | Best Interest Duty breach |
+| `ADV-004` | 404 | Policy not found |
+| `ADV-005` | 422 | Conflicting compliance requirements |
+
+### System Errors (SYS-xxx)
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `SYS-001` | 500 | Database connection error |
+| `SYS-002` | 502 | External service unavailable |
+| `SYS-003` | 503 | Service temporarily unavailable |
+| `SYS-004` | 500 | Internal configuration error |
+| `SYS-005` | 500 | Memory allocation failure |
+
+## 4. Detailed Error Specifications
+
+### Authentication Errors
+
+**AUTH-001: Missing authentication token**
+```json
+{
+  "error": {
+    "type": "AuthenticationError",
+    "code": "AUTH-001",
+    "message": "Authentication token is required",
+    "details": {
+      "required_header": "Authorization",
+      "expected_format": "Bearer {token}"
+    }
+  }
+}
+```
+
+**AUTH-004: Insufficient permissions**
+```json
+{
+  "error": {
+    "type": "AuthorizationError",
+    "code": "AUTH-004",
+    "message": "Insufficient permissions for this operation",
+    "details": {
+      "required_role": "adviser",
+      "user_role": "consumer",
+      "operation": "create_advice"
+    }
+  }
+}
+```
+
+### Validation Errors
+
+**VAL-005: Business rule violation**
+```json
+{
+  "error": {
+    "type": "BusinessRuleViolationError",
+    "code": "VAL-005",
+    "message": "Super contribution exceeds concessional cap",
+    "details": {
+      "rule": "CONCESSIONAL_CAP_2025",
+      "limit": "110000.00",
+      "provided": "125000.00",
+      "entity_id": "person_001"
+    }
+  }
+}
+```
+
+### Calculation Errors
+
+**CALC-003: Calculation engine failure**
+```json
+{
+  "error": {
+    "type": "CalculationEngineError",
+    "code": "CALC-003",
+    "message": "Calculation engine encountered an error",
+    "details": {
+      "calc_id": "CAL-PIT-001",
+      "entity_id": "person_001",
+      "year_index": 0,
+      "failure_reason": "Division by zero in tax bracket calculation",
+      "input_snapshot": {
+        "taxable_income": "75000.00",
+        "tax_brackets": []
+      }
+    }
+  }
+}
+```
+
+### Strategy Errors
+
+**STRAT-003: Optimization convergence failure**
+```json
+{
+  "error": {
+    "type": "OptimizationError",
+    "code": "STRAT-003",
+    "message": "Optimization failed to converge within limits",
+    "details": {
+      "strategy_template_id": "STR-SUP-001",
+      "iterations_performed": 100,
+      "max_iterations": 100,
+      "convergence_threshold": "0.001",
+      "final_improvement": "0.00005",
+      "best_value_found": "2850000.00"
+    }
+  }
+}
+```
+
+## 5. Error Recovery Guidelines
+
+### Client-Side Error Handling
+
+**Retry Logic:**
+- **429 Rate Limited**: Exponential backoff, max 5 retries
+- **503 Service Unavailable**: Retry with backoff, max 3 retries
+- **502 Bad Gateway**: Retry once after 30 seconds
+
+**User Feedback:**
+- **400/422**: Show specific field errors with guidance
+- **403**: Redirect to login or show upgrade prompt
+- **500**: Show generic error with retry option
+
+### Server-Side Error Handling
+
+**Logging:**
+- All errors logged with trace_id for correlation
+- Sensitive data sanitized before logging
+- Error metrics collected for monitoring
+
+**Monitoring:**
+- Error rates tracked by endpoint and error code
+- Alerting on elevated error rates (>5% of requests)
+- Performance impact of error handling monitored
+
+## 6. Error Testing Contracts
+
+### Error Test Cases
+
+**Authentication:**
+- Missing token requests
+- Expired token usage
+- Invalid token formats
+- Permission boundary testing
+
+**Validation:**
+- Malformed JSON payloads
+- Missing required fields
+- Invalid data types
+- Business rule violations
+
+**System:**
+- Database connection failures
+- External service timeouts
+- Memory allocation errors
+- Configuration errors
+
+### Error Response Validation
+
+**Schema Compliance:**
+- All errors match error response schema
+- Required fields always present
+- Optional fields properly omitted
+
+**Consistency:**
+- Same error conditions produce same error codes
+- Error messages stable across versions
+- Details format consistent within error types
+
+## 7. Internationalization
+
+### Error Message Localization
+
+**Supported Languages:**
+- English (en) - default
+- Future: Additional languages as needed
+
+**Message Structure:**
+- Error codes remain English/stable
+- Human-readable messages localizable
+- Field names and values not translated
+
+### Cultural Adaptation
+
+**Number Formatting:**
+- Respect locale-specific number formatting
+- Currency symbols localized
+- Date formats follow user locale
+
+## 8. Error Documentation
+
+### API Documentation Integration
+
+**OpenAPI Integration:**
+```yaml
+responses:
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/ErrorResponse'
+        examples:
+          validation_error:
+            $ref: '#/components/examples/ValidationError'
+```
+
+**Interactive Documentation:**
+- Error examples in API documentation
+- Troubleshooting guides linked from errors
+- Developer support contact information
+
+### User-Facing Error Messages
+
+**Consumer-Friendly Messages:**
+- Technical details hidden from end users
+- Actionable guidance provided
+- Support contact information included
+
+**Adviser/Developer Messages:**
+- Full technical details exposed
+- Debug information available
+- Direct links to documentation

@@ -1,0 +1,321 @@
+[
+  {
+    "file_path": "001-four-engine-architecture/spec.md",
+    "title": "Four Engine Architecture Specification",
+    "description": "Main specification document for the four-engine financial advice system",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Define the overall architecture and requirements for the four-engine system (LLM Orchestrator, Calculation Engine, Strategy Engine, Advice Engine)",
+    "related_files": [
+      "001-four-engine-architecture/plan.md",
+      "001-four-engine-architecture/data-model.md",
+      "001-four-engine-architecture/design/interaction_architecture.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/plan.md",
+    "title": "Four Engine Architecture Implementation Plan",
+    "description": "Detailed implementation plan and roadmap for the four-engine system",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Provide a comprehensive implementation roadmap with milestones, dependencies, and task breakdowns",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/checklists/requirements.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/data-model.md",
+    "title": "Data Model Specification",
+    "description": "Data structures and models for the four-engine architecture",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Define the data structures, schemas, and relationships used across all four engines",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/contracts/api-v1.yaml"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/design/interaction_architecture.md",
+    "title": "Interaction Architecture Design",
+    "description": "Design document for engine interactions and communication patterns",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "design",
+    "purpose": "Define how the four engines interact, communicate, and coordinate their operations",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/contracts/llm-orchestrator.yaml"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/checklists/data-models-apis.md",
+    "title": "Data Models and APIs Checklist",
+    "description": "Validation checklist for data models and API contracts",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "checklists",
+    "purpose": "Ensure all data models and API contracts are properly defined and validated",
+    "related_files": [
+      "001-four-engine-architecture/data-model.md",
+      "001-four-engine-architecture/contracts/api-v1.yaml"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/checklists/requirements.md",
+    "title": "Requirements Checklist",
+    "description": "Comprehensive checklist of all system requirements",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "checklists",
+    "purpose": "Track and validate all functional and non-functional requirements",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/plan.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/contracts/api-v1.yaml",
+    "title": "API v1 Contract",
+    "description": "OpenAPI specification for version 1 of the system APIs",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "contracts",
+    "purpose": "Define the REST API contracts and schemas for external integrations",
+    "related_files": [
+      "001-four-engine-architecture/data-model.md",
+      "001-four-engine-architecture/design/interaction_architecture.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/contracts/calculation-engine.yaml",
+    "title": "Calculation Engine Contract",
+    "description": "Interface contract for the Calculation Engine",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "contracts",
+    "purpose": "Define the interface and capabilities of the Calculation Engine",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/design/interaction_architecture.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/contracts/errors.yaml",
+    "title": "Error Handling Contract",
+    "description": "Standardized error codes and handling patterns",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "contracts",
+    "purpose": "Define error codes, messages, and handling strategies across all engines",
+    "related_files": [
+      "001-four-engine-architecture/contracts/api-v1.yaml"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/contracts/llm-orchestrator.yaml",
+    "title": "LLM Orchestrator Contract",
+    "description": "Interface contract for the LLM Orchestrator Engine",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "contracts",
+    "purpose": "Define the interface and orchestration capabilities of the LLM Orchestrator",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/design/interaction_architecture.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/contracts/strategy-engine.yaml",
+    "title": "Strategy Engine Contract",
+    "description": "Interface contract for the Strategy Engine",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "contracts",
+    "purpose": "Define the interface and strategy capabilities of the Strategy Engine",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/design/interaction_architecture.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/quickstart.md",
+    "title": "Quick Start Guide",
+    "description": "Quick start guide for developers joining the project",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Provide developers with essential information to get started quickly",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/plan.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/research.md",
+    "title": "Research and Analysis",
+    "description": "Research findings and technical analysis",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Document research findings, technical evaluations, and architectural decisions",
+    "related_files": [
+      "001-four-engine-architecture/spec.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/calculation_catalog.md",
+    "title": "Calculation Catalog",
+    "description": "Catalog of all calculations supported by the system",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Comprehensive catalog of all financial calculations and formulas supported",
+    "related_files": [
+      "001-four-engine-architecture/spec.md",
+      "001-four-engine-architecture/data-model.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "002-web-frontend/spec_input.md",
+    "title": "Web Frontend Specification Input",
+    "description": "Input requirements and specifications for the web frontend",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "002-web-frontend",
+    "category": "root",
+    "purpose": "Define the requirements and specifications for the web frontend component",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "003-frankies-finance/spec_input.md",
+    "title": "Frankie's Finance Specification Input",
+    "description": "Input requirements and specifications for Frankie's Finance",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "003-frankies-finance",
+    "category": "root",
+    "purpose": "Define the requirements and specifications for the Frankie's Finance application",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "spec_reorganization_instructions.md",
+    "title": "Specification Reorganization Instructions",
+    "description": "Instructions for reorganizing and maintaining project specifications",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "shared",
+    "category": "root",
+    "purpose": "Provide guidelines for organizing, maintaining, and updating project specifications",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-prompts/catalog.json",
+    "title": "LLM Prompts Catalog",
+    "description": "Tracking catalog for all LLM prompt files",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Maintains metadata for all LLM prompt files including creation dates, descriptions, mode associations, and dependencies",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-source-materials/catalog.json",
+    "title": "LLM Source Materials Catalog",
+    "description": "Tracking catalog for all LLM source material files",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Maintains metadata for all LLM source material files used internally for prompt development",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-source-materials/australian-financial-system.md",
+    "title": "Australian Financial System Primer",
+    "description": "Overview of Australian financial institutions, products, tax system, and investment structures",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about Australian financial system without exposing sensitive knowledge to external LLMs.",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-source-materials/financial-advice-process.md",
+    "title": "Financial Advice Process Guide",
+    "description": "Stages of financial advice, adviser responsibilities, client communication patterns, and documentation requirements",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about the financial advice process without exposing sensitive knowledge to external LLMs.",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-source-materials/regulatory-environment.md",
+    "title": "Regulatory Environment Overview",
+    "description": "ASIC regulatory framework, Best Interest Duty, licensing requirements, consumer protection, and privacy laws",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about Australian financial services regulation without exposing sensitive knowledge to external LLMs.",
+    "related_files": [],
+    "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/llm-source-materials/interaction-patterns.md",
+    "title": "Interaction Pattern Library",
+    "description": "Common user question types, educational content delivery patterns, risk communication frameworks, and conversation flows",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "root",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about common interaction patterns in financial advice without exposing sensitive knowledge to external LLMs.",
+    "related_files": [],
+    "status": "active"
+  }
+]

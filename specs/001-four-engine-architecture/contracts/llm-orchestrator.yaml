@@ -1,0 +1,308 @@
+# LLM Orchestrator API Contracts
+
+This document defines the contracts for the LLM Orchestrator component, which provides natural language processing, intent recognition, and narrative generation capabilities.
+
+## 1. LLM Orchestrator Interface
+
+### Core Orchestration Functions
+
+```python
+from typing import Dict, List, Optional, Any
+from pydantic import BaseModel
+from datetime import datetime
+from decimal import Decimal
+
+class IntentRecognitionRequest(BaseModel):
+    """Request for intent recognition and mode selection."""
+    user_input: str
+    conversation_context: Optional[List[Dict[str, Any]]] = None
+    user_profile: Optional[Dict[str, Any]] = None
+    available_modes: List[str]  # List of available execution modes
+
+class IntentRecognitionResult(BaseModel):
+    """Result of intent recognition."""
+    detected_intent: str  # e.g., "fact_check", "strategy_explore", "scenario_compare"
+    selected_mode: str  # Execution mode ID, e.g., "MODE-FACT-CHECK"
+    confidence_score: float  # 0.0 to 1.0
+    extracted_entities: Dict[str, Any]  # Parsed entities like amounts, dates, etc.
+    clarification_questions: Optional[List[str]] = None
+    requires_calculation: bool = False
+
+def recognize_intent(request: IntentRecognitionRequest) -> IntentRecognitionResult:
+    """
+    Analyze user input to determine intent and select appropriate execution mode.
+
+    Args:
+        request: User input and context for intent analysis
+
+    Returns:
+        IntentRecognitionResult with detected intent and mode selection
+
+    Raises:
+        IntentRecognitionError: For ambiguous or unsupported inputs
+    """
+```
+
+### State Hydration Interface
+
+```python
+class StateHydrationRequest(BaseModel):
+    """Request for building structured state from user inputs."""
+    user_input: str
+    intent_result: IntentRecognitionResult
+    existing_state: Optional[Dict[str, Any]] = None  # Partial state to extend
+    validation_context: Optional[Dict[str, Any]] = None  # Field definitions, constraints
+
+class StateHydrationResult(BaseModel):
+    """Result of state hydration."""
+    hydrated_state: Dict[str, Any]  # Structured state fragments
+    missing_fields: List[str]  # Fields that need clarification
+    validation_errors: List[str]  # Data quality issues found
+    confidence_score: float  # 0.0 to 1.0
+    suggested_questions: List[str]  # Questions to ask user for missing data
+
+class FieldValidationRule(BaseModel):
+    """Validation rule for a specific field."""
+    field_name: str
+    field_type: str  # "string", "decimal", "date", "enum"
+    required: bool
+    constraints: Optional[Dict[str, Any]] = None  # min, max, pattern, etc.
+    description: str
+    examples: List[str]
+
+def hydrate_state(request: StateHydrationRequest) -> StateHydrationResult:
+    """
+    Convert natural language inputs into structured state fragments.
+
+    Args:
+        request: User input and intent for state building
+
+    Returns:
+        StateHydrationResult with structured data and validation feedback
+
+    Raises:
+        StateHydrationError: For unparseable inputs or validation failures
+    """
+```
+
+### Strategy Nomination Interface
+
+```python
+class StrategyNominationRequest(BaseModel):
+    """Request for strategy suggestions."""
+    user_intent: str
+    current_state: Dict[str, Any]  # User's financial state
+    available_strategies: List[Dict[str, Any]]  # Strategy templates available
+    risk_tolerance: Optional[str] = None  # "conservative", "balanced", "aggressive"
+    time_horizon: Optional[int] = None  # Years
+
+class StrategyNominationResult(BaseModel):
+    """Result of strategy nomination."""
+    nominated_strategies: List[Dict[str, Any]]  # Ranked strategy suggestions
+    reasoning: str  # Explanation of why these strategies were selected
+    risk_assessment: str  # Risk implications of suggestions
+    alternative_options: List[Dict[str, Any]]  # Backup suggestions
+
+def nominate_strategies(request: StrategyNominationRequest) -> StrategyNominationResult:
+    """
+    Suggest appropriate financial strategies based on user intent and state.
+
+    Args:
+        request: User goals and context for strategy selection
+
+    Returns:
+        StrategyNominationResult with ranked strategy suggestions
+
+    Raises:
+        StrategyNominationError: For incompatible goals or missing context
+    """
+```
+
+### Narrative Generation Interface
+
+```python
+class NarrativeGenerationRequest(BaseModel):
+    """Request for generating human-readable narratives."""
+    narrative_type: str  # "explanation", "advice", "education", "summary"
+    data_source: Dict[str, Any]  # Calculation results, scenario data, etc.
+    audience: str  # "consumer", "adviser", "compliance"
+    context: Optional[Dict[str, Any]] = None  # Additional context
+    tone: Optional[str] = "professional"  # "professional", "conversational", "educational"
+
+class NarrativeGenerationResult(BaseModel):
+    """Result of narrative generation."""
+    narrative: str  # Human-readable text
+    key_points: List[str]  # Bullet points of important information
+    citations: List[Dict[str, Any]]  # References to rules/sources used
+    confidence_score: float  # 0.0 to 1.0 in generation quality
+
+def generate_narrative(request: NarrativeGenerationRequest) -> NarrativeGenerationResult:
+    """
+    Generate human-readable explanations, advice, or educational content.
+
+    Args:
+        request: Content type and data source for narrative generation
+
+    Returns:
+        NarrativeGenerationResult with formatted narrative and metadata
+
+    Raises:
+        NarrativeGenerationError: For unsupported content types or data issues
+    """
+```
+
+## 2. Execution Mode Interface
+
+### Mode Selection and Execution
+
+```python
+class ModeExecutionRequest(BaseModel):
+    """Request for executing a complete interaction mode."""
+    mode_id: str  # e.g., "MODE-FACT-CHECK", "MODE-CRYSTAL-BALL"
+    user_input: str
+    user_context: Optional[Dict[str, Any]] = None
+    execution_options: Optional[Dict[str, Any]] = None
+
+class ModeExecutionResult(BaseModel):
+    """Result of mode execution."""
+    mode_id: str
+    status: str  # "success", "clarification_needed", "error"
+    result_data: Dict[str, Any]  # Mode-specific results
+    narrative_response: str  # Human-readable response
+    follow_up_questions: Optional[List[str]] = None
+    execution_trace: List[Dict[str, Any]]  # Processing steps taken
+
+def execute_mode(request: ModeExecutionRequest) -> ModeExecutionResult:
+    """
+    Execute a complete interaction mode from intent to response.
+
+    Args:
+        request: Mode specification and user input
+
+    Returns:
+        ModeExecutionResult with processed results and narrative
+
+    Raises:
+        ModeExecutionError: For unsupported modes or execution failures
+    """
+```
+
+## 3. RAG Integration Interface
+
+### Reference Retrieval for Context Augmentation
+
+```python
+class ReferenceRetrievalRequest(BaseModel):
+    """Request for retrieving relevant reference materials."""
+    query: str
+    context_type: str  # "educational", "rule_validation", "explanation"
+    domain_filters: Optional[List[str]] = None  # e.g., ["tax", "super", "property"]
+    max_results: int = 5
+
+class ReferenceRetrievalResult(BaseModel):
+    """Result of reference retrieval."""
+    references: List[Dict[str, Any]]  # Retrieved documents/snippets
+    relevance_scores: List[float]  # Relevance ranking
+    context_summary: str  # How references relate to query
+
+def retrieve_references(request: ReferenceRetrievalRequest) -> ReferenceRetrievalResult:
+    """
+    Retrieve authoritative references to augment LLM responses.
+
+    Args:
+        request: Query and context for reference retrieval
+
+    Returns:
+        ReferenceRetrievalResult with relevant authoritative sources
+
+    Raises:
+        ReferenceRetrievalError: For query processing failures
+    """
+```
+
+## 4. Error Handling
+
+### LLM-Specific Error Types
+
+| Error Code | HTTP Status | Description |
+|------------|-------------|-------------|
+| `LLM-001` | 400 | Invalid or malformed input |
+| `LLM-002` | 422 | Intent recognition failed - ambiguous input |
+| `LLM-003` | 422 | State hydration failed - unparseable data |
+| `LLM-004` | 422 | Unsupported execution mode |
+| `LLM-005` | 500 | LLM service unavailable |
+| `LLM-006` | 500 | Narrative generation failed |
+| `LLM-007` | 429 | Rate limit exceeded |
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "type": "LLMProcessingError",
+    "code": "LLM-002",
+    "message": "Unable to determine user intent from input",
+    "details": {
+      "input_length": 150,
+      "detected_keywords": ["tax", "super"],
+      "suggestion": "Please provide more specific details about your tax situation"
+    },
+    "trace_id": "uuid-for-log-correlation",
+    "timestamp": "2025-11-21T10:30:00Z"
+  }
+}
+```
+
+## 5. Rate Limiting and Quotas
+
+### Rate Limit Categories
+
+- **Intent Recognition**: 100 requests/minute per user
+- **State Hydration**: 50 requests/minute per user
+- **Narrative Generation**: 20 requests/minute per user
+- **Mode Execution**: 10 requests/minute per user
+
+### Quota Headers
+
+```http
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1637000000
+X-RateLimit-Policy: user-based
+```
+
+## 6. Authentication and Security
+
+### Bearer Token Authentication
+
+All endpoints require Bearer token authentication:
+
+```http
+Authorization: Bearer <jwt_token>
+```
+
+### Content Safety Filtering
+
+- All inputs are scanned for PII before LLM processing
+- Outputs are filtered for harmful or inappropriate content
+- Sensitive data is redacted in logs and responses
+
+## 7. Monitoring and Observability
+
+### Metrics Collected
+
+- Intent recognition accuracy by mode
+- State hydration success rates
+- Narrative generation quality scores
+- Response latency by operation type
+- Error rates by error type
+
+### Health Check Endpoint
+
+```http
+GET /health/llm-orchestrator
+```
+
+Returns LLM service availability and model status.
+
+

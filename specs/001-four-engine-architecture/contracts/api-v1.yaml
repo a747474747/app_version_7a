@@ -1,0 +1,1624 @@
+openapi: 3.0.3
+info:
+  title: Frankie Finance API
+  version: 1.0.0
+  description: |
+    Four-Engine Financial Calculation and Advice Platform API
+
+    This API provides deterministic financial calculations, scenario analysis,
+    strategy optimization, and regulatory compliance checking for consumers
+    and financial advisers.
+
+  contact:
+    name: API Support
+    email: api@frankiefinance.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://api.frankiefinance.com/v1
+    description: Production server
+  - url: https://api-staging.frankiefinance.com/v1
+    description: Staging server
+
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
+
+paths:
+  # Health and Status
+  /health:
+    get:
+      summary: System health check
+      description: Check system and dependency health
+      tags: [System]
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  # Authentication
+  /auth/login:
+    post:
+      summary: User authentication
+      description: Authenticate user and return access token
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      description: Get new access token using refresh token
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  # Scenario Management
+  /scenarios:
+    post:
+      summary: Create new scenario
+      description: Create a new financial scenario with initial state
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScenarioRequest'
+      responses:
+        '201':
+          description: Scenario created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+        '400':
+          description: Invalid scenario data
+
+    get:
+      summary: List user scenarios
+      description: Get list of user's scenarios with summaries
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Scenario list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioList'
+
+  /scenarios/{scenario_id}:
+    get:
+      summary: Get scenario details
+      description: Retrieve complete scenario information
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Scenario details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+        '404':
+          description: Scenario not found
+
+    put:
+      summary: Update scenario
+      description: Update scenario state and metadata
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScenarioRequest'
+      responses:
+        '200':
+          description: Scenario updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+
+    delete:
+      summary: Delete scenario
+      description: Delete a scenario and all its data
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Scenario deleted
+
+  /scenarios/{scenario_id}/run:
+    post:
+      summary: Run scenario calculation
+      description: Execute calculation engine on scenario
+      tags: [Calculations]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunCalculationRequest'
+      responses:
+        '200':
+          description: Calculation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+        '202':
+          description: Calculation queued (for large scenarios)
+
+  /scenarios/{scenario_id}/results:
+    get:
+      summary: Get calculation results
+      description: Retrieve projection results and intermediates
+      tags: [Calculations]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: year_index
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Calculation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+
+  /scenarios/compare:
+    post:
+      summary: Compare scenarios
+      description: Compare multiple scenarios side-by-side
+      tags: [Scenarios]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompareScenariosRequest'
+      responses:
+        '200':
+          description: Scenario comparison
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioComparison'
+
+  # Strategy Engine
+  /strategies/optimize:
+    post:
+      summary: Run strategy optimization
+      description: Optimize strategy parameters for target goals
+      tags: [Strategy]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptimizationRequest'
+      responses:
+        '200':
+          description: Optimization completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptimizationResult'
+
+  /strategies/templates:
+    get:
+      summary: List strategy templates
+      description: Get available optimization templates
+      tags: [Strategy]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Strategy templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrategyTemplateList'
+
+  # Advice Engine
+  /advice/evaluate:
+    post:
+      summary: Evaluate regulatory compliance
+      description: Check scenario against compliance rules
+      tags: [Advice]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplianceRequest'
+      responses:
+        '200':
+          description: Compliance evaluation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceResult'
+
+  # Interaction Modes
+  /modes/{mode}/execute:
+    post:
+      summary: Execute interaction mode
+      description: Run specific interaction mode (Fact Check, Crystal Ball, etc.)
+      tags: [Modes]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: mode
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [fact_check, crystal_ball, strategy_explorer, adviser_sandbox, scaled_advice]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModeExecutionRequest'
+      responses:
+        '200':
+          description: Mode execution completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModeExecutionResult'
+
+  # Chat/Conversational Interface
+  /chat/process:
+    post:
+      summary: Process conversational input
+      description: Handle natural language financial queries
+      tags: [Chat]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+
+  # Audit and Trace
+  /trace/{scenario_id}:
+    get:
+      summary: Get calculation trace
+      description: Retrieve detailed audit trail for scenario
+      tags: [Audit]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: scenario_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entity_id
+          in: query
+          schema:
+            type: string
+        - name: year_index
+          in: query
+          schema:
+            type: integer
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [info, warning, decision_point]
+      responses:
+        '200':
+          description: Trace entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceLog'
+
+  # Knowledge Base
+  /references/search:
+    get:
+      summary: Search reference materials
+      description: Search authoritative financial references
+      tags: [Knowledge]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [tax, super, property, regulation]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 5
+      responses:
+        '200':
+          description: Reference search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceSearchResult'
+
+  # Development/QA Endpoints
+  /qa/run-golden-suite:
+    post:
+      summary: Run golden test suite
+      description: Execute comprehensive test suite (dev/compliance only)
+      tags: [QA]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Test results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteResult'
+
+  /qa/run-calculation:
+    post:
+      summary: Test individual calculation
+      description: Run specific CAL with test inputs (dev/compliance only)
+      tags: [QA]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationTestRequest'
+      responses:
+        '200':
+          description: Calculation test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationTestResult'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    # Common Types
+    Money:
+      type: object
+      properties:
+        amount:
+          type: string
+          pattern: '^\d+\.\d{2}$'
+        currency:
+          type: string
+          default: "AUD"
+      required: [amount]
+
+    DateRange:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+
+    # Authentication
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required: [email, password]
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+          default: "bearer"
+        expires_in:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+      required: [access_token, refresh_token, user]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [consumer, adviser, compliance, partner]
+        first_name:
+          type: string
+        last_name:
+          type: string
+        organization:
+          type: string
+      required: [id, email, role]
+
+    # Health
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        version:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        dependencies:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [up, down]
+            llm_service:
+              type: string
+              enum: [up, down]
+            cache:
+              type: string
+              enum: [up, down]
+      required: [status, timestamp]
+
+    # Scenarios
+    CreateScenarioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        base_scenario_id:
+          type: string
+        calculation_state:
+          $ref: '#/components/schemas/CalculationState'
+      required: [name]
+
+    UpdateScenarioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        calculation_state:
+          $ref: '#/components/schemas/CalculationState'
+
+    Scenario:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [draft, calculating, complete, error]
+        calculation_state:
+          $ref: '#/components/schemas/CalculationState'
+        results_summary:
+          $ref: '#/components/schemas/ResultsSummary'
+        created_by:
+          type: string
+        created_timestamp:
+          type: string
+          format: date-time
+        last_modified:
+          type: string
+          format: date-time
+      required: [id, name, status, created_timestamp]
+
+    ScenarioList:
+      type: object
+      properties:
+        scenarios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scenario'
+        total_count:
+          type: integer
+        has_more:
+          type: boolean
+      required: [scenarios, total_count, has_more]
+
+    # Calculations
+    RunCalculationRequest:
+      type: object
+      properties:
+        projection_years:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 30
+        assumption_set_id:
+          type: string
+        assumption_overrides:
+          type: object
+          properties:
+            inflation_rate: { type: number }
+            wage_growth_rate: { type: number }
+        include_trace:
+          type: boolean
+          default: true
+
+    CalculationResult:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        projection_output:
+          $ref: '#/components/schemas/ProjectionOutput'
+        execution_time_ms:
+          type: integer
+        trace_available:
+          type: boolean
+      required: [scenario_id, projection_output]
+
+    ResultsSummary:
+      type: object
+      properties:
+        net_wealth_current:
+          $ref: '#/components/schemas/Money'
+        net_wealth_projected:
+          $ref: '#/components/schemas/Money'
+        tax_payable_current:
+          $ref: '#/components/schemas/Money'
+        retirement_age:
+          type: integer
+        risk_score:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    # Scenario Comparison
+    CompareScenariosRequest:
+      type: object
+      properties:
+        scenario_ids:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 5
+        metrics:
+          type: array
+          items:
+            type: string
+          default: ["net_wealth", "tax_payable", "retirement_age"]
+      required: [scenario_ids]
+
+    ScenarioComparison:
+      type: object
+      properties:
+        scenarios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scenario'
+        comparison:
+          type: object
+          additionalProperties:
+            type: object
+        recommendations:
+          type: array
+          items:
+            type: string
+      required: [scenarios, comparison]
+
+    # Strategy
+    OptimizationRequest:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        strategy_template_id:
+          type: string
+        target_metric:
+          type: string
+          enum: [net_wealth, tax_efficiency, retirement_age]
+        constraints:
+          type: object
+      required: [scenario_id, strategy_template_id, target_metric]
+
+    OptimizationResult:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        optimized_scenario:
+          $ref: '#/components/schemas/Scenario'
+        improvement:
+          type: object
+        iterations:
+          type: integer
+      required: [scenario_id, optimized_scenario]
+
+    StrategyTemplateList:
+      type: object
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/StrategyTemplate'
+      required: [templates]
+
+    StrategyTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domain:
+          type: string
+        description:
+          type: string
+      required: [id, name, domain]
+
+    # Advice/Compliance
+    ComplianceRequest:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        policies:
+          type: array
+          items:
+            type: string
+      required: [scenario_id]
+
+    ComplianceResult:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        status:
+          type: string
+          enum: [compliant, warnings, blocked]
+        policy_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyResult'
+        recommendations:
+          type: array
+          items:
+            type: string
+      required: [scenario_id, status]
+
+    PolicyResult:
+      type: object
+      properties:
+        policy_id:
+          type: string
+        status:
+          type: string
+          enum: [pass, warning, fail]
+        message:
+          type: string
+        reference:
+          type: string
+      required: [policy_id, status, message]
+
+    # Modes
+    ModeExecutionRequest:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        parameters:
+          type: object
+      required: [scenario_id]
+
+    ModeExecutionResult:
+      type: object
+      properties:
+        mode:
+          type: string
+        scenario_id:
+          type: string
+        result:
+          type: object
+        explanation:
+          type: string
+      required: [mode, scenario_id, result]
+
+    # Chat
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+        scenario_id:
+          type: string
+        context:
+          type: object
+      required: [message]
+
+    ChatResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        mode_used:
+          type: string
+        scenario_updated:
+          type: boolean
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceCitation'
+      required: [response, mode_used]
+
+    SourceCitation:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+        type:
+          type: string
+          enum: [regulation, calculation, reference]
+
+    # Audit
+    TraceLog:
+      type: object
+      properties:
+        scenario_id:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TraceEntry'
+        total_count:
+          type: integer
+      required: [scenario_id, entries]
+
+    TraceEntry:
+      type: object
+      properties:
+        calc_id:
+          type: string
+        entity_id:
+          type: string
+        year_index:
+          type: integer
+        field:
+          type: string
+        severity:
+          type: string
+          enum: [info, warning, decision_point]
+        explanation:
+          type: string
+        metadata:
+          type: object
+        timestamp:
+          type: string
+          format: date-time
+      required: [calc_id, year_index, field, severity, explanation]
+
+    # Knowledge
+    ReferenceSearchResult:
+      type: object
+      properties:
+        query:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReferenceDocument'
+        total_found:
+          type: integer
+      required: [query, results]
+
+    ReferenceDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+        source:
+          type: string
+        version:
+          type: string
+        last_updated:
+          type: string
+          format: date
+      required: [id, title, category]
+
+    # QA/Testing
+    TestSuiteResult:
+      type: object
+      properties:
+        suite_name:
+          type: string
+        status:
+          type: string
+          enum: [passed, failed, partial]
+        tests_run:
+          type: integer
+        tests_passed:
+          type: integer
+        tests_failed:
+          type: integer
+        execution_time_ms:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResult'
+      required: [suite_name, status, tests_run, tests_passed, tests_failed]
+
+    TestResult:
+      type: object
+      properties:
+        test_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [passed, failed, error]
+        execution_time_ms:
+          type: integer
+        error_message:
+          type: string
+        expected:
+          type: object
+        actual:
+          type: object
+
+    CalculationTestRequest:
+      type: object
+      properties:
+        calc_id:
+          type: string
+        inputs:
+          type: object
+        expected_outputs:
+          type: object
+      required: [calc_id, inputs]
+
+    CalculationTestResult:
+      type: object
+      properties:
+        calc_id:
+          type: string
+        status:
+          type: string
+          enum: [passed, failed, error]
+        inputs:
+          type: object
+        expected_outputs:
+          type: object
+        actual_outputs:
+          type: object
+        execution_time_ms:
+          type: integer
+        trace_log:
+          type: array
+          items:
+            $ref: '#/components/schemas/TraceEntry'
+
+    # Core Data Models (Aligned with data-model.md)
+    CalculationState:
+      type: object
+      description: Complete calculation input snapshot
+      properties:
+        global_context:
+          $ref: '#/components/schemas/GlobalContext'
+        entity_context:
+          $ref: '#/components/schemas/EntityContext'
+        position_context:
+          $ref: '#/components/schemas/FinancialPositionContext'
+        cashflow_context:
+          $ref: '#/components/schemas/CashflowContext'
+        scenario_id:
+          type: string
+        assumption_set_id:
+          type: string
+
+    GlobalContext:
+      type: object
+      properties:
+        financial_year:
+          type: integer
+        effective_date:
+          type: string
+          format: date
+        projection_years:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 30
+        jurisdiction:
+          type: string
+          default: "AU"
+        currency:
+          type: string
+          default: "AUD"
+        inflation_rate:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+        wage_growth_rate:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+        property_growth_rate:
+          type: number
+          format: decimal
+          minimum: -1
+          maximum: 1
+        equity_return_rate:
+          type: number
+          format: decimal
+          minimum: -1
+          maximum: 1
+        fixed_income_return_rate:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+        cash_return_rate:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+        discount_rate:
+          type: number
+          format: decimal
+        tax_brackets:
+          type: array
+          items:
+            type: object
+        medicare_levy_rate:
+          type: number
+          format: decimal
+        medicare_levy_thresholds:
+          type: object
+        concessional_cap:
+          type: integer
+        non_concessional_cap:
+          type: integer
+        tbc_general_cap:
+          type: integer
+        precision_mode:
+          type: string
+          enum: [CENT, DOLLAR]
+          default: CENT
+        rounding_mode:
+          type: string
+          enum: [HALF_UP, HALF_DOWN, UP, DOWN]
+          default: HALF_UP
+
+    EntityContext:
+      type: object
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyEntity'
+        trusts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustEntity'
+        smsf_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/SMSFEntity'
+        household_budget:
+          $ref: '#/components/schemas/HouseholdBudget'
+
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          enum: [primary, partner, dependant]
+        date_of_birth:
+          type: string
+          format: date
+        sex:
+          type: string
+          enum: [M, F]
+        residency_status:
+          type: string
+          enum: [RESIDENT, NON_RESIDENT, TEMPORARY]
+          default: RESIDENT
+        work_status:
+          type: string
+          enum: [FULL_TIME, PART_TIME, CASUAL, UNEMPLOYED, RETIRED, STUDENT]
+          default: FULL_TIME
+        smoker_status:
+          type: boolean
+        occupation_risk_band:
+          type: string
+        residency_qualifying_years:
+          type: integer
+          minimum: 0
+          default: 0
+        age_pension_age_reached_flag:
+          type: boolean
+          default: false
+        relationships:
+          type: array
+          items:
+            type: object
+            properties:
+              target_person_id:
+                type: string
+              type:
+                type: string
+                enum: [spouse, child, parent]
+              financial_dependence:
+                type: number
+                format: decimal
+                minimum: 0.0
+                maximum: 1.0
+
+    CompanyEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        aggregated_turnover:
+          type: number
+          format: decimal
+          minimum: 0
+        base_rate_entity_flag:
+          type: boolean
+          default: false
+        company_tax_rate:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          default: 0.30
+        franked_dividends_paid:
+          type: number
+          format: decimal
+          minimum: 0
+          default: 0
+        franking_account_balance:
+          type: number
+          format: decimal
+          minimum: 0
+          default: 0
+
+    TrustEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        trust_type:
+          type: string
+        net_income:
+          type: number
+          format: decimal
+          minimum: 0
+        distribution_components:
+          type: object
+          additionalProperties:
+            type: object
+        upe_to_company_amounts:
+          type: number
+          format: decimal
+          minimum: 0
+          default: 0
+
+    SMSFEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        taxable_income_ordinary:
+          type: number
+          format: decimal
+          minimum: 0
+        taxable_income_nali:
+          type: number
+          format: decimal
+          minimum: 0
+        ecpi_proportion:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          default: 0
+        members:
+          type: array
+          items:
+            type: string
+
+    InsurancePolicy:
+      type: object
+      properties:
+        id:
+          type: string
+        owner_entity_id:
+          type: string
+        insured_person_id:
+          type: string
+        cover_type:
+          type: string
+          enum: [LIFE, TPD, TRAUMA, IP]
+        sum_insured:
+          type: number
+          format: decimal
+          minimum: 0
+        monthly_benefit:
+          type: number
+          format: decimal
+          minimum: 0
+        waiting_period_days:
+          type: integer
+          minimum: 0
+        benefit_period_years:
+          type: integer
+          minimum: 0
+        premium_amount:
+          type: number
+          format: decimal
+          minimum: 0
+        premium_frequency:
+          type: string
+          enum: [MONTHLY, ANNUAL]
+        premium_basis:
+          type: string
+          enum: [STEPPED, LEVEL]
+        tax_deductible_flag:
+          type: boolean
+          default: false
+
+    SuperAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        owner_person_id:
+          type: string
+        fund_type:
+          type: string
+          enum: [INDUSTRY, RETAIL, SMSF]
+        phase:
+          type: string
+          enum: [ACCUMULATION, PENSION]
+        balance_current:
+          type: number
+          format: decimal
+          minimum: 0
+        taxable_component:
+          type: number
+          format: decimal
+          minimum: 0
+        tax_free_component:
+          type: number
+          format: decimal
+          minimum: 0
+        preserved_amount:
+          type: number
+          format: decimal
+          minimum: 0
+        investment_option:
+          type: object
+          additionalProperties:
+            type: number
+            format: decimal
+            minimum: 0
+            maximum: 1
+
+    HouseholdBudget:
+      type: object
+      properties:
+        household_id:
+          type: string
+        housing_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        food_groceries_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        medical_health_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        children_education_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        insurance_premiums_general:
+          type: number
+          format: decimal
+          minimum: 0
+        discretionary_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        allocation_strategy:
+          type: string
+          enum: [EQUAL_SPLIT, PRO_RATA_GROSS, PRIMARY_ABSORBS]
+          default: EQUAL_SPLIT
+
+    FinancialPositionContext:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        liabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Loan'
+        insurance_policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsurancePolicy'
+        super_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuperAccount'
+
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        asset_type:
+          type: string
+        ownership:
+          type: array
+          items:
+            type: object
+            properties:
+              entity_id:
+                type: string
+              share:
+                type: number
+                format: decimal
+                minimum: 0
+                maximum: 1
+        valuations:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                format: decimal
+              currency:
+                type: string
+                default: "AUD"
+              effective_date:
+                type: string
+                format: date
+              source:
+                type: string
+                enum: [CLIENT_ESTIMATE, BANK_FEED, SYSTEM_PROJECTION]
+                default: CLIENT_ESTIMATE
+          minItems: 1
+        linked_entity_id:
+          type: string
+
+    Loan:
+      type: object
+      properties:
+        id:
+          type: string
+        linked_asset_id:
+          type: string
+        borrower_entity_ids:
+          type: array
+          items:
+            type: string
+        loan_type:
+          type: string
+          enum: [HOME, INVESTMENT, PERSONAL, CREDIT_CARD]
+        principal_outstanding:
+          type: number
+          format: decimal
+          minimum: 0
+        offset_balance:
+          type: number
+          format: decimal
+          minimum: 0
+          default: 0
+        redraw_balance:
+          type: number
+          format: decimal
+          minimum: 0
+          default: 0
+        interest_rate_current:
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+        interest_rate_type:
+          type: string
+          enum: [VARIABLE, FIXED]
+          default: VARIABLE
+        remaining_term_years:
+          type: number
+          format: decimal
+          minimum: 0
+        repayment_frequency:
+          type: string
+          enum: [WEEKLY, FORTNIGHTLY, MONTHLY]
+          default: MONTHLY
+        repayment_amount:
+          type: number
+          format: decimal
+          minimum: 0
+        interest_only_flag:
+          type: boolean
+          default: false
+        stress_buffer_rate:
+          type: number
+          format: decimal
+          default: 0.03
+
+    CashflowContext:
+      type: object
+      properties:
+        flows:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EntityCashflow'
+        shared_budget:
+          $ref: '#/components/schemas/HouseholdBudget'
+
+    EntityCashflow:
+      type: object
+      properties:
+        entity_id:
+          type: string
+        salary_wages_gross:
+          type: number
+          format: decimal
+          minimum: 0
+        salary_sacrifice_super:
+          type: number
+          format: decimal
+          minimum: 0
+        bonus_gross:
+          type: number
+          format: decimal
+          minimum: 0
+        allowances_gross:
+          type: number
+          format: decimal
+          minimum: 0
+        reportable_fringe_benefits:
+          type: number
+          format: decimal
+          minimum: 0
+        interest_income:
+          type: number
+          format: decimal
+          minimum: 0
+        dividend_unfranked:
+          type: number
+          format: decimal
+          minimum: 0
+        dividend_franked:
+          type: number
+          format: decimal
+          minimum: 0
+        dividend_franking_credits:
+          type: number
+          format: decimal
+          minimum: 0
+        rental_income_gross:
+          type: number
+          format: decimal
+          minimum: 0
+        foreign_income:
+          type: number
+          format: decimal
+          minimum: 0
+        foreign_tax_paid:
+          type: number
+          format: decimal
+          minimum: 0
+        work_related_expenses:
+          type: number
+          format: decimal
+          minimum: 0
+        personal_super_contributions:
+          type: number
+          format: decimal
+          minimum: 0
+        employer_super_guarantee:
+          type: number
+          format: decimal
+          minimum: 0
+        personal_non_concessional_contributions:
+          type: number
+          format: decimal
+          minimum: 0
+        spouse_contributions_received:
+          type: number
+          format: decimal
+          minimum: 0
+        downsizer_contributions:
+          type: number
+          format: decimal
+          minimum: 0
+
+    ProjectionOutput:
+      type: object
+      properties:
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/YearSnapshot'
+
+    YearSnapshot:
+      type: object
+      properties:
+        year_index:
+          type: integer
+        financial_year:
+          type: integer
+        net_wealth:
+          $ref: '#/components/schemas/Money'
+        tax_payable:
+          $ref: '#/components/schemas/Money'

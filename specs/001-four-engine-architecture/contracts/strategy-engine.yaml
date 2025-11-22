@@ -1,0 +1,392 @@
+# Strategy Engine API Contracts
+
+This document defines the contracts for the Strategy Engine component, which provides optimization and scenario generation capabilities.
+
+## 1. Strategy Engine Interface
+
+### Core Optimization Function
+
+```python
+from typing import Dict, List, Optional
+from pydantic import BaseModel
+from decimal import Decimal
+
+class OptimizationRequest(BaseModel):
+    """Request for strategy optimization."""
+    scenario_id: str
+    strategy_template_id: str
+    target_metric: str  # e.g., "net_wealth", "tax_efficiency"
+    constraints: Dict[str, Any]
+    max_iterations: int = 100
+    convergence_threshold: Decimal = Decimal("0.01")
+
+class OptimizationResult(BaseModel):
+    """Result of optimization run."""
+    scenario_id: str
+    optimized_scenario_id: str
+    strategy_template_id: str
+    target_metric: str
+    optimal_value: Decimal
+    iterations_performed: int
+    convergence_achieved: bool
+    improvement_percentage: Decimal
+    parameter_values: Dict[str, Decimal]
+    trace_log: List[StrategyTraceEntry]
+
+def optimize_strategy(request: OptimizationRequest) -> OptimizationResult:
+    """
+    Run strategy optimization on a scenario.
+
+    Args:
+        request: Optimization parameters and constraints
+
+    Returns:
+        OptimizationResult with best scenario found
+
+    Raises:
+        OptimizationError: For invalid requests or convergence failures
+    """
+```
+
+## 2. Strategy Templates
+
+### Template Structure
+
+```python
+class StrategyTemplate(BaseModel):
+    """Reusable strategy configuration."""
+    id: str
+    name: str
+    domain: StrategyDomain  # super_contribution, debt_reduction, etc.
+    description: str
+
+    # Tunable parameters
+    parameters: List[StrategyParameter]
+
+    # Constraints and limits
+    constraints: List[StrategyConstraint]
+
+    # Applicability rules
+    applicability_checks: List[str]  # CAL IDs to validate
+
+    # Optimization settings
+    optimization_method: OptimizationMethod = "grid_search"
+    default_max_iterations: int = 50
+
+class StrategyParameter(BaseModel):
+    """Tunable parameter in a strategy."""
+    name: str
+    description: str
+    data_type: str  # "decimal", "integer", "boolean"
+    min_value: Optional[Decimal]
+    max_value: Optional[Decimal]
+    default_value: Any
+    step_size: Optional[Decimal]  # for grid search
+
+class StrategyConstraint(BaseModel):
+    """Constraint on strategy parameters."""
+    parameter_name: str
+    constraint_type: str  # "min", "max", "equals", "custom"
+    value: Any
+    description: str
+```
+
+### Available Strategy Templates
+
+| Template ID | Name | Domain | Parameters |
+|-------------|------|--------|------------|
+| **STR-SUP-001** | Salary Sacrifice Optimization | Super | `salary_sacrifice_pct` (0-30%) |
+| **STR-DEBT-001** | Debt Reduction Strategy | Debt | `extra_payment_amount`, `target_debt` |
+| **STR-INV-001** | Investment Allocation | Portfolio | `equity_allocation`, `risk_profile` |
+| **STR-TAX-001** | Tax Efficiency Optimization | Tax | `deduction_strategy`, `offset_usage` |
+| **STR-RET-001** | Retirement Planning | Retirement | `retirement_age`, `spending_target` |
+
+## 3. Engine API Endpoints
+
+### POST /api/v1/strategies/optimize
+
+Run strategy optimization.
+
+**Request:**
+```json
+{
+  "scenario_id": "scenario_123",
+  "strategy_template_id": "STR-SUP-001",
+  "target_metric": "net_wealth",
+  "constraints": {
+    "max_salary_sacrifice": 0.30,
+    "maintain_cash_buffer": true
+  },
+  "max_iterations": 50,
+  "convergence_threshold": "0.001"
+}
+```
+
+**Response:**
+```json
+{
+  "scenario_id": "scenario_123",
+  "optimized_scenario_id": "scenario_123_opt",
+  "strategy_template_id": "STR-SUP-001",
+  "target_metric": "net_wealth",
+  "optimal_value": "2850000.00",
+  "iterations_performed": 23,
+  "convergence_achieved": true,
+  "improvement_percentage": "8.5",
+  "parameter_values": {
+    "salary_sacrifice_pct": "0.25"
+  },
+  "trace_log": [
+    {
+      "iteration": 1,
+      "parameter_values": { "salary_sacrifice_pct": "0.10" },
+      "metric_value": "2750000.00",
+      "accepted": true
+    },
+    {
+      "iteration": 23,
+      "parameter_values": { "salary_sacrifice_pct": "0.25" },
+      "metric_value": "2850000.00",
+      "accepted": true,
+      "reason": "Convergence achieved"
+    }
+  ]
+}
+```
+
+### GET /api/v1/strategies/templates
+
+List available strategy templates.
+
+**Response:**
+```json
+{
+  "templates": [
+    {
+      "id": "STR-SUP-001",
+      "name": "Salary Sacrifice Optimization",
+      "domain": "super_contribution",
+      "description": "Optimize salary sacrifice percentage for maximum super balance",
+      "parameters": [
+        {
+          "name": "salary_sacrifice_pct",
+          "description": "Percentage of salary to sacrifice",
+          "data_type": "decimal",
+          "min_value": "0.0",
+          "max_value": "0.30",
+          "default_value": "0.15",
+          "step_size": "0.01"
+        }
+      ],
+      "constraints": [],
+      "optimization_method": "grid_search"
+    }
+  ]
+}
+```
+
+### POST /api/v1/strategies/validate
+
+Validate strategy applicability.
+
+**Request:**
+```json
+{
+  "scenario_id": "scenario_123",
+  "strategy_template_id": "STR-SUP-001"
+}
+```
+
+**Response:**
+```json
+{
+  "applicable": true,
+  "checks_passed": [
+    "CAL-SUP-001: Concessional cap available",
+    "CAL-PIT-001: Salary sacrifice eligible"
+  ],
+  "warnings": [],
+  "recommended_parameters": {
+    "max_salary_sacrifice": "0.25"
+  }
+}
+```
+
+## 4. Optimization Methods
+
+### Grid Search
+
+**Algorithm:**
+1. Generate parameter combinations within bounds
+2. Evaluate each combination using Calculation Engine
+3. Return best result found
+
+**Use Case:** Small parameter spaces, guaranteed coverage
+
+**Parameters:**
+- `step_size`: Granularity of parameter search
+- `max_combinations`: Limit on evaluations (default: 1000)
+
+### Gradient Descent
+
+**Algorithm:**
+1. Start with initial parameter values
+2. Calculate gradient of objective function
+3. Update parameters in direction of improvement
+4. Repeat until convergence or max iterations
+
+**Use Case:** Continuous parameters, smooth objective functions
+
+**Parameters:**
+- `learning_rate`: Step size for parameter updates
+- `convergence_threshold`: Minimum improvement required
+
+### Genetic Algorithm
+
+**Algorithm:**
+1. Generate initial population of parameter sets
+2. Evaluate fitness of each individual
+3. Select fittest individuals for reproduction
+4. Apply crossover and mutation operators
+5. Repeat for multiple generations
+
+**Use Case:** Complex parameter interactions, non-smooth functions
+
+**Parameters:**
+- `population_size`: Number of parameter sets per generation
+- `mutation_rate`: Probability of random parameter changes
+- `generations`: Number of evolutionary cycles
+
+## 5. Strategy Trace Contracts
+
+### StrategyTraceEntry Structure
+
+```json
+{
+  "iteration": 5,
+  "parameter_values": {
+    "salary_sacrifice_pct": "0.20"
+  },
+  "metric_value": "2800000.00",
+  "accepted": true,
+  "reason": "Better than previous best",
+  "calculation_time_ms": 450,
+  "metadata": {
+    "super_contribution": "10000.00",
+    "tax_saving": "2850.00",
+    "net_benefit": "7150.00"
+  }
+}
+```
+
+### Trace Filtering
+
+**Query Parameters:**
+- `iteration_range`: Min/max iteration numbers
+- `accepted_only`: Only successful iterations
+- `parameter_name`: Filter by specific parameter changes
+
+## 6. Error Handling Contracts
+
+### OptimizationError Types
+
+```python
+class OptimizationError(Exception):
+    """Base optimization error."""
+    strategy_template_id: str
+    scenario_id: str
+    error_code: str
+    message: str
+
+class InvalidParametersError(OptimizationError):
+    """Invalid optimization parameters."""
+    pass
+
+class ConvergenceFailureError(OptimizationError):
+    """Optimization failed to converge."""
+    pass
+
+class ConstraintViolationError(OptimizationError):
+    """Strategy constraints violated."""
+    pass
+```
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "type": "ConvergenceFailureError",
+    "strategy_template_id": "STR-SUP-001",
+    "scenario_id": "scenario_123",
+    "error_code": "MAX_ITERATIONS_EXCEEDED",
+    "message": "Optimization did not converge within 100 iterations",
+    "details": {
+      "iterations_performed": 100,
+      "best_value": "2750000.00",
+      "final_improvement": "0.0001",
+      "convergence_threshold": "0.001"
+    }
+  },
+  "trace_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+## 7. Performance Contracts
+
+### Response Time Guarantees
+
+| Operation | Target | Maximum |
+|-----------|--------|---------|
+| Template validation | < 200ms | < 1s |
+| Simple optimization (grid search, <10 iterations) | < 5s | < 15s |
+| Complex optimization (genetic, 50 iterations) | < 30s | < 60s |
+| Multi-strategy comparison | < 60s | < 120s |
+
+### Accuracy Guarantees
+
+- **Convergence Detection**: Reliable within 1% of optimal value
+- **Constraint Satisfaction**: 100% of valid constraints enforced
+- **Reproducibility**: Same inputs produce same results
+- **Numerical Stability**: No floating-point precision issues
+
+## 8. Integration Test Contracts
+
+### Strategy Integration Tests
+
+1. **End-to-End Optimization**: Template → optimization → scenario creation
+2. **Constraint Validation**: Invalid constraints properly rejected
+3. **Convergence Testing**: Various optimization methods converge appropriately
+4. **Multi-Parameter Optimization**: Complex strategies with interdependent parameters
+5. **Error Handling**: Invalid scenarios and parameters handled gracefully
+
+### Performance Test Contracts
+
+- **Load Testing**: 10 concurrent optimizations, 95th percentile < 45s
+- **Memory Testing**: Large parameter spaces don't cause memory issues
+- **Timeout Testing**: Long-running optimizations properly terminated
+- **Resource Usage**: CPU and memory bounds maintained during optimization
+
+## 9. Strategy Validation Contracts
+
+### Applicability Validation
+
+**Pre-optimization Checks:**
+1. **Template Compatibility**: Strategy works with scenario structure
+2. **Parameter Bounds**: All parameters within valid ranges
+3. **Constraint Consistency**: Constraints don't conflict
+4. **Calculation Dependencies**: Required CALs available in scenario
+
+**Runtime Validation:**
+1. **Constraint Enforcement**: Parameters stay within bounds
+2. **Calculation Success**: All underlying calculations succeed
+3. **Result Validity**: Optimized scenario produces valid results
+4. **Improvement Tracking**: Each iteration improves or maintains quality
+
+### Result Validation
+
+**Output Validation:**
+1. **Scenario Creation**: Optimized scenario properly saved
+2. **Parameter Application**: Parameters correctly applied to scenario
+3. **Metric Calculation**: Target metric correctly computed
+4. **Trace Completeness**: Full optimization trace available

@@ -1,0 +1,333 @@
+# Calculation Engine API Contracts
+
+This document defines the contracts for the Calculation Engine component, which provides deterministic financial calculations.
+
+## 1. Core Calculation Interface
+
+### CAL Function Signature
+
+All Canonical Calculations (CALs) follow this interface:
+
+```python
+from typing import Optional
+from pydantic import BaseModel
+from decimal import Decimal
+
+class CalculationResult(BaseModel):
+    """Result of a CAL execution."""
+    success: bool
+    value: Optional[Decimal]
+    trace_entries: List[TraceEntry]
+    error_message: Optional[str]
+
+def run_CAL_XXX(
+    state: CalculationState,
+    entity_id: str,
+    year_index: int = 0
+) -> CalculationResult:
+    """
+    Execute canonical calculation CAL-XXX.
+
+    Args:
+        state: Complete calculation state
+        entity_id: Target entity (person/company/trust/smsf)
+        year_index: Projection year (0 = current year)
+
+    Returns:
+        CalculationResult with computed value and trace
+
+    Raises:
+        CalculationError: For invalid inputs or computation failures
+    """
+```
+
+### CAL Categories
+
+| Category | Purpose | Example CALs |
+|----------|---------|---------------|
+| **CAL-PIT** | Personal Income Tax | CAL-PIT-001 (Resident Tax) |
+| **CAL-SUP** | Superannuation | CAL-SUP-007 (Super Tax) |
+| **CAL-CGT** | Capital Gains Tax | CAL-CGT-001 (Discount Method) |
+| **CAL-PRP** | Property | CAL-PRP-005 (Rental Cashflow) |
+| **CAL-DEBT** | Debt & Loans | CAL-DEBT-001 (Loan Amortization) |
+| **CAL-FND** | Financial Position | CAL-FND-001 (Net Wealth) |
+
+## 2. Engine API Endpoints
+
+### POST /api/v1/calc/run
+
+Execute calculation engine on a scenario.
+
+**Request:**
+```json
+{
+  "scenario_id": "string",
+  "projection_years": 30,
+  "assumption_set_id": "string",
+  "include_trace": true,
+  "entity_scope": "household"
+}
+```
+
+**Response:**
+```json
+{
+  "scenario_id": "string",
+  "status": "completed",
+  "execution_time_ms": 1250,
+  "projection_output": {
+    "base_state": { /* CalculationState */ },
+    "timeline": [
+      {
+        "year_index": 0,
+        "financial_year": 2025,
+        "position_snapshot": { /* FinancialPositionContext */ },
+        "intermediaries": {
+          "results": {
+            "person_001": {
+              "tax": {
+                "assessable_income": "85000.00",
+                "taxable_income": "75000.00",
+                "base_tax": "14247.00",
+                "medicare_levy": "1275.00",
+                "net_tax_payable": "15522.00"
+              },
+              "super": {
+                "contributions_tax": "3450.00",
+                "balance_projection": ["250000.00", "275000.00", "..."]
+              }
+            }
+          },
+          "trace_log": [
+            {
+              "calc_id": "CAL-PIT-001",
+              "entity_id": "person_001",
+              "year_index": 0,
+              "field": "net_tax_payable",
+              "severity": "info",
+              "explanation": "Tax calculated using resident marginal rates",
+              "metadata": {
+                "bracket": "37%",
+                "taxable_income": "75000.00"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+```
+
+**Error Responses:**
+- `400 Bad Request`: Invalid calculation state
+- `422 Unprocessable Entity`: Business rule violations
+- `500 Internal Server Error`: Calculation engine failure
+
+### GET /api/v1/calc/status/{scenario_id}
+
+Check calculation status for async operations.
+
+**Response:**
+```json
+{
+  "scenario_id": "string",
+  "status": "running|completed|failed",
+  "progress": 0.75,
+  "estimated_completion_seconds": 45,
+  "error_message": null
+}
+```
+
+## 3. Calculation Validation Contracts
+
+### Input Validation Rules
+
+1. **State Completeness**: All required fields present
+2. **Type Safety**: Monetary values as Decimal, dates as date objects
+3. **Business Rules**: Tax brackets valid, contribution caps not exceeded
+4. **Entity Consistency**: Referenced entities exist and are valid
+5. **Temporal Logic**: Effective dates are logical and consistent
+
+### Output Validation Rules
+
+1. **Determinism**: Same inputs produce identical outputs
+2. **Precision**: Monetary values rounded to cents (2 decimal places)
+3. **Completeness**: All expected fields populated
+4. **Trace Coverage**: Every calculated value has trace explanation
+5. **Range Validity**: Values within expected ranges (no negative taxes, etc.)
+
+## 4. Error Handling Contracts
+
+### CalculationError Types
+
+```python
+class CalculationError(Exception):
+    """Base calculation error."""
+    calc_id: str
+    entity_id: str
+    year_index: int
+    error_code: str
+    message: str
+    details: Dict[str, Any]
+
+class InvalidInputError(CalculationError):
+    """Invalid input data."""
+    pass
+
+class BusinessRuleViolationError(CalculationError):
+    """Business rule violated."""
+    pass
+
+class ComputationError(CalculationError):
+    """Mathematical computation failed."""
+    pass
+```
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "type": "CalculationError",
+    "calc_id": "CAL-PIT-001",
+    "entity_id": "person_001",
+    "year_index": 0,
+    "error_code": "INVALID_TAX_BRACKET",
+    "message": "Tax bracket threshold cannot be negative",
+    "details": {
+      "field": "tax_brackets[0].threshold",
+      "provided_value": "-1000",
+      "expected_range": "0 to 999999"
+    }
+  },
+  "trace_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+## 5. Performance Contracts
+
+### Response Time Guarantees
+
+| Operation | Target | Maximum |
+|-----------|--------|---------|
+| Single CAL | < 100ms | < 500ms |
+| Year projection | < 500ms | < 2s |
+| 30-year projection | < 2s | < 5s |
+| Complex multi-entity | < 5s | < 10s |
+
+### Resource Usage Limits
+
+- **Memory**: < 500MB per calculation
+- **CPU**: < 80% utilization during peak
+- **Concurrent Calculations**: Up to 50 simultaneous
+- **Queue Depth**: 100 pending calculations max
+
+## 6. Trace Log Contracts
+
+### Trace Entry Structure
+
+```json
+{
+  "calc_id": "CAL-PIT-001",
+  "entity_id": "person_001",
+  "year_index": 0,
+  "field": "net_tax_payable",
+  "severity": "info|warning|decision_point",
+  "explanation": "Human-readable explanation",
+  "metadata": {
+    "input_values": { "taxable_income": "75000.00" },
+    "intermediate_steps": { "base_tax": "14247.00" },
+    "rule_applied": "Resident marginal rates 2025/26"
+  },
+  "timestamp": "2025-11-21T10:30:00Z"
+}
+```
+
+### Trace Filtering
+
+**Query Parameters:**
+- `calc_id`: Filter by specific calculation
+- `entity_id`: Filter by entity
+- `year_index`: Filter by projection year
+- `severity`: Filter by severity level
+- `field`: Filter by calculated field
+
+### Trace Validation Rules
+
+1. **Completeness**: Every numeric output has at least one trace entry
+2. **Accuracy**: Trace values match actual calculations
+3. **Consistency**: Same calculation produces identical trace
+4. **Performance**: Trace generation < 10% of total calculation time
+
+## 7. Golden Test Contracts
+
+### Test Case Structure
+
+```json
+{
+  "test_id": "GOLDEN-PIT-001",
+  "description": "Basic resident tax calculation",
+  "calc_id": "CAL-PIT-001",
+  "inputs": {
+    "global_context": {
+      "financial_year": 2025,
+      "tax_brackets": [
+        { "threshold": 0, "rate": 0.0 },
+        { "threshold": 18200, "rate": 0.19 },
+        { "threshold": 45000, "rate": 0.325 }
+      ]
+    },
+    "entity_context": {
+      "persons": [{
+        "id": "person_001",
+        "taxable_income": 50000.00
+      }]
+    }
+  },
+  "expected_outputs": {
+    "net_tax_payable": "8547.00",
+    "effective_rate": 0.17094
+  },
+  "trace_assertions": [
+    {
+      "field": "base_tax",
+      "expected_value": "8547.00",
+      "explanation_contains": "marginal rate"
+    }
+  ]
+}
+```
+
+### Test Execution Results
+
+```json
+{
+  "test_id": "GOLDEN-PIT-001",
+  "status": "passed|failed",
+  "execution_time_ms": 45,
+  "inputs_valid": true,
+  "outputs_match": true,
+  "trace_valid": true,
+  "differences": [],
+  "actual_outputs": { /* actual values */ },
+  "expected_outputs": { /* expected values */ }
+}
+```
+
+## 8. Integration Test Contracts
+
+### Engine Integration Tests
+
+1. **End-to-End Calculation**: Complete scenario → projection output
+2. **Multi-Entity Calculations**: Household with multiple persons/entities
+3. **Projection Consistency**: Year N+1 builds correctly on Year N
+4. **Assumption Sensitivity**: Different assumption sets produce different results
+5. **Error Propagation**: Invalid inputs produce appropriate errors
+
+### Performance Test Contracts
+
+- **Load Testing**: 50 concurrent calculations, 95th percentile < 3s
+- **Stress Testing**: 100 concurrent calculations, system stability
+- **Memory Testing**: Large scenarios (100+ entities) don't cause OOM
+- **Long-Running Tests**: 50-year projections complete successfully

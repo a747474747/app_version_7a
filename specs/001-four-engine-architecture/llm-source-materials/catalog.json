@@ -1,0 +1,110 @@
+[
+  {
+    "material_id": "australian-financial-system",
+    "title": "Australian Financial System Primer",
+    "description": "Overview of Australian financial institutions, products, tax system, and investment structures",
+    "category": "system_primer",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "australian-financial-system.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about Australian financial system without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "financial-advice-process",
+    "title": "Financial Advice Process Guide",
+    "description": "Stages of financial advice, adviser responsibilities, client communication patterns, and documentation requirements",
+    "category": "process",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "financial-advice-process.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about the financial advice process without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "regulatory-environment",
+    "title": "Regulatory Environment Overview",
+    "description": "ASIC regulatory framework, Best Interest Duty, licensing requirements, consumer protection, and privacy laws",
+    "category": "regulatory",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "regulatory-environment.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about Australian financial services regulation without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "interaction-patterns",
+    "title": "Interaction Pattern Library",
+    "description": "Common user question types, educational content delivery patterns, risk communication frameworks, and conversation flows",
+    "category": "process",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "interaction-patterns.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about common interaction patterns in financial advice without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "tax-regime",
+    "title": "Tax Regime: Detailed Rules and Thresholds",
+    "description": "Income tax rates, CGT rules, superannuation tax, negative gearing, and tax offsets",
+    "category": "domain_knowledge",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "domain-knowledge/tax-regime.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about Australian tax rules without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "superannuation",
+    "title": "Superannuation: Contribution Strategies and Rules",
+    "description": "Contribution types, strategies, access rules, pensions, and estate planning",
+    "category": "domain_knowledge",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "domain-knowledge/superannuation.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about superannuation rules without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "property-investment",
+    "title": "Property Investment: Considerations and Strategies",
+    "description": "Property types, investment considerations, financing strategies, tax considerations, and due diligence",
+    "category": "domain_knowledge",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "domain-knowledge/property-investment.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about property investment without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "retirement-planning",
+    "title": "Retirement Planning: Income Strategies",
+    "description": "Retirement income sources, strategies, superannuation pensions, Age Pension, and projection considerations",
+    "category": "domain_knowledge",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "domain-knowledge/retirement-planning.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about retirement planning without exposing sensitive knowledge to external LLMs."
+  },
+  {
+    "material_id": "insurance",
+    "title": "Insurance: Product Types and Suitability",
+    "description": "Life insurance types, structures, suitability considerations, tax implications, and strategies",
+    "category": "domain_knowledge",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "domain-knowledge/insurance.md",
+    "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about insurance products without exposing sensitive knowledge to external LLMs."
+  }
+]

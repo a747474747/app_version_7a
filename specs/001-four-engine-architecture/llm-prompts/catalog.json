@@ -1,0 +1,508 @@
+[
+  {
+    "prompt_id": "intent-recognition",
+    "title": "Intent Recognition Prompt",
+    "description": "Core LLM Orchestrator function for recognizing user intent and selecting appropriate execution mode",
+    "mode_id": null,
+    "category": "core_orchestrator",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "core-orchestrator/intent-recognition.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md",
+      "001-four-engine-architecture/contracts/llm-orchestrator.yaml"
+    ]
+  },
+  {
+    "prompt_id": "state-hydration",
+    "title": "State Hydration Prompt",
+    "description": "Core LLM Orchestrator function for converting natural language inputs into structured state fragments",
+    "mode_id": null,
+    "category": "core_orchestrator",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "core-orchestrator/state-hydration.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md",
+      "001-four-engine-architecture/contracts/llm-orchestrator.yaml"
+    ]
+  },
+  {
+    "prompt_id": "strategy-nomination",
+    "title": "Strategy Nomination Prompt",
+    "description": "Core LLM Orchestrator function for suggesting appropriate financial strategies based on user intent and state",
+    "mode_id": null,
+    "category": "core_orchestrator",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "core-orchestrator/strategy-nomination.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md",
+      "001-four-engine-architecture/contracts/llm-orchestrator.yaml"
+    ]
+  },
+  {
+    "prompt_id": "narrative-generation",
+    "title": "Narrative Generation Prompt",
+    "description": "Core LLM Orchestrator function for generating human-readable explanations, advice, and educational content",
+    "mode_id": null,
+    "category": "core_orchestrator",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "core-orchestrator/narrative-generation.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md",
+      "001-four-engine-architecture/contracts/llm-orchestrator.yaml"
+    ]
+  },
+  {
+    "prompt_id": "mode-01-fact-check",
+    "title": "Mode 1: Fact Check Prompt",
+    "description": "Handles factual queries about current financial state (e.g., 'What is my current net wealth?')",
+    "mode_id": 1,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-01-fact-check.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-02-crystal-ball",
+    "title": "Mode 2: Crystal Ball Prompt",
+    "description": "Handles linear projection queries (e.g., 'Am I on track for retirement?')",
+    "mode_id": 2,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-02-crystal-ball.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-03-strategy-explorer",
+    "title": "Mode 3: Strategy Explorer Prompt",
+    "description": "Handles exploration of concepts (e.g., 'How could I pay less tax?')",
+    "mode_id": 3,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-03-strategy-explorer.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-04-adviser-sandbox",
+    "title": "Mode 4: Adviser Sandbox Prompt",
+    "description": "Handles manual modeling and scenario comparison (e.g., 'Compare Strategy A vs B')",
+    "mode_id": 4,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-04-adviser-sandbox.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-05-scaled-advice",
+    "title": "Mode 5: Scaled Advice Prompt",
+    "description": "Handles single-issue advice (e.g., 'Top up super by $20k')",
+    "mode_id": 5,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-05-scaled-advice.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-06-holistic-plan",
+    "title": "Mode 6: Holistic Plan Prompt",
+    "description": "Handles comprehensive plan requests (e.g., 'Fix my finances')",
+    "mode_id": 6,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-06-holistic-plan.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-07-proactive-monitor",
+    "title": "Mode 7: Proactive Monitor Prompt",
+    "description": "Handles system-triggered alerts (e.g., 'New Tax Rates Passed')",
+    "mode_id": 7,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-07-proactive-monitor.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-08-stress-tester",
+    "title": "Mode 8: Stress Tester Prompt",
+    "description": "Handles resilience analysis (e.g., 'What if I lose my job?')",
+    "mode_id": 8,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-08-stress-tester.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-09-value-scout",
+    "title": "Mode 9: Value Scout Prompt",
+    "description": "Handles lead qualification (e.g., 'Is it worth paying for an adviser?')",
+    "mode_id": 9,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-09-value-scout.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-10-time-traveler",
+    "title": "Mode 10: Time Traveler Prompt",
+    "description": "Handles retrospective analysis (e.g., 'Why did my balance change?')",
+    "mode_id": 10,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-10-time-traveler.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-11-bulk-auditor",
+    "title": "Mode 11: Bulk Auditor Prompt",
+    "description": "Handles systemic risk checks for licensee compliance",
+    "mode_id": 11,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-11-bulk-auditor.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-12-progressive-mapper",
+    "title": "Mode 12: Progressive Mapper Prompt",
+    "description": "Handles data intake and quality checks (e.g., 'Does my data look right?')",
+    "mode_id": 12,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-12-progressive-mapper.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-13-behaviour-coach",
+    "title": "Mode 13: Behaviour Coach Prompt",
+    "description": "Handles habit and micro-action suggestions (e.g., 'Micro-actions for this week')",
+    "mode_id": 13,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-13-behaviour-coach.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-14-implementation-orchestrator",
+    "title": "Mode 14: Implementation Orchestrator Prompt",
+    "description": "Handles execution planning (e.g., 'Turn strategy into steps')",
+    "mode_id": 14,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-14-implementation-orchestrator.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-15-rule-lab",
+    "title": "Mode 15: Rule Lab Prompt",
+    "description": "Handles logic regression testing for dev and model governance",
+    "mode_id": 15,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-15-rule-lab.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-16-collaborative-session",
+    "title": "Mode 16: Collaborative Session Prompt",
+    "description": "Handles live modeling and client meeting co-pilot functionality",
+    "mode_id": 16,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-16-collaborative-session.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-17-calculation-harness",
+    "title": "Mode 17: Calculation Harness Prompt",
+    "description": "Handles atomic CAL unit testing for engine QA",
+    "mode_id": 17,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-17-calculation-harness.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-18-scenario-fuzzer",
+    "title": "Mode 18: Scenario Fuzzer Prompt",
+    "description": "Handles robustness and edge case testing for dev",
+    "mode_id": 18,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-18-scenario-fuzzer.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-19-advice-harness",
+    "title": "Mode 19: Advice Harness Prompt",
+    "description": "Handles advice policy regression testing for licensee QA",
+    "mode_id": 19,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-19-advice-harness.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-20-prompt-contract-tester",
+    "title": "Mode 20: Prompt Contract Tester Prompt",
+    "description": "Handles LLM schema QA for dev and integration",
+    "mode_id": 20,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-20-prompt-contract-tester.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-21-rag-auditor",
+    "title": "Mode 21: RAG Auditor Prompt",
+    "description": "Handles reference and source verification for legal QA",
+    "mode_id": 21,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-21-rag-auditor.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-22-load-latency-bench",
+    "title": "Mode 22: Load & Latency Bench Prompt",
+    "description": "Handles scalability testing for DevOps",
+    "mode_id": 22,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-22-load-latency-bench.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-23-cross-engine-consistency",
+    "title": "Mode 23: Cross-Engine Consistency Checker Prompt",
+    "description": "Handles semantic integrity checks for system integration",
+    "mode_id": 23,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-23-cross-engine-consistency.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-24-conversational-guide",
+    "title": "Mode 24: Conversational Guide Prompt",
+    "description": "Handles general inquiries and educational questions (e.g., 'What is a franking credit?')",
+    "mode_id": 24,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-24-conversational-guide.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-25-practice-assistant",
+    "title": "Mode 25: Practice Assistant Prompt",
+    "description": "Handles operational support and content generation (e.g., 'Draft an email to Client X')",
+    "mode_id": 25,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-25-practice-assistant.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "mode-26-system-oracle",
+    "title": "Mode 26: System Oracle Prompt",
+    "description": "Handles debugging and introspection queries (e.g., 'Why did the Strategy Engine reject that scenario?')",
+    "mode_id": 26,
+    "category": "mode_prompt",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "mode-prompts/mode-26-system-oracle.md",
+    "related_files": [
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ]
+  },
+  {
+    "prompt_id": "privacy-filter",
+    "title": "Privacy Filter Prompt",
+    "description": "Shared utility for filtering and redacting PII before external LLM calls",
+    "mode_id": null,
+    "category": "shared_utility",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "shared-utilities/privacy-filter.md",
+    "related_files": []
+  },
+  {
+    "prompt_id": "rag-retrieval",
+    "title": "RAG Retrieval Prompt",
+    "description": "Shared utility for retrieving authoritative references and citations",
+    "mode_id": null,
+    "category": "shared_utility",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "shared-utilities/rag-retrieval.md",
+    "related_files": []
+  },
+  {
+    "prompt_id": "error-handling",
+    "title": "Error Handling Prompt",
+    "description": "Shared utility for graceful error handling and user communication",
+    "mode_id": null,
+    "category": "shared_utility",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "shared-utilities/error-handling.md",
+    "related_files": []
+  },
+  {
+    "prompt_id": "conversation-context",
+    "title": "Conversation Context Prompt",
+    "description": "Shared utility for managing multi-turn conversation context and session persistence",
+    "mode_id": null,
+    "category": "shared_utility",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "last_updated": "2025-11-21",
+    "version": "1.0",
+    "file_path": "shared-utilities/conversation-context.md",
+    "related_files": []
+  }
+]

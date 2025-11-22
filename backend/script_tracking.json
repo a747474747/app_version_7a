@@ -1,0 +1,11 @@
+[
+  {
+    "script_name": "script_tracking.json",
+    "description": "Tracking file for all Python scripts in the backend",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Maintains metadata for all Python scripts including creation dates, descriptions, and dependencies"
+  }
+]
