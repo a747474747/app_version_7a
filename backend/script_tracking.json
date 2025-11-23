@@ -281,9 +281,22 @@
       "src/routers/qa/__init__.py",
       "src/routers/references/__init__.py",
       "src/routers/trace/__init__.py",
-      "src/routers/modes/__init__.py"
+      "src/routers/modes/__init__.py",
+      "shared/dev_routers/llm_debug.py"
     ],
     "purpose": "Aggregates all API routes into a single router for the FastAPI application"
+  },
+  {
+    "script_name": "shared/dev_routers/llm_debug.py",
+    "description": "LLM debug router for tiered routing visualization and testing",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "llm_engine/model_registry.py",
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Provides debug endpoints for LLM tier candidates display and model selection testing in the development dashboard"
   },
   {
     "script_name": "src/routers/health.py",
@@ -316,15 +329,68 @@
     "purpose": "Manages financial scenarios, including creation, storage, and execution"
   },
   {
+    "script_name": "src/services/prompt_service.py",
+    "description": "Service for loading and managing LLM prompts from catalog",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "specs/001-four-engine-architecture/llm-prompts/catalog.json"
+    ],
+    "purpose": "Provides utilities for loading prompt text from files and accessing prompt metadata from the catalog system"
+  },
+  {
     "script_name": "tests/test_registry.py",
     "description": "Test script for calculation registry validation",
     "created_date": "2025-11-22",
     "created_timezone": "Australia/Brisbane",
     "engine": "shared",
     "interacts_with": [
-      "src/engines/calculation/registry.py"
+      "calculation_engine/registry.py"
     ],
     "purpose": "Validates that all expected CAL-* calculation functions are properly registered"
+  },
+  {
+    "script_name": "tests/test_openrouter_simple.py",
+    "description": "Simple test script for OpenRouter connection without full client setup",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [],
+    "purpose": "Tests basic OpenRouter API connectivity using direct HTTP calls"
+  },
+  {
+    "script_name": "tests/test_openrouter.py",
+    "description": "Comprehensive test script for OpenRouter client functionality",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "src/services/openrouter_client.py"
+    ],
+    "purpose": "Tests full OpenRouter client functionality including model listing and chat completions"
+  },
+  {
+    "script_name": "tests/test_server.py",
+    "description": "Test script to verify minimal server imports and basic functionality",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "shared/minimal_server.py"
+    ],
+    "purpose": "Validates that the minimal server can import correctly and access calculation functions"
+  },
+  {
+    "script_name": "tests/verify_openrouter_compliance.py",
+    "description": "Verification script to ensure OpenRouter implementation matches documentation",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "src/services/openrouter_client.py"
+    ],
+    "purpose": "Verifies that our OpenRouter client implementation complies with the official API documentation"
   },
   {
     "script_name": "alembic/env.py",
@@ -349,6 +415,42 @@
       "src/models/advice_outcome.py"
     ],
     "purpose": "Creates initial database schema with all required tables for the application"
+  },
+  {
+    "script_name": "start_server.py",
+    "description": "Development script to start the FastAPI server with environment loading",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/main.py"
+    ],
+    "purpose": "Convenient script to start the development server with proper environment setup and Clerk authentication checking"
+  },
+  {
+    "script_name": "test_server.py",
+    "description": "Integration test script that starts server and tests endpoints",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/main.py",
+      "src/routers/modes.py",
+      "src/routers/health.py"
+    ],
+    "purpose": "End-to-end testing of server startup and API endpoint functionality including health, modes, and documentation endpoints"
+  },
+  {
+    "script_name": "test_router.py",
+    "description": "Test script to verify router imports and registration",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/routers/modes.py",
+      "src/routers/api.py"
+    ],
+    "purpose": "Validates that API routers can be imported and contain expected routes for modes and general API functionality"
   },
   {
     "script_name": "validate_python_rules.py",
@@ -380,5 +482,234 @@
       "../backend/src/models/"
     ],
     "purpose": "Demonstrates a legitimate frontend Python script for build tooling that generates TypeScript types from backend schemas"
+  },
+  {
+    "script_name": "src/services/openrouter_client.py",
+    "description": "OpenRouter LLM client with tiered routing and dynamic model selection",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/config/settings.py",
+      "llm_engine/model_registry.py",
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Provides robust HTTP client for OpenRouter API interactions with comprehensive error handling, rate limiting, and dynamic model selection via tiered routing"
+  },
+  {
+    "script_name": "src/services/llm_service.py",
+    "description": "LLM service abstraction layer with connection testing and monitoring",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/services/openrouter_client.py",
+      "src/config/settings.py"
+    ],
+    "purpose": "High-level LLM service providing connection management, cost tracking, usage monitoring, and unified API for LLM operations"
+  },
+  {
+    "script_name": "src/utils/__init__.py",
+    "description": "Utils package initialization",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [],
+    "purpose": "Initializes the utilities package for shared utility functions and helpers"
+  },
+  {
+    "script_name": "src/utils/llm_parsing.py",
+    "description": "LLM response parsing and validation utilities",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "shared",
+    "interacts_with": [
+      "src/services/openrouter_client.py"
+    ],
+    "purpose": "Provides comprehensive parsing, validation, and processing utilities for LLM responses including JSON schema validation and structured data extraction"
+  },
+  {
+    "script_name": "llm_engine/__init__.py",
+    "description": "LLM Engine package initialization and exports",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/orchestrator.py",
+      "llm_engine/state_hydration.py",
+      "llm_engine/narrative_generation.py",
+      "llm_engine/privacy_filter.py",
+      "llm_engine/intent_recognition.py"
+    ],
+    "purpose": "Initializes the LLM Engine package and provides unified exports for all LLM orchestration components"
+  },
+  {
+    "script_name": "llm_engine/orchestrator.py",
+    "description": "LLM Orchestrator base class with prompt loading and TraceLog integration",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "src/services/llm_service.py",
+      "src/services/prompt_service.py",
+      "calculation_engine/schemas/calculation.py"
+    ],
+    "purpose": "Provides base orchestration functionality for all LLM operations with CAL-* ID tracking and external prompt loading"
+  },
+  {
+    "script_name": "llm_engine/state_hydration.py",
+    "description": "State hydration engine for converting natural language to CalculationState",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/orchestrator.py",
+      "calculation_engine/schemas/calculation.py",
+      "calculation_engine/schemas/entities.py",
+      "calculation_engine/schemas/assets.py",
+      "calculation_engine/schemas/cashflow.py"
+    ],
+    "purpose": "Converts natural language financial descriptions into structured CalculationState objects with validation and clarification question generation"
+  },
+  {
+    "script_name": "llm_engine/narrative_generation.py",
+    "description": "Narrative generation engine for human-readable calculation explanations",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/orchestrator.py",
+      "calculation_engine/schemas/calculation.py"
+    ],
+    "purpose": "Generates human-readable narratives from calculation results with multiple templates and confidence scoring"
+  },
+  {
+    "script_name": "llm_engine/privacy_filter.py",
+    "description": "PII detection and redaction utilities for LLM data sanitization",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/orchestrator.py"
+    ],
+    "purpose": "Provides comprehensive PII filtering with configurable privacy levels and audit trails for secure LLM operations"
+  },
+  {
+    "script_name": "llm_engine/intent_recognition.py",
+    "description": "Intent recognition engine for user query analysis and mode selection",
+    "created_date": "2025-11-22",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/orchestrator.py"
+    ],
+    "purpose": "Analyzes user queries to determine intent and select appropriate operational modes (1-26) from the four-engine architecture"
+  },
+  {
+    "script_name": "llm_engine/model_registry.py",
+    "description": "Model registry service for dynamic OpenRouter model catalog management",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "calculation_engine/schemas/llm_tiers.py",
+      "calculation_engine/schemas/openrouter.py",
+      "calculation_engine/schemas/model_registry.py"
+    ],
+    "purpose": "Provides dynamic model catalog management with caching, refresh, and tier-based model selection for the LLM tiered routing strategy"
+  },
+  {
+    "script_name": "calculation_engine/schemas/llm_tiers.py",
+    "description": "LLM tier enums and selection criteria for the three intelligence tiers",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [],
+    "purpose": "Defines LLMTier enum (ROUTER, NARRATOR, THINKER) and ModelSelectionCriteria for tier-based model selection"
+  },
+  {
+    "script_name": "calculation_engine/schemas/openrouter.py",
+    "description": "OpenRouter API schemas for model information and capabilities",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Defines Pydantic models for OpenRouter API responses including pricing, capabilities, and model selection results"
+  },
+  {
+    "script_name": "calculation_engine/schemas/model_registry.py",
+    "description": "Model registry schemas for cached model catalog management",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "calculation_engine",
+    "interacts_with": [
+      "calculation_engine/schemas/openrouter.py",
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Defines ModelRegistry and RegistryStatus models for caching and querying available OpenRouter models with tier mappings"
+  },
+  {
+    "script_name": "tests/test_model_registry.py",
+    "description": "Test script for model registry service with full dependencies",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/model_registry.py",
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Tests the model registry service with full app dependencies, including model fetching and tier selection"
+  },
+  {
+    "script_name": "tests/test_model_registry_simple.py",
+    "description": "Simple test for model registry components without network calls",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "calculation_engine/schemas/llm_tiers.py",
+      "calculation_engine/schemas/openrouter.py",
+      "calculation_engine/schemas/model_registry.py"
+    ],
+    "purpose": "Tests model registry schemas and tier selection logic using mocked HTTP client"
+  },
+  {
+    "script_name": "tests/test_model_registry_real.py",
+    "description": "Test script for model registry with real OpenRouter API calls",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/model_registry.py",
+      "calculation_engine/schemas/llm_tiers.py"
+    ],
+    "purpose": "Tests the model registry service with real OpenRouter API calls to verify model fetching and caching"
+  },
+  {
+    "script_name": "llm_engine/tests/test_top10_speeds_simple.py",
+    "description": "Simple parallel speed test for top 10 curated LLM models using direct HTTP calls",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "llm_engine/model_performance_benchmark.csv",
+      "llm_engine/model_performance_summary.csv"
+    ],
+    "purpose": "Tests response speeds for top 10 curated models in parallel, generating performance benchmark data for model selection"
+  },
+  {
+    "script_name": "llm_engine/tests/test_top10_speeds.py",
+    "description": "Sequential speed test for top 10 curated LLM models using OpenRouter client",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "engine": "llm_orchestrator",
+    "interacts_with": [
+      "src/services/openrouter_client.py",
+      "llm_engine/model_performance_benchmark.csv",
+      "llm_engine/model_performance_summary.csv"
+    ],
+    "purpose": "Tests response speeds for top 10 curated models sequentially using the OpenRouter client, generating performance benchmark data"
   }
 ]

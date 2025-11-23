@@ -1,0 +1,47 @@
+{
+  "name": "Basic Income Tax Scenario",
+  "description": "Simple scenario for testing personal income tax calculations",
+  "effective_date": "2025-07-01",
+  "projection_years": 1,
+  "global_context": {
+    "effective_date": "2025-07-01",
+    "projection_years": 1,
+    "inflation_rate": 0.03,
+    "market_return_rate": 0.08
+  },
+  "entities": {
+    "person_1": {
+      "type": "person",
+      "name": "John Smith",
+      "date_of_birth": "1980-01-01",
+      "residency_status": "resident",
+      "relationship_status": "single"
+    }
+  },
+  "cashflow_context": {
+    "flows": {
+      "person_1": {
+        "salary_wages_gross": 75000.00,
+        "salary_wages_tax_withheld": 15000.00,
+        "employer_super_guarantee": 7500.00,
+        "personal_super_contribution": 3000.00,
+        "salary_sacrifice_super": 5000.00,
+        "personal_deductible_super": 2000.00
+      }
+    }
+  },
+  "expected_results": {
+    "CAL-PIT-001": {
+      "tax_payable": 13547.00
+    },
+    "CAL-PIT-002": {
+      "medicare_levy": 1035.60
+    },
+    "CAL-PIT-004": {
+      "tax_offsets": 700.00
+    },
+    "CAL-PIT-005": {
+      "net_tax_payable": 12882.60
+    }
+  }
+}

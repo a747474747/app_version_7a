@@ -9,11 +9,12 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: #0f172a;
+            color: #e2e8f0;
         }
 
         .header {
-            background: #2563eb;
+            background: #1e40af;
             color: white;
             padding: 20px;
             border-radius: 8px;
@@ -38,16 +39,17 @@
         }
 
         .panel {
-            background: white;
+            background: #1e293b;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
 
         .panel h2 {
             margin-top: 0;
-            color: #1f2937;
-            border-bottom: 2px solid #e5e7eb;
+            color: #e2e8f0;
+            border-bottom: 2px solid #475569;
             padding-bottom: 10px;
         }
 
@@ -66,49 +68,50 @@
         .trace-log {
             max-height: 400px;
             overflow-y: auto;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #0f172a;
+            border: 1px solid #334155;
             border-radius: 4px;
             padding: 10px;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             font-size: 12px;
             line-height: 1.4;
+            color: #cbd5e1;
         }
 
         .trace-entry {
             margin-bottom: 8px;
             padding: 8px;
-            border-left: 3px solid #e5e7eb;
-            background: white;
+            border-left: 3px solid #475569;
+            background: #1e293b;
         }
 
         .trace-entry:hover {
-            background: #f1f5f9;
+            background: #334155;
         }
 
         .trace-calc-id {
             font-weight: bold;
-            color: #2563eb;
+            color: #60a5fa;
         }
 
         .trace-entity {
-            color: #059669;
+            color: #34d399;
             font-weight: 500;
         }
 
         .trace-field {
-            color: #7c3aed;
+            color: #a78bfa;
         }
 
         .trace-explanation {
             margin-top: 4px;
-            color: #374151;
+            color: #cbd5e1;
         }
 
         .trace-metadata {
             margin-top: 4px;
             font-size: 11px;
-            color: #6b7280;
+            color: #94a3b8;
         }
 
         .engine-state {
@@ -117,23 +120,25 @@
         }
 
         .state-section {
-            border: 1px solid #e5e7eb;
+            border: 1px solid #475569;
             border-radius: 4px;
             padding: 12px;
+            background: #0f172a;
         }
 
         .state-section h3 {
             margin: 0 0 8px 0;
-            color: #1f2937;
+            color: #e2e8f0;
             font-size: 14px;
         }
 
         .state-value {
             font-family: monospace;
-            background: #f8fafc;
+            background: #0f172a;
             padding: 4px 8px;
             border-radius: 3px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #334155;
+            color: #cbd5e1;
         }
 
         .controls {
@@ -161,12 +166,12 @@
         }
 
         .btn-secondary {
-            background: #6b7280;
+            background: #475569;
             color: white;
         }
 
         .btn-secondary:hover {
-            background: #4b5563;
+            background: #334155;
         }
 
         .loading {
@@ -175,17 +180,17 @@
         }
 
         .error {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
+            background: #7f1d1d;
+            border: 1px solid #991b1b;
+            color: #fca5a5;
             padding: 12px;
             border-radius: 4px;
             margin-bottom: 16px;
         }
 
         .json-viewer {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #0f172a;
+            border: 1px solid #334155;
             border-radius: 4px;
             padding: 12px;
             font-family: monospace;
@@ -193,6 +198,7 @@
             max-height: 300px;
             overflow-y: auto;
             white-space: pre-wrap;
+            color: #cbd5e1;
         }
 
         .calc-item {
@@ -201,30 +207,96 @@
             margin-bottom: 4px;
             border-radius: 4px;
             transition: background 0.2s;
+            color: #e2e8f0;
         }
 
         .calc-item:hover {
-            background: #e5e7eb;
+            background: #334155;
         }
 
         .calc-item.selected {
-            background: #dbeafe;
-            border: 1px solid #2563eb;
+            background: #1e3a8a;
+            border: 1px solid #3b82f6;
+        }
+
+        /* Chat interface styles */
+        #questionInput {
+            font-family: inherit;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            resize: vertical;
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        #questionInput:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .processing-step {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-response {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 10px;
+            color: #e2e8f0;
+        }
+
+        .chat-response strong {
+            color: #e2e8f0;
+        }
+
+        /* Additional dark theme styles */
+        label {
+            color: #cbd5e1;
+        }
+
+        select, input[type="text"], textarea {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #e2e8f0;
+        }
+
+        select:focus, input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🔧 Four-Engine Dev Dashboard</h1>
-        <p>Real-time visualization of TraceLogs, Engine States, Domain Structure, and Rule Sets for the modular Calculation Engine</p>
+        <p>Real-time visualization of TraceLogs, Engine States, Domain Structure, Rule Sets, and <strong>Fact-Check Chat Testing</strong> for the modular Calculation Engine</p>
+        <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
+            💡 <strong>New:</strong> Use the "Fact Check Chat Tester" below to test User Story 1 - Consumer Fact Check functionality with real-time backend processing visualization.
+        </div>
     </div>
 
     <div class="controls">
         <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh Data</button>
-        <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+        <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear All Logs</button>
+        <button class="btn btn-secondary" onclick="clearLLMTraceLogs()">🧠 Clear LLM Traces</button>
+        <button class="btn btn-secondary" onclick="clearLLMActivities()">🧹 Clear LLM Activities</button>
         <button class="btn btn-secondary" onclick="toggleAutoRefresh()">
             <span id="autoRefreshText">▶️ Start Auto-Refresh</span>
         </button>
+        <div style="margin-left: 20px; display: inline-block;">
+            <button class="btn btn-secondary" onclick="simulateLLMActivity('intent_recognition')">🤖 Test Intent Recognition</button>
+            <button class="btn btn-secondary" onclick="simulateLLMActivity('state_hydration')">💧 Test State Hydration</button>
+            <button class="btn btn-secondary" onclick="simulateLLMActivity('narrative_generation')">📝 Test Narrative Generation</button>
+        </div>
     </div>
 
     <div id="errorContainer"></div>
@@ -262,11 +334,22 @@
         </div>
     </div>
 
-    <div class="panel">
-        <h2>📋 Trace Logs</h2>
-        <div id="traceLogs" class="trace-log">
-            <div class="trace-entry">
-                <div>Loading trace logs...</div>
+    <div class="dashboard-grid">
+        <div class="panel">
+            <h2>📋 Trace Logs</h2>
+            <div id="traceLogs" class="trace-log">
+                <div class="trace-entry">
+                    <div>Loading trace logs...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🤖 LLM Trace Logs</h2>
+            <div id="llmTraceLogs" class="trace-log">
+                <div class="trace-entry">
+                    <div>Loading LLM trace logs...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -361,6 +444,312 @@
         </div>
     </div>
 
+    <div class="panel">
+        <h2>🤖 LLM Engine Activities</h2>
+
+        <!-- Real-time Activity Feed -->
+        <div class="panel" style="margin-bottom: 20px; padding: 15px;">
+            <h3>⚡ Real-time Activity Feed</h3>
+            <div id="llmRealtimeFeed" class="trace-log" style="max-height: 200px; font-size: 11px;">
+                <div class="trace-entry">
+                    <div>Monitoring LLM activities...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="panel" style="margin: 0; padding: 15px;">
+                <h3>🔗 Connection Health</h3>
+                <div id="llmHealth" class="engine-state">
+                    <div class="state-value">Status: <span id="llmConnectionStatus">Checking...</span></div>
+                    <div class="state-value">Models Available: <span id="llmModelsCount">-</span></div>
+                    <div class="state-value">Response Time: <span id="llmResponseTime">-</span>ms</div>
+                    <div class="state-value">Uptime: <span id="llmUptime">-</span>%</div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin: 0; padding: 15px;">
+                <h3>📊 Usage Metrics</h3>
+                <div id="llmUsage" class="engine-state">
+                    <div class="state-value">Total Requests: <span id="llmTotalRequests">-</span></div>
+                    <div class="state-value">Success Rate: <span id="llmSuccessRate">-</span>%</div>
+                    <div class="state-value">Tokens Used: <span id="llmTokensUsed">-</span></div>
+                    <div class="state-value">Throughput: <span id="llmThroughput">-</span> req/min</div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin: 0; padding: 15px;">
+                <h3>💰 Cost Tracking</h3>
+                <div id="llmCosts" class="engine-state">
+                    <div class="state-value">Total Cost: $<span id="llmTotalCost">0.0000</span></div>
+                    <div class="state-value">Avg Response: <span id="llmAvgResponseTime">-</span>ms</div>
+                    <div class="state-value">Error Rate: <span id="llmErrorRate">0.00</span>%</div>
+                    <div class="state-value">Rate Limits: <span id="llmRateLimits">-</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LLM Operation Types -->
+        <div class="panel" style="margin-top: 20px; padding: 15px;">
+            <h3>🎯 Operation Types</h3>
+            <div class="dashboard-grid" style="grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <div class="state-section" style="text-align: center;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 12px;">Intent Recognition</h4>
+                    <div class="state-value" style="font-size: 18px; font-weight: bold;" id="intentRecCount">0</div>
+                    <div style="font-size: 10px; color: #94a3b8;">Total Operations</div>
+                </div>
+                <div class="state-section" style="text-align: center;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 12px;">State Hydration</h4>
+                    <div class="state-value" style="font-size: 18px; font-weight: bold;" id="stateHydrateCount">0</div>
+                    <div style="font-size: 10px; color: #94a3b8;">Total Operations</div>
+                </div>
+                <div class="state-section" style="text-align: center;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 12px;">Narrative Gen</h4>
+                    <div class="state-value" style="font-size: 18px; font-weight: bold;" id="narrativeGenCount">0</div>
+                    <div style="font-size: 10px; color: #94a3b8;">Total Operations</div>
+                </div>
+                <div class="state-section" style="text-align: center;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 12px;">Privacy Filter</h4>
+                    <div class="state-value" style="font-size: 18px; font-weight: bold;" id="privacyFilterCount">0</div>
+                    <div style="font-size: 10px; color: #94a3b8;">PII Detected</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="panel" style="margin-top: 20px; padding: 15px;">
+                <h3>🧠 Orchestrator Activities</h3>
+                <div id="llmOrchestrator" class="engine-state">
+                    <div class="state-value">Status: <span id="orchestratorStatus">Idle</span></div>
+                    <div class="state-value">Active Operations: <span id="activeOperations">0</span></div>
+                    <div class="state-value">Loaded Prompts: <span id="loadedPrompts">-</span></div>
+                    <div class="state-value">Last Activity: <span id="lastActivity">None</span></div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <h4 style="margin-bottom: 8px; font-size: 14px;">Recent Activities</h4>
+                    <div id="recentActivities" class="trace-log" style="max-height: 150px; font-size: 11px;">
+                        <div class="trace-entry">
+                            <div>No recent LLM activities</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top: 20px; padding: 15px;">
+                <h3>🔒 Privacy & Security</h3>
+                <div id="llmPrivacy" class="engine-state">
+                    <div class="state-value">PII Filtered: <span id="piiFilteredCount">0</span></div>
+                    <div class="state-value">Filter Success: <span id="privacyFilterSuccess">100.0</span>%</div>
+                    <div class="state-value">Data Sanitized: <span id="dataSanitizedCount">0</span></div>
+                    <div class="state-value">Compliance Status: <span id="complianceStatus">✓ Good</span></div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <h4 style="margin-bottom: 8px; font-size: 14px;">PII Detection Summary</h4>
+                    <div id="piiDetectionSummary" class="json-viewer" style="max-height: 120px; font-size: 11px;">
+                        <em>No PII detections yet</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 20px; padding: 15px;">
+            <h3>📈 Model Usage Breakdown</h3>
+            <div id="llmModelBreakdown" class="json-viewer" style="max-height: 200px;">
+                <em>Loading model usage data...</em>
+            </div>
+        </div>
+
+        <!-- Prompt Management -->
+        <div class="panel" style="margin-top: 20px; padding: 15px;">
+            <h3>📝 Prompt Management</h3>
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 2fr;">
+                <div class="state-section">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">Prompt Library</h4>
+                    <div class="state-value">Total Prompts: <span id="totalPrompts">-</span></div>
+                    <div class="state-value">Loaded: <span id="loadedPromptsCount">-</span></div>
+                    <div class="state-value">Cache Hit Rate: <span id="promptCacheHitRate">-</span>%</div>
+                    <div class="state-value">Last Updated: <span id="promptsLastUpdated">-</span></div>
+                </div>
+                <div class="state-section">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">Prompt Usage</h4>
+                    <div id="promptUsageBreakdown" class="json-viewer" style="max-height: 120px; font-size: 11px;">
+                        <em>Loading prompt usage data...</em>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <h4 style="margin-bottom: 8px; font-size: 14px;">Recent Prompt Loads</h4>
+                <div id="recentPromptLoads" class="trace-log" style="max-height: 100px; font-size: 11px;">
+                    <div class="trace-entry">
+                        <div>No recent prompt activity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LLM Performance Metrics -->
+        <div class="panel" style="margin-top: 20px; padding: 15px;">
+            <h3>⚡ Performance Metrics</h3>
+            <div class="dashboard-grid" style="grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div class="state-section">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">Intent Recognition</h4>
+                    <div class="state-value">Avg Time: <span id="intentRecAvgTime">-</span>ms</div>
+                    <div class="state-value">Success Rate: <span id="intentRecSuccess">-</span>%</div>
+                    <div class="state-value">Confidence: <span id="intentRecConfidence">-</span></div>
+                </div>
+                <div class="state-section">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">State Hydration</h4>
+                    <div class="state-value">Avg Time: <span id="stateHydrateAvgTime">-</span>ms</div>
+                    <div class="state-value">Success Rate: <span id="stateHydrateSuccess">-</span>%</div>
+                    <div class="state-value">Fields Parsed: <span id="stateHydrateFields">-</span></div>
+                </div>
+                <div class="state-section">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">Narrative Generation</h4>
+                    <div class="state-value">Avg Time: <span id="narrativeGenAvgTime">-</span>ms</div>
+                    <div class="state-value">Success Rate: <span id="narrativeGenSuccess">-</span>%</div>
+                    <div class="state-value">Avg Length: <span id="narrativeGenLength">-</span> chars</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>🤖 LLM Tier Candidates (IMPLEMENTED)</h2>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <h3>Validated Models by Tier</h3>
+                <div id="llmTierCandidates" class="engine-state">
+                    <div class="state-section">
+                        <h4>🚀 ROUTER (Fast/Cheap)</h4>
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Intent Recognition & Classification | <5s response | <$0.0005/token</div>
+                        <div id="routerCandidates">Loading validated models...</div>
+                    </div>
+                    <div class="state-section">
+                        <h4>🎭 NARRATOR (Fluency/Tone)</h4>
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Conversational & Educational | 2-6s response | <$0.0002/token</div>
+                        <div id="narratorCandidates">Loading validated models...</div>
+                    </div>
+                    <div class="state-section">
+                        <h4>🧠 THINKER (Complex Reasoning)</h4>
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Strategic Analysis & Optimization | 5-8s response | <$0.0004/token</div>
+                        <div id="thinkerCandidates">Loading validated models...</div>
+                    </div>
+                    <div class="state-section">
+                        <h4>❌ FAILED MODELS</h4>
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Models that failed testing (10% failure rate)</div>
+                        <div id="failedCandidates">Loading failed models...</div>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <h3>Tier Selection Test</h3>
+                <form id="tierTestForm" onsubmit="testTierSelection(event)">
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Select Tier:</label>
+                        <select id="testTier" required style="width: 100%; padding: 5px;">
+                            <option value="ROUTER">ROUTER - Intent Recognition</option>
+                            <option value="NARRATOR">NARRATOR - Natural Language</option>
+                            <option value="THINKER">THINKER - Complex Reasoning</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Test Selection</button>
+                </form>
+                <h4 style="margin-top: 15px;">Performance Summary:</h4>
+                <div id="performanceSummary" class="json-viewer" style="max-height: 150px; margin-bottom: 15px;">
+                    <strong>Concurrent Test Results (2025-11-23):</strong><br>
+                    • Total models tested: 10<br>
+                    • Success rate: 90%<br>
+                    • Average response: 4.74s<br>
+                    • Fastest: 2.53s (kimi-k2-thinking)<br>
+                    • Cost range: $0.00000005 - $0.0000005/token
+                </div>
+                <h4>Selected Model Result:</h4>
+                <div id="tierTestResult" class="json-viewer" style="max-height: 200px;">
+                    Select a tier and click "Test Selection" to see which model would be chosen
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>💬 Fact Check Chat Tester</h2>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <h3>Ask a Financial Question</h3>
+                <form id="factCheckForm" onsubmit="runFactCheck(event)">
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Question:</label>
+                        <textarea id="questionInput" required
+                                  placeholder="e.g., What is my tax liability? or What is my net wealth?"
+                                  style="width: 100%; padding: 8px; height: 80px; resize: vertical;"
+                                  rows="3"></textarea>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Scenario (optional):</label>
+                        <select id="factCheckScenario" style="width: 100%; padding: 5px;">
+                            <option value="">Use empty state (LLM hydration)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="factCheckSubmitBtn">Ask Question</button>
+                </form>
+            </div>
+            <div style="flex: 1;">
+                <h3>Processing Flow</h3>
+                <div id="factCheckFlow" class="json-viewer" style="max-height: 300px; font-size: 12px;">
+                    <div style="color: #94a3b8; font-style: italic;">
+                        Enter a question and click "Ask Question" to see the backend processing flow
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h3>Final Response</h3>
+            <div id="factCheckResponse" class="json-viewer" style="max-height: 200px;">
+                <div style="color: #94a3b8; font-style: italic;">
+                    Response will appear here after processing
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>🧮 Calculation Runner</h2>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <h3>Run Single Calculation</h3>
+                <form id="singleCalcForm" onsubmit="runSingleCalculation(event)">
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Calculation ID:</label>
+                        <select id="calcId" required style="width: 100%; padding: 5px;">
+                            <option value="">Select calculation...</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Entity ID:</label>
+                        <input type="text" id="entityId" value="person_1" required style="width: 100%; padding: 5px;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: block; margin-bottom: 5px;">Scenario:</label>
+                        <select id="scenarioSelect" style="width: 100%; padding: 5px;">
+                            <option value="">Select scenario...</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Run Calculation</button>
+                </form>
+            </div>
+            <div style="flex: 1;">
+                <h3>Result</h3>
+                <div id="calcResult" class="json-viewer" style="max-height: 300px;">
+                    Select a calculation and scenario to run
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let autoRefreshInterval = null;
         let backendUrl = 'http://localhost:8000';
@@ -368,6 +757,8 @@
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             refreshData();
+            loadAvailableCalculations();
+            loadAvailableScenarios();
         });
 
         async function refreshData() {
@@ -378,9 +769,11 @@
                 await Promise.all([
                     checkSystemStatus(),
                     loadTraceLogs(),
+                    loadLLMTraceLogs(),
                     loadEngineStates(),
                     loadCalculationDomains(),
-                    loadRuleSets()
+                    loadRuleSets(),
+                    loadLLMActivities()
                 ]);
 
             } catch (error) {
@@ -421,78 +814,137 @@
 
         async function loadTraceLogs() {
             try {
-                // Updated trace logs showing examples from the new domain structure
+                const response = await fetch(`${backendUrl}/debug/trace-logs`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
                 const logsContainer = document.getElementById('traceLogs');
-                logsContainer.innerHTML = `
+
+                if (!data.entries || data.entries.length === 0) {
+                    logsContainer.innerHTML = `
+                        <div class="trace-entry">
+                            <div>No trace logs available. Run some calculations to see traces here.</div>
+                            <div class="trace-metadata">Last updated: ${new Date().toISOString()}</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                logsContainer.innerHTML = data.entries.map(entry => `
                     <div class="trace-entry">
-                        <div class="trace-calc-id">CAL-PIT-001</div>
-                        <div class="trace-entity">Entity: person_1</div>
-                        <div class="trace-field">Field: tax_payable</div>
-                        <div class="trace-explanation">PAYG tax calculated for resident on taxable income (Tax Personal Domain)</div>
-                        <div class="trace-metadata">{"assessable_income": 75000, "deductions": 0, "taxable_income": 75000, "tax_brackets_applied": 3}</div>
+                        <div class="trace-calc-id">${entry.calc_id}</div>
+                        <div class="trace-entity">Entity: ${entry.entity_id}</div>
+                        <div class="trace-field">Field: ${entry.field}</div>
+                        <div class="trace-explanation">${entry.explanation}</div>
+                        <div class="trace-metadata">${JSON.stringify(entry.metadata || {})}</div>
                     </div>
-                    <div class="trace-entry">
-                        <div class="trace-calc-id">CAL-PIT-002</div>
-                        <div class="trace-entity">Entity: person_1</div>
-                        <div class="trace-field">Field: medicare_levy</div>
-                        <div class="trace-explanation">Medicare levy calculated at 2% on income above threshold (Tax Personal Domain)</div>
-                        <div class="trace-metadata">{"taxable_income": 75000, "threshold": 23220, "rate": 0.02, "levy_payable": 1035.60}</div>
-                    </div>
-                    <div class="trace-entry">
-                        <div class="trace-calc-id">CAL-SUP-002</div>
-                        <div class="trace-entity">Entity: person_1</div>
-                        <div class="trace-field">Field: total_concessional_contributions</div>
-                        <div class="trace-explanation">Total concessional contributions calculated (Superannuation Domain)</div>
-                        <div class="trace-metadata">{"employer_sg": 15000, "salary_sacrifice": 5000, "personal_deductible": 2000, "total": 22000}</div>
-                    </div>
-                    <div class="trace-entry">
-                        <div class="trace-calc-id">CAL-CGT-001</div>
-                        <div class="trace-entity">Entity: person_1</div>
-                        <div class="trace-field">Field: capital_gain</div>
-                        <div class="trace-explanation">Capital gain/loss calculated on asset disposal (CGT Domain)</div>
-                        <div class="trace-metadata">{"proceeds": 200000, "cost_base": 150000, "capital_gain": 50000}</div>
-                    </div>
-                    <div class="trace-entry">
-                        <div class="trace-calc-id">CAL-PFL-104</div>
-                        <div class="trace-entity">Entity: person_1</div>
-                        <div class="trace-field">Field: negative_gearing_benefit</div>
-                        <div class="trace-explanation">Negative gearing tax benefit calculated (Property Domain)</div>
-                        <div class="trace-metadata">{"property_interest": 25000, "rental_income": 15000, "deductible_loss": 10000, "marginal_rate": 0.32, "tax_benefit": 3200}</div>
-                    </div>
-                `;
+                `).join('');
+
             } catch (error) {
                 document.getElementById('traceLogs').innerHTML =
-                    '<div class="trace-entry">Failed to load trace logs</div>';
+                    `<div class="trace-entry">Failed to load trace logs: ${error.message}</div>`;
+            }
+        }
+
+        async function loadLLMTraceLogs() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/trace-logs`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const llmLogsContainer = document.getElementById('llmTraceLogs');
+
+                if (!data.entries || data.entries.length === 0) {
+                    llmLogsContainer.innerHTML = `
+                        <div class="trace-entry">
+                            <div>No LLM trace logs available. LLM operations will appear here.</div>
+                            <div class="trace-metadata">Last updated: ${new Date().toISOString()}</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                llmLogsContainer.innerHTML = data.entries.map(entry => `
+                    <div class="trace-entry" style="border-left-color: ${getActivityColor(entry.operation_type || 'llm_call')};">
+                        <div class="trace-calc-id">${entry.calc_id || 'LLM-OP'}</div>
+                        <div class="trace-entity">${entry.entity_id || 'llm_orchestrator'}</div>
+                        <div class="trace-field">${entry.field || 'operation'}</div>
+                        <div class="trace-explanation">${entry.explanation || 'LLM operation'}</div>
+                        <div class="trace-metadata">${JSON.stringify(entry.metadata || {})}</div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                document.getElementById('llmTraceLogs').innerHTML =
+                    `<div class="trace-entry">Failed to load LLM trace logs: ${error.message}</div>`;
             }
         }
 
         async function loadEngineStates() {
-            // Updated engine states reflecting the new modular structure
-            document.getElementById('calcEngineState').innerHTML = `
-                <div class="state-value">Registry Functions: 12</div>
-                <div class="state-value">Domain Modules: 4</div>
-                <div class="state-value">Tax Domain: CAL-PIT-001,002,004,005</div>
-                <div class="state-value">CGT Domain: CAL-CGT-001,002</div>
-                <div class="state-value">Super Domain: CAL-SUP-002,003,007,008,009</div>
-                <div class="state-value">Property Domain: CAL-PFL-104</div>
-            `;
+            try {
+                const response = await fetch(`${backendUrl}/debug/engine-states`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
 
-            document.getElementById('projectionEngineState').innerHTML = `
-                <div class="state-value">Uses Registry: Yes</div>
-                <div class="state-value">Years Projected: 30</div>
-                <div class="state-value">Active Scenarios: 3</div>
-                <div class="state-value">Registry Lookups: Enabled</div>
-            `;
+                const data = await response.json();
 
-            document.getElementById('strategyEngineState').innerHTML = `
-                <div class="state-value">Status: Idle</div>
-                <div class="state-value">Last Run: Never</div>
-            `;
+                document.getElementById('calcEngineState').innerHTML = `
+                    <div class="state-value">Status: ${data.calculation_engine.status}</div>
+                    <div class="state-value">Registry Functions: ${data.calculation_engine.function_count || 0}</div>
+                    ${data.calculation_engine.details ? Object.entries(data.calculation_engine.details).map(([key, value]) =>
+                        `<div class="state-value">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${JSON.stringify(value)}</div>`
+                    ).join('') : ''}
+                `;
 
-            document.getElementById('llmEngineState').innerHTML = `
-                <div class="state-value">Status: Disconnected</div>
-                <div class="state-value">Prompts Loaded: 0</div>
-            `;
+                document.getElementById('projectionEngineState').innerHTML = `
+                    <div class="state-value">Status: ${data.projection_engine.status}</div>
+                    <div class="state-value">Last Run: ${data.projection_engine.last_run || 'Never'}</div>
+                    ${data.projection_engine.details ? Object.entries(data.projection_engine.details).map(([key, value]) =>
+                        `<div class="state-value">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${value}</div>`
+                    ).join('') : ''}
+                `;
+
+                document.getElementById('strategyEngineState').innerHTML = `
+                    <div class="state-value">Status: ${data.strategy_engine.status}</div>
+                    <div class="state-value">Last Run: ${data.strategy_engine.last_run || 'Never'}</div>
+                    ${data.strategy_engine.details ? Object.entries(data.strategy_engine.details).map(([key, value]) =>
+                        `<div class="state-value">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${value}</div>`
+                    ).join('') : ''}
+                `;
+
+                // Load LLM orchestrator state from dedicated endpoint
+                try {
+                    const llmResponse = await fetch(`${backendUrl}/debug/llm/health`);
+                    if (llmResponse.ok) {
+                        const llmData = await llmResponse.json();
+                        document.getElementById('llmEngineState').innerHTML = `
+                            <div class="state-value">Status: ${llmData.status === 'healthy' ? 'Healthy' : llmData.status === 'unhealthy' ? 'Unhealthy' : 'Unknown'}</div>
+                            <div class="state-value">Models Available: ${llmData.connection.models_available || 0}</div>
+                            <div class="state-value">Response Time: ${llmData.connection.response_time_ms ? llmData.connection.response_time_ms.toFixed(1) + 'ms' : 'N/A'}</div>
+                            <div class="state-value">Uptime: ${llmData.usage.uptime_percentage ? llmData.usage.uptime_percentage.toFixed(1) + '%' : 'N/A'}</div>
+                        `;
+                    } else {
+                        document.getElementById('llmEngineState').innerHTML = `<div class="state-value">Status: Unavailable</div>`;
+                    }
+                } catch (error) {
+                    document.getElementById('llmEngineState').innerHTML = `<div class="state-value">Status: Error</div><div class="state-value">Error: ${error.message}</div>`;
+                }
+
+            } catch (error) {
+                // Fallback to placeholder data if endpoint fails
+                document.getElementById('calcEngineState').innerHTML = `
+                    <div class="state-value">Status: Error</div>
+                    <div class="state-value">Error: ${error.message}</div>
+                `;
+                document.getElementById('projectionEngineState').innerHTML = `<div class="state-value">Status: Unknown</div>`;
+                document.getElementById('strategyEngineState').innerHTML = `<div class="state-value">Status: Unknown</div>`;
+                document.getElementById('llmEngineState').innerHTML = `<div class="state-value">Status: Unknown</div>`;
+            }
         }
 
         async function loadCalculationDomains() {
@@ -503,49 +955,228 @@
 
         async function loadRuleSets() {
             try {
-                // Updated rule sets showing the actual RuleLoader structure
+                const response = await fetch(`${backendUrl}/debug/rules`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
                 const rulesContainer = document.getElementById('ruleSets');
-                rulesContainer.textContent = JSON.stringify({
-                    tax: {
-                        brackets: [
-                            { min: 0, max: 18200, rate: 0.0 },
-                            { min: 18201, max: 45000, rate: 0.16 },
-                            { min: 45001, max: 120000, rate: 0.30 },
-                            { min: 120001, max: 180000, rate: 0.37 }
-                        ],
-                        medicare_levy_rate: 0.02,
-                        medicare_levy_thresholds: {
-                            single: 23220,
-                            family: 39176
-                        },
-                        lito_parameters: {
-                            max_offset: 700,
-                            income_limit: 37500,
-                            phase_out_start: 37500,
-                            phase_out_rate: 0.05
-                        }
-                    },
-                    superannuation: {
-                        concessional_cap: 11000,
-                        contributions_tax_rate: 0.15,
-                        division_293_threshold: 250000,
-                        division_293_rate: 0.15
-                    },
-                    capital_gains: {
-                        individual_discount_rate: 0.50
-                    },
-                    property: {
-                        marginal_tax_rate: 0.32
-                    }
-                }, null, 2);
+
+                if (!data.rules) {
+                    rulesContainer.textContent = 'No rule configurations available';
+                    return;
+                }
+
+                rulesContainer.textContent = JSON.stringify(data.rules, null, 2);
+
+                // Add metadata
+                const metadata = document.createElement('div');
+                metadata.style.cssText = 'margin-top: 10px; padding-top: 10px; border-top: 1px solid #334155; font-size: 12px; color: #94a3b8;';
+                metadata.innerHTML = `
+                    <div>Last loaded: ${new Date(data.last_loaded).toLocaleString()}</div>
+                    <div>Config files: ${data.config_files.join(', ')}</div>
+                `;
+                rulesContainer.appendChild(metadata);
+
             } catch (error) {
-                document.getElementById('ruleSets').textContent = 'Failed to load rule sets';
+                document.getElementById('ruleSets').textContent = `Failed to load rule sets: ${error.message}`;
             }
         }
 
-        function clearLogs() {
-            document.getElementById('traceLogs').innerHTML =
-                '<div class="trace-entry">Logs cleared</div>';
+        async function loadLLMHealth() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/health`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update connection health
+                document.getElementById('llmConnectionStatus').textContent =
+                    data.status === 'healthy' ? 'Healthy' :
+                    data.status === 'unhealthy' ? 'Unhealthy' : 'Unknown';
+
+                document.getElementById('llmConnectionStatus').style.color =
+                    data.status === 'healthy' ? '#10b981' :
+                    data.status === 'unhealthy' ? '#ef4444' : '#6b7280';
+
+                document.getElementById('llmModelsCount').textContent =
+                    data.connection.models_available || '-';
+                document.getElementById('llmResponseTime').textContent =
+                    data.connection.response_time_ms ? data.connection.response_time_ms.toFixed(1) : '-';
+                document.getElementById('llmUptime').textContent =
+                    data.usage.uptime_percentage ? data.usage.uptime_percentage.toFixed(1) : '-';
+
+            } catch (error) {
+                document.getElementById('llmConnectionStatus').textContent = 'Error';
+                document.getElementById('llmConnectionStatus').style.color = '#ef4444';
+                console.warn('Failed to load LLM health:', error);
+            }
+        }
+
+        async function loadLLMUsage() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/usage`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update usage metrics
+                document.getElementById('llmTotalRequests').textContent = data.total_requests || 0;
+                document.getElementById('llmSuccessRate').textContent =
+                    data.total_requests > 0 ? ((data.successful_requests / data.total_requests) * 100).toFixed(1) : '0.0';
+                document.getElementById('llmTokensUsed').textContent = data.total_tokens_used ?
+                    data.total_tokens_used.toLocaleString() : '0';
+                document.getElementById('llmThroughput').textContent = data.throughput_requests_per_minute ?
+                    data.throughput_requests_per_minute.toFixed(1) : '0.0';
+
+                // Update cost tracking
+                document.getElementById('llmTotalCost').textContent = data.total_cost_usd || '0.0000';
+                document.getElementById('llmAvgResponseTime').textContent =
+                    data.average_response_time_ms ? data.average_response_time_ms.toFixed(1) : '-';
+                document.getElementById('llmErrorRate').textContent =
+                    (data.error_rate * 100).toFixed(2);
+                document.getElementById('llmRateLimits').textContent = '0'; // Would need to track this separately
+
+                // Update model breakdown
+                const breakdownContainer = document.getElementById('llmModelBreakdown');
+                if (data.cost_by_model && Object.keys(data.cost_by_model).length > 0) {
+                    const breakdown = Object.entries(data.cost_by_model)
+                        .sort(([,a], [,b]) => b - a)
+                        .map(([model, cost]) => `${model}: $${cost.toFixed(4)}`)
+                        .join('\n');
+                    breakdownContainer.textContent = breakdown;
+                } else {
+                    breakdownContainer.innerHTML = '<em>No model usage data available</em>';
+                }
+
+            } catch (error) {
+                console.warn('Failed to load LLM usage:', error);
+                // Set defaults for error state
+                document.getElementById('llmTotalRequests').textContent = '-';
+                document.getElementById('llmSuccessRate').textContent = '-';
+                document.getElementById('llmTokensUsed').textContent = '-';
+                document.getElementById('llmThroughput').textContent = '-';
+            }
+        }
+
+        async function loadLLMOrchestrator() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/orchestrator`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update orchestrator status
+                document.getElementById('orchestratorStatus').textContent =
+                    data.orchestrator_status || 'Unknown';
+                document.getElementById('activeOperations').textContent =
+                    data.active_operations ? data.active_operations.length : 0;
+                document.getElementById('loadedPrompts').textContent =
+                    data.loaded_prompts || '-';
+                document.getElementById('lastActivity').textContent =
+                    data.last_activity || 'None';
+
+                // Update recent activities
+                const activitiesContainer = document.getElementById('recentActivities');
+                if (data.recent_activities && data.recent_activities.length > 0) {
+                    activitiesContainer.innerHTML = data.recent_activities
+                        .slice(-5) // Show last 5 activities
+                        .map(activity => `
+                            <div class="trace-entry">
+                                <div class="trace-calc-id">${activity.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                                <div class="trace-explanation">${JSON.stringify(activity.details || {})}</div>
+                                <div class="trace-metadata">${new Date(activity.timestamp).toLocaleTimeString()}</div>
+                            </div>
+                        `).join('');
+                } else {
+                    activitiesContainer.innerHTML = `
+                        <div class="trace-entry">
+                            <div>No recent LLM activities</div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.warn('Failed to load LLM orchestrator status:', error);
+                document.getElementById('orchestratorStatus').textContent = 'Error';
+                document.getElementById('recentActivities').innerHTML = `
+                    <div class="trace-entry">
+                        <div>Failed to load activities: ${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadLLMActivities() {
+            await Promise.all([
+                loadLLMHealth(),
+                loadLLMUsage(),
+                loadLLMOrchestrator(),
+                loadLLMOperationMetrics(),
+                loadLLMPrivacyStats(),
+                loadLLMPerformanceMetrics(),
+                loadLLMRealtimeFeed(),
+                loadPromptManagement(),
+                loadLLMTierCandidates()
+            ]);
+        }
+
+        async function clearLogs() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/trace-logs`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                document.getElementById('traceLogs').innerHTML =
+                    `<div class="trace-entry">Logs cleared successfully - removed ${data.cleared_count} entries</div>`;
+
+                // Refresh the display
+                setTimeout(() => {
+                    loadTraceLogs();
+                    loadLLMTraceLogs();
+                }, 500);
+
+            } catch (error) {
+                document.getElementById('traceLogs').innerHTML =
+                    `<div class="trace-entry">Failed to clear logs: ${error.message}</div>`;
+            }
+        }
+
+        async function clearLLMTraceLogs() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/trace-logs`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                document.getElementById('llmTraceLogs').innerHTML =
+                    `<div class="trace-entry">LLM trace logs cleared successfully - removed ${data.cleared_count} entries</div>`;
+
+                // Refresh the display
+                setTimeout(() => loadLLMTraceLogs(), 500);
+
+            } catch (error) {
+                document.getElementById('llmTraceLogs').innerHTML =
+                    `<div class="trace-entry">Failed to clear LLM trace logs: ${error.message}</div>`;
+            }
         }
 
         function toggleAutoRefresh() {
@@ -569,6 +1200,295 @@
 
         function clearErrors() {
             document.getElementById('errorContainer').innerHTML = '';
+        }
+
+        async function loadLLMOperationMetrics() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/operation-metrics`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update operation counts
+                document.getElementById('intentRecCount').textContent = data.intent_recognition?.count || 0;
+                document.getElementById('stateHydrateCount').textContent = data.state_hydration?.count || 0;
+                document.getElementById('narrativeGenCount').textContent = data.narrative_generation?.count || 0;
+                document.getElementById('privacyFilterCount').textContent = data.privacy_filter?.pii_detected || 0;
+
+            } catch (error) {
+                console.warn('Failed to load LLM operation metrics:', error);
+                // Set defaults
+                document.getElementById('intentRecCount').textContent = '-';
+                document.getElementById('stateHydrateCount').textContent = '-';
+                document.getElementById('narrativeGenCount').textContent = '-';
+                document.getElementById('privacyFilterCount').textContent = '-';
+            }
+        }
+
+        async function loadLLMPrivacyStats() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/privacy-stats`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update privacy metrics
+                document.getElementById('piiFilteredCount').textContent = data.pii_filtered || 0;
+                document.getElementById('privacyFilterSuccess').textContent = data.filter_success_rate ? data.filter_success_rate.toFixed(1) : '100.0';
+                document.getElementById('dataSanitizedCount').textContent = data.data_sanitized || 0;
+                document.getElementById('complianceStatus').textContent = data.compliance_status || '✓ Good';
+
+                // Update PII detection summary
+                const summaryContainer = document.getElementById('piiDetectionSummary');
+                if (data.pii_by_type && Object.keys(data.pii_by_type).length > 0) {
+                    const summary = Object.entries(data.pii_by_type)
+                        .sort(([,a], [,b]) => b - a)
+                        .map(([type, count]) => `${type}: ${count}`)
+                        .join('\n');
+                    summaryContainer.textContent = summary;
+                } else {
+                    summaryContainer.innerHTML = '<em>No PII detections yet</em>';
+                }
+
+            } catch (error) {
+                console.warn('Failed to load LLM privacy stats:', error);
+                document.getElementById('piiFilteredCount').textContent = '-';
+                document.getElementById('dataSanitizedCount').textContent = '-';
+            }
+        }
+
+        async function loadLLMPerformanceMetrics() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/performance-metrics`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update performance metrics
+                document.getElementById('intentRecAvgTime').textContent = data.intent_recognition?.avg_response_time_ms ?
+                    data.intent_recognition.avg_response_time_ms.toFixed(1) : '-';
+                document.getElementById('intentRecSuccess').textContent = data.intent_recognition?.success_rate ?
+                    data.intent_recognition.success_rate.toFixed(1) : '-';
+                document.getElementById('intentRecConfidence').textContent = data.intent_recognition?.avg_confidence ?
+                    (data.intent_recognition.avg_confidence * 100).toFixed(1) : '-';
+
+                document.getElementById('stateHydrateAvgTime').textContent = data.state_hydration?.avg_response_time_ms ?
+                    data.state_hydration.avg_response_time_ms.toFixed(1) : '-';
+                document.getElementById('stateHydrateSuccess').textContent = data.state_hydration?.success_rate ?
+                    data.state_hydration.success_rate.toFixed(1) : '-';
+                document.getElementById('stateHydrateFields').textContent = data.state_hydration?.avg_fields_parsed || '-';
+
+                document.getElementById('narrativeGenAvgTime').textContent = data.narrative_generation?.avg_response_time_ms ?
+                    data.narrative_generation.avg_response_time_ms.toFixed(1) : '-';
+                document.getElementById('narrativeGenSuccess').textContent = data.narrative_generation?.success_rate ?
+                    data.narrative_generation.success_rate.toFixed(1) : '-';
+                document.getElementById('narrativeGenLength').textContent = data.narrative_generation?.avg_narrative_length || '-';
+
+            } catch (error) {
+                console.warn('Failed to load LLM performance metrics:', error);
+                // Set defaults for performance metrics
+                ['intentRecAvgTime', 'intentRecSuccess', 'intentRecConfidence',
+                 'stateHydrateAvgTime', 'stateHydrateSuccess', 'stateHydrateFields',
+                 'narrativeGenAvgTime', 'narrativeGenSuccess', 'narrativeGenLength'].forEach(id => {
+                    document.getElementById(id).textContent = '-';
+                });
+            }
+        }
+
+        async function loadLLMRealtimeFeed() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/realtime-activities`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const feedContainer = document.getElementById('llmRealtimeFeed');
+
+                if (data.activities && data.activities.length > 0) {
+                    feedContainer.innerHTML = data.activities
+                        .slice(-10) // Show last 10 activities
+                        .reverse() // Most recent first
+                        .map(activity => `
+                            <div class="trace-entry" style="border-left-color: ${getActivityColor(activity.type)};">
+                                <div class="trace-calc-id">${activity.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                                <div class="trace-entity">${activity.operation_id || 'N/A'}</div>
+                                <div class="trace-field">${activity.status || 'active'}</div>
+                                <div class="trace-explanation">${activity.description || 'Processing...'}</div>
+                                <div class="trace-metadata">${activity.timestamp || new Date().toLocaleTimeString()}</div>
+                            </div>
+                        `).join('');
+                } else {
+                    feedContainer.innerHTML = `
+                        <div class="trace-entry">
+                            <div>No active LLM operations</div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.warn('Failed to load LLM realtime feed:', error);
+                document.getElementById('llmRealtimeFeed').innerHTML = `
+                    <div class="trace-entry">
+                        <div>Failed to load realtime feed: ${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function getActivityColor(activityType) {
+            const colors = {
+                'intent_recognition': '#2563eb',
+                'state_hydration': '#059669',
+                'narrative_generation': '#7c3aed',
+                'privacy_filter': '#dc2626',
+                'llm_call': '#ea580c'
+            };
+            return colors[activityType] || '#6b7280';
+        }
+
+        async function loadPromptManagement() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/prompt-management`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update prompt library stats
+                document.getElementById('totalPrompts').textContent = data.total_prompts || 0;
+                document.getElementById('loadedPromptsCount').textContent = data.loaded_prompts || 0;
+                document.getElementById('promptCacheHitRate').textContent = data.cache_hit_rate ? data.cache_hit_rate.toFixed(1) : '0.0';
+                document.getElementById('promptsLastUpdated').textContent = data.last_updated ?
+                    new Date(data.last_updated).toLocaleString() : 'Never';
+
+                // Update prompt usage breakdown
+                const usageContainer = document.getElementById('promptUsageBreakdown');
+                if (data.usage_by_prompt && Object.keys(data.usage_by_prompt).length > 0) {
+                    const usage = Object.entries(data.usage_by_prompt)
+                        .sort(([,a], [,b]) => b - a)
+                        .slice(0, 5) // Top 5 most used
+                        .map(([prompt, count]) => `${prompt}: ${count} uses`)
+                        .join('\n');
+                    usageContainer.textContent = usage;
+                } else {
+                    usageContainer.innerHTML = '<em>No prompt usage data yet</em>';
+                }
+
+                // Update recent prompt loads
+                const loadsContainer = document.getElementById('recentPromptLoads');
+                if (data.recent_loads && data.recent_loads.length > 0) {
+                    loadsContainer.innerHTML = data.recent_loads
+                        .slice(-5) // Last 5 loads
+                        .reverse() // Most recent first
+                        .map(load => `
+                            <div class="trace-entry">
+                                <div class="trace-calc-id">${load.prompt_id}</div>
+                                <div class="trace-explanation">${load.operation || 'Loaded for processing'}</div>
+                                <div class="trace-metadata">${new Date(load.timestamp).toLocaleTimeString()}</div>
+                            </div>
+                        `).join('');
+                } else {
+                    loadsContainer.innerHTML = `
+                        <div class="trace-entry">
+                            <div>No recent prompt loads</div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.warn('Failed to load prompt management data:', error);
+                document.getElementById('totalPrompts').textContent = '-';
+                document.getElementById('loadedPromptsCount').textContent = '-';
+                document.getElementById('promptCacheHitRate').textContent = '-';
+            }
+        }
+
+        async function clearLLMActivities() {
+            try {
+                const response = await fetch(`${backendUrl}/debug/llm/activities`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                document.getElementById('recentActivities').innerHTML = `
+                    <div class="trace-entry">
+                        <div>LLM activities cleared successfully - removed ${data.cleared_count} entries</div>
+                    </div>
+                `;
+
+                // Refresh the display
+                setTimeout(() => loadLLMOrchestrator(), 500);
+
+            } catch (error) {
+                document.getElementById('recentActivities').innerHTML = `
+                    <div class="trace-entry">
+                        <div>Failed to clear LLM activities: ${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function simulateLLMActivity(activityType) {
+            try {
+                const testDetails = {
+                    intent_recognition: {
+                        query: "What is my tax payable?",
+                        detected_intent: "fact_check_tax",
+                        confidence: 0.95,
+                        mode_id: 1
+                    },
+                    state_hydration: {
+                        entity_id: "person_1",
+                        fields_hydrated: ["income", "deductions", "tax_brackets"],
+                        missing_fields: [],
+                        confidence: 0.88
+                    },
+                    narrative_generation: {
+                        topic: "tax_optimization",
+                        word_count: 250,
+                        citations_used: 3,
+                        confidence: 0.92
+                    }
+                };
+
+                const response = await fetch(`${backendUrl}/debug/llm/test-activity`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        activity_type: activityType,
+                        details: testDetails[activityType] || {test: true}
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log(`Simulated ${activityType} activity:`, data);
+
+                // Refresh LLM activities display
+                setTimeout(() => loadLLMOrchestrator(), 200);
+
+            } catch (error) {
+                console.error(`Failed to simulate ${activityType} activity:`, error);
+                showError(`Failed to simulate LLM activity: ${error.message}`);
+            }
         }
 
         function showCalculationDetails(calcId, event) {
@@ -606,7 +1526,7 @@
                         'Taxable income calculation rules'
                     ],
                     dependencies: 'None',
-                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                    file: 'backend/calculation_engine/domains/tax_personal.py'
                 },
                 'CAL-PIT-002': {
                     id: 'CAL-PIT-002',
@@ -630,7 +1550,7 @@
                         'Medicare levy thresholds (single/family)'
                     ],
                     dependencies: 'CAL-PIT-001 (taxable income)',
-                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                    file: 'backend/calculation_engine/domains/tax_personal.py'
                 },
                 'CAL-PIT-004': {
                     id: 'CAL-PIT-004',
@@ -655,7 +1575,7 @@
                         'LITO phase-out rate'
                     ],
                     dependencies: 'CAL-PIT-001 (taxable income)',
-                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                    file: 'backend/calculation_engine/domains/tax_personal.py'
                 },
                 'CAL-PIT-005': {
                     id: 'CAL-PIT-005',
@@ -676,7 +1596,7 @@
                     outputs: 'CalculationResult with net_tax_payable (Decimal)',
                     rules_used: 'None (aggregation calculation)',
                     dependencies: 'CAL-PIT-001, CAL-PIT-002, CAL-PIT-004',
-                    file: 'backend/src/engines/calculation/domains/tax_personal.py'
+                    file: 'backend/calculation_engine/domains/tax_personal.py'
                 },
                 'CAL-CGT-001': {
                     id: 'CAL-CGT-001',
@@ -697,7 +1617,7 @@
                     outputs: 'CalculationResult with capital_gain (Decimal)',
                     rules_used: 'Asset disposal valuation rules',
                     dependencies: 'Asset disposal data in state',
-                    file: 'backend/src/engines/calculation/domains/cgt.py'
+                    file: 'backend/calculation_engine/domains/cgt.py'
                 },
                 'CAL-CGT-002': {
                     id: 'CAL-CGT-002',
@@ -720,7 +1640,7 @@
                         'CGT discount rate for individuals (50%)'
                     ],
                     dependencies: 'CAL-CGT-001 (capital gain)',
-                    file: 'backend/src/engines/calculation/domains/cgt.py'
+                    file: 'backend/calculation_engine/domains/cgt.py'
                 },
                 'CAL-SUP-002': {
                     id: 'CAL-SUP-002',
@@ -741,7 +1661,7 @@
                     outputs: 'CalculationResult with total_concessional (Decimal)',
                     rules_used: 'Concessional contribution definitions',
                     dependencies: 'Cashflow data with super contributions',
-                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                    file: 'backend/calculation_engine/domains/superannuation.py'
                 },
                 'CAL-SUP-003': {
                     id: 'CAL-SUP-003',
@@ -763,7 +1683,7 @@
                         'Concessional contributions cap limit'
                     ],
                     dependencies: 'CAL-SUP-002 (total concessional)',
-                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                    file: 'backend/calculation_engine/domains/superannuation.py'
                 },
                 'CAL-SUP-007': {
                     id: 'CAL-SUP-007',
@@ -785,7 +1705,7 @@
                         'Super contributions tax rate (15%)'
                     ],
                     dependencies: 'CAL-SUP-002 (total concessional)',
-                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                    file: 'backend/calculation_engine/domains/superannuation.py'
                 },
                 'CAL-SUP-008': {
                     id: 'CAL-SUP-008',
@@ -809,7 +1729,7 @@
                         'Division 293 additional tax rate'
                     ],
                     dependencies: 'CAL-PIT-001 (ATI), CAL-SUP-002 (concessional)',
-                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                    file: 'backend/calculation_engine/domains/superannuation.py'
                 },
                 'CAL-SUP-009': {
                     id: 'CAL-SUP-009',
@@ -830,7 +1750,7 @@
                     outputs: 'CalculationResult with net_contribution (Decimal)',
                     rules_used: 'Tax rate calculations',
                     dependencies: 'CAL-SUP-002, CAL-SUP-007, CAL-SUP-008',
-                    file: 'backend/src/engines/calculation/domains/superannuation.py'
+                    file: 'backend/calculation_engine/domains/superannuation.py'
                 },
                 'CAL-PFL-104': {
                     id: 'CAL-PFL-104',
@@ -854,7 +1774,7 @@
                         'Marginal tax rate for property calculations'
                     ],
                     dependencies: 'Property loan and income data',
-                    file: 'backend/src/engines/calculation/domains/property.py'
+                    file: 'backend/calculation_engine/domains/property.py'
                 }
             };
 
@@ -863,7 +1783,7 @@
                 detailsContainer.innerHTML = `
                     <div style="margin-bottom: 12px;">
                         <strong style="color: #2563eb; font-size: 14px;">${details.id}</strong>
-                        <span style="color: #6b7280;">- ${details.name}</span>
+                        <span style="color: #94a3b8;">- ${details.name}</span>
                     </div>
                     <div style="margin-bottom: 8px;">
                         <strong>Domain:</strong> ${details.domain}
@@ -903,6 +1823,530 @@
                 `;
             } else {
                 detailsContainer.innerHTML = `<em>Details not available for ${calcId}</em>`;
+            }
+        }
+
+        async function loadAvailableCalculations() {
+            try {
+                const response = await fetch(`${backendUrl}/api/v1/calculations/available`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const select = document.getElementById('calcId');
+                select.innerHTML = '<option value="">Select calculation...</option>';
+
+                Object.keys(data.calculations).sort().forEach(calcId => {
+                    const option = document.createElement('option');
+                    option.value = calcId;
+                    option.textContent = calcId;
+                    select.appendChild(option);
+                });
+
+            } catch (error) {
+                console.warn('Backend API unavailable, using hardcoded calculations:', error);
+                // Fallback to hardcoded calculations for offline/demo mode
+                const hardcodedCalculations = [
+                    'CAL-PIT-001', 'CAL-PIT-002', 'CAL-PIT-004', 'CAL-PIT-005',
+                    'CAL-CGT-001', 'CAL-CGT-002',
+                    'CAL-SUP-002', 'CAL-SUP-003', 'CAL-SUP-007', 'CAL-SUP-008', 'CAL-SUP-009',
+                    'CAL-PFL-104'
+                ];
+
+                const select = document.getElementById('calcId');
+                select.innerHTML = '<option value="">Select calculation...</option>';
+
+                hardcodedCalculations.forEach(calcId => {
+                    const option = document.createElement('option');
+                    option.value = calcId;
+                    option.textContent = calcId;
+                    select.appendChild(option);
+                });
+
+                // Show a note that we're in offline mode
+                console.log('📋 Using hardcoded calculations (offline mode)');
+            }
+        }
+
+        async function loadAvailableScenarios() {
+            try {
+                // For now, hardcode the scenario files we created
+                const scenarios = [
+                    'basic_income_tax.json',
+                    'superannuation_scenario.json',
+                    'capital_gains_scenario.json',
+                    'comprehensive_scenario.json'
+                ];
+
+                const select = document.getElementById('scenarioSelect');
+                select.innerHTML = '<option value="">Select scenario...</option>';
+
+                scenarios.forEach(scenario => {
+                    const option = document.createElement('option');
+                    option.value = scenario;
+                    option.textContent = scenario.replace('.json', '').replace(/_/g, ' ');
+                    select.appendChild(option);
+                });
+
+                // Also populate the fact-check scenario selector
+                const factCheckSelect = document.getElementById('factCheckScenario');
+                factCheckSelect.innerHTML = '<option value="">Use empty state (LLM hydration)</option>';
+
+                scenarios.forEach(scenario => {
+                    const option = document.createElement('option');
+                    option.value = scenario;
+                    option.textContent = scenario.replace('.json', '').replace(/_/g, ' ');
+                    factCheckSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('Failed to load scenarios:', error);
+            }
+        }
+
+        async function runFactCheck(event) {
+            event.preventDefault();
+
+            const question = document.getElementById('questionInput').value.trim();
+            const scenarioFile = document.getElementById('factCheckScenario').value;
+            const submitBtn = document.getElementById('factCheckSubmitBtn');
+            const flowContainer = document.getElementById('factCheckFlow');
+            const responseContainer = document.getElementById('factCheckResponse');
+
+            if (!question) {
+                flowContainer.innerHTML = '<div style="color: #dc2626;">Please enter a question</div>';
+                return;
+            }
+
+            // Reset containers
+            flowContainer.innerHTML = '';
+            responseContainer.innerHTML = '<div style="color: #94a3b8; font-style: italic;">Processing...</div>';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            try {
+                // Step 1: Intent Recognition
+                await addProcessingStep(flowContainer, '🔍 Intent Recognition', 'Analyzing question to determine intent...', 'processing');
+                const intentResult = await simulateIntentRecognition(question);
+                await addProcessingStep(flowContainer, '🔍 Intent Recognition', `Detected intent: ${intentResult.intent} (confidence: ${(intentResult.confidence * 100).toFixed(1)}%)`, 'success');
+
+                // Step 2: State Hydration
+                await addProcessingStep(flowContainer, '💧 State Hydration', 'Converting natural language to structured financial data...', 'processing');
+
+                let scenarioData = null;
+                if (scenarioFile) {
+                    // Load scenario data if provided
+                    const scenarioResponse = await fetch(`test_scenarios/${scenarioFile}`);
+                    if (scenarioResponse.ok) {
+                        scenarioData = await scenarioResponse.json();
+                        await addProcessingStep(flowContainer, '💧 State Hydration', `Loaded scenario: ${scenarioFile}`, 'success');
+                    }
+                } else {
+                    await addProcessingStep(flowContainer, '💧 State Hydration', 'Using empty state (LLM will hydrate from question)', 'info');
+                }
+
+                // Step 3: Make API call to fact-check endpoint
+                await addProcessingStep(flowContainer, '🚀 API Call', 'Calling fact-check endpoint...', 'processing');
+
+                const requestData = {
+                    scenario_id: scenarioFile ? scenarioFile.replace('.json', '') : 'demo_scenario',
+                    parameters: {
+                        question: question
+                    }
+                };
+
+                // If we have scenario data, we could include it, but for now let the LLM handle hydration
+                const factCheckResponse = await fetch(`${backendUrl}/api/v1/modes/fact_check/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!factCheckResponse.ok) {
+                    throw new Error(`Fact-check API failed: HTTP ${factCheckResponse.status}`);
+                }
+
+                const result = await factCheckResponse.json();
+                await addProcessingStep(flowContainer, '🚀 API Call', 'Fact-check endpoint responded successfully', 'success');
+
+                // Step 4: Show calculation results if any
+                if (result.result && result.result.data) {
+                    const calcData = result.result.data;
+                    if (calcData.tax_liability !== undefined || calcData.net_wealth !== undefined) {
+                        await addProcessingStep(flowContainer, '🧮 Calculation Engine', 'Processed calculations successfully', 'success');
+
+                        if (calcData.tax_liability !== undefined) {
+                            await addProcessingStep(flowContainer, '📊 Tax Calculation', `Tax liability: $${calcData.tax_liability}`, 'info');
+                        }
+                        if (calcData.net_wealth !== undefined) {
+                            await addProcessingStep(flowContainer, '📊 Wealth Calculation', `Net wealth: $${calcData.net_wealth}`, 'info');
+                        }
+                    }
+                }
+
+                // Step 5: Narrative Generation
+                if (result.explanation) {
+                    await addProcessingStep(flowContainer, '📝 Narrative Generation', 'Generated human-readable response', 'success');
+                }
+
+                // Step 6: Privacy Filtering
+                await addProcessingStep(flowContainer, '🔒 Privacy Filtering', 'Applied PII filtering to response', 'success');
+
+                // Step 7: Trace Logging
+                if (result.result && result.result.trace_log) {
+                    await addProcessingStep(flowContainer, '📋 Trace Logging', `Logged ${result.result.trace_log.length} calculation steps`, 'success');
+                }
+
+                // Display final response
+                responseContainer.innerHTML = `
+                    <div class="chat-response">
+                        <div style="margin-bottom: 12px;">
+                            <strong style="color: #e2e8f0;">Question:</strong><br>
+                            <span style="color: #374151; font-style: italic;">"${question}"</span>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong style="color: #e2e8f0;">AI Response:</strong><br>
+                            <span style="color: #374151; line-height: 1.5;">${result.explanation || 'No explanation provided'}</span>
+                        </div>
+                        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #334155; font-size: 11px; color: #94a3b8;">
+                            <div style="display: flex; gap: 15px;">
+                                <span><strong>Mode:</strong> ${result.mode}</span>
+                                <span><strong>Scenario:</strong> ${result.scenario_id}</span>
+                                <span><strong>Status:</strong> <span style="color: #10b981;">Success</span></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Refresh trace logs to show new entries
+                setTimeout(() => {
+                    loadTraceLogs();
+                    loadLLMTraceLogs();
+                }, 500);
+
+            } catch (error) {
+                await addProcessingStep(flowContainer, '❌ Error', `Processing failed: ${error.message}`, 'error');
+                responseContainer.innerHTML = `<div style="color: #dc2626;">Error: ${error.message}</div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Ask Question';
+            }
+        }
+
+        async function addProcessingStep(container, stepName, message, status) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'processing-step';
+            stepDiv.style.cssText = `
+                margin-bottom: 8px;
+                padding: 8px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: white;
+                border: 1px solid #475569;
+            `;
+
+            let statusColor = '#6b7280';
+            let statusIcon = '⏳';
+
+            switch (status) {
+                case 'processing':
+                    statusColor = '#f59e0b';
+                    statusIcon = '⏳';
+                    break;
+                case 'success':
+                    statusColor = '#10b981';
+                    statusIcon = '✅';
+                    break;
+                case 'error':
+                    statusColor = '#ef4444';
+                    statusIcon = '❌';
+                    break;
+                case 'info':
+                    statusColor = '#3b82f6';
+                    statusIcon = 'ℹ️';
+                    break;
+            }
+
+            stepDiv.style.borderLeft = `4px solid ${statusColor}`;
+
+            stepDiv.innerHTML = `
+                <span style="color: ${statusColor}; font-size: 14px;">${statusIcon}</span>
+                <div style="flex: 1;">
+                    <strong style="color: ${statusColor};">${stepName}</strong><br>
+                    <span style="color: #374151;">${message}</span>
+                </div>
+                <span style="font-size: 10px; color: #9ca3af; align-self: flex-start;">
+                    ${new Date().toLocaleTimeString()}
+                </span>
+            `;
+
+            container.appendChild(stepDiv);
+
+            // Auto-scroll to bottom
+            container.scrollTop = container.scrollHeight;
+
+            // Add a small delay for visual effect
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+
+        async function simulateIntentRecognition(question) {
+            // Simulate intent recognition (in real implementation this would be done by LLM)
+            const lowerQuestion = question.toLowerCase();
+
+            let intent = 'unknown';
+            let confidence = 0.5;
+
+            if (lowerQuestion.includes('tax') || lowerQuestion.includes('liability') || lowerQuestion.includes('payable')) {
+                intent = 'check_tax_liability';
+                confidence = 0.95;
+            } else if (lowerQuestion.includes('wealth') || lowerQuestion.includes('net worth') || lowerQuestion.includes('assets')) {
+                intent = 'check_net_wealth';
+                confidence = 0.90;
+            } else if (lowerQuestion.includes('super') || lowerQuestion.includes('retirement')) {
+                intent = 'check_superannuation';
+                confidence = 0.85;
+            }
+
+            // Simulate processing delay
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            return { intent, confidence };
+        }
+
+        async function runSingleCalculation(event) {
+            event.preventDefault();
+
+            const calcId = document.getElementById('calcId').value;
+            const entityId = document.getElementById('entityId').value;
+            const scenarioFile = document.getElementById('scenarioSelect').value;
+
+            if (!calcId || !scenarioFile) {
+                document.getElementById('calcResult').textContent = 'Please select both a calculation and scenario';
+                return;
+            }
+
+            try {
+                document.getElementById('calcResult').textContent = 'Running calculation...';
+
+                // Load scenario data
+                const scenarioResponse = await fetch(`test_scenarios/${scenarioFile}`);
+                if (!scenarioResponse.ok) {
+                    throw new Error(`Failed to load scenario: HTTP ${scenarioResponse.status}`);
+                }
+
+                const scenarioData = await scenarioResponse.json();
+
+                // Prepare calculation request
+                const requestData = {
+                    calc_id: calcId,
+                    entity_id: entityId,
+                    state_data: {
+                        global_context: scenarioData.global_context || {},
+                        entities: scenarioData.entities || {},
+                        asset_context: scenarioData.asset_context || {},
+                        cashflow_context: scenarioData.cashflow_context || {}
+                    }
+                };
+
+                // Run calculation
+                const calcResponse = await fetch(`${backendUrl}/api/v1/calculations/run`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!calcResponse.ok) {
+                    throw new Error(`Calculation failed: HTTP ${calcResponse.status}`);
+                }
+
+                const result = await calcResponse.json();
+
+                // Display result
+                document.getElementById('calcResult').textContent = JSON.stringify(result, null, 2);
+
+                // Refresh trace logs to show new entries
+                setTimeout(() => loadTraceLogs(), 500);
+
+            } catch (error) {
+                document.getElementById('calcResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function loadLLMTierCandidates() {
+            try {
+                // Load tier candidates from API
+                const response = await fetch(`${backendUrl}/llm-tiers/candidates`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Update ROUTER candidates
+                const routerContainer = document.getElementById('routerCandidates');
+                if (data.ROUTER && data.ROUTER.models && data.ROUTER.models.length > 0) {
+                    routerContainer.innerHTML = data.ROUTER.models.map(model => `
+                        <div class="state-value" style="cursor: pointer;" onclick="showModelDetails('${model.id}')">
+                            <strong>${model.name}</strong><br>
+                            <span style="font-size: 11px; color: #94a3b8;">
+                                ${model.response_time_seconds?.toFixed(3) || 'N/A'}s |
+                                ${model.tokens_used || 'N/A'} tokens |
+                                $${model.pricing_input?.toFixed(7) || 'N/A'}
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    routerContainer.innerHTML = '<div class="state-value">No models available</div>';
+                }
+
+                // Update NARRATOR candidates
+                const narratorContainer = document.getElementById('narratorCandidates');
+                if (data.NARRATOR && data.NARRATOR.models && data.NARRATOR.models.length > 0) {
+                    narratorContainer.innerHTML = data.NARRATOR.models.map(model => `
+                        <div class="state-value" style="cursor: pointer;" onclick="showModelDetails('${model.id}')">
+                            <strong>${model.name}</strong><br>
+                            <span style="font-size: 11px; color: #94a3b8;">
+                                ${model.response_time_seconds?.toFixed(3) || 'N/A'}s |
+                                ${model.tokens_used || 'N/A'} tokens |
+                                $${model.pricing_input?.toFixed(7) || 'N/A'}
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    narratorContainer.innerHTML = '<div class="state-value">No models available</div>';
+                }
+
+                // Update THINKER candidates
+                const thinkerContainer = document.getElementById('thinkerCandidates');
+                if (data.THINKER && data.THINKER.models && data.THINKER.models.length > 0) {
+                    thinkerContainer.innerHTML = data.THINKER.models.map(model => `
+                        <div class="state-value" style="cursor: pointer;" onclick="showModelDetails('${model.id}')">
+                            <strong>${model.name}</strong><br>
+                            <span style="font-size: 11px; color: #94a3b8;">
+                                ${model.response_time_seconds?.toFixed(3) || 'N/A'}s |
+                                ${model.tokens_used || 'N/A'} tokens |
+                                $${model.pricing_input?.toFixed(7) || 'N/A'}
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    thinkerContainer.innerHTML = '<div class="state-value">No models available</div>';
+                }
+
+                // Update FAILED candidates
+                const failedContainer = document.getElementById('failedCandidates');
+                if (data.FAILED && data.FAILED.models && data.FAILED.models.length > 0) {
+                    failedContainer.innerHTML = data.FAILED.models.map(model => `
+                        <div class="state-value" style="background: #7f1d1d; border-left: 3px solid #ef4444;">
+                            <strong style="color: #dc2626;">${model.name}</strong><br>
+                            <span style="font-size: 11px; color: #94a3b8;">
+                                ${model.error || 'Failed testing'}
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    failedContainer.innerHTML = '<div class="state-value">No failed models</div>';
+                }
+
+                // Update metadata
+                if (data.metadata) {
+                    const metadataHtml = `
+                        <strong>Implementation Status:</strong><br>
+                        • Last updated: ${new Date(data.metadata.last_updated).toLocaleDateString()}<br>
+                        • Models tested: ${data.metadata.total_models_tested || 0}<br>
+                        • Success rate: ${(data.metadata.success_rate || 0) * 100}%<br>
+                        • Cost range: ${data.metadata.cost_range || 'N/A'}
+                    `;
+                    document.getElementById('performanceSummary').innerHTML = metadataHtml;
+                }
+
+            } catch (error) {
+                console.warn('Failed to load LLM tier candidates:', error);
+                ['routerCandidates', 'narratorCandidates', 'thinkerCandidates', 'failedCandidates'].forEach(id => {
+                    document.getElementById(id).innerHTML = '<div class="state-value">Error loading data</div>';
+                });
+            }
+        }
+
+        async function showModelDetails(modelId) {
+            try {
+                // Load tier mapping from API
+                const response = await fetch(`${backendUrl}/llm-tiers/tier-mapping`);
+                if (!response.ok) return;
+
+                const data = await response.json();
+
+                // Search through all tiers for the model
+                let modelDetails = null;
+                let foundTier = '';
+
+                for (const [tierName, tierData] of Object.entries(data)) {
+                    if (tierData.models) {
+                        const model = tierData.models.find(m => m.id === modelId);
+                        if (model) {
+                            modelDetails = model;
+                            foundTier = tierName;
+                            break;
+                        }
+                    }
+                }
+
+                if (modelDetails) {
+                    const details = {
+                        model_id: modelDetails.id,
+                        name: modelDetails.name,
+                        tier: foundTier,
+                        response_time: `${modelDetails.response_time_seconds?.toFixed(3) || 'N/A'}s`,
+                        tokens_used: modelDetails.tokens_used || 'N/A',
+                        context_length: modelDetails.context_length || 'N/A',
+                        pricing_input: `$${modelDetails.pricing_input?.toFixed(7) || 'N/A'}`,
+                        priority: modelDetails.priority || 'N/A',
+                        status: modelDetails.status || 'unknown',
+                        warning: modelDetails.warning || null
+                    };
+
+                    alert(`Model Details:\\n${JSON.stringify(details, null, 2)}`);
+                }
+            } catch (error) {
+                console.warn('Failed to load model details:', error);
+            }
+        }
+
+        async function testTierSelection(event) {
+            event.preventDefault();
+
+            const tier = document.getElementById('testTier').value;
+            const resultContainer = document.getElementById('tierTestResult');
+
+            try {
+                resultContainer.textContent = 'Testing tier selection...';
+
+                // Use API endpoint for tier selection
+                const response = await fetch(`${backendUrl}/llm-tiers/test-selection`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tier: tier })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                resultContainer.textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                resultContainer.textContent = `Error: ${error.message}`;
             }
         }
 

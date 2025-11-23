@@ -39,6 +39,26 @@ from .orchestration import (
     AdviceOutcome,
 )
 
+# Import LLM tier models
+from .llm_tiers import (
+    LLMTier,
+    TierCapability,
+    ModelSelectionCriteria,
+)
+
+from .openrouter import (
+    OpenRouterPricing,
+    OpenRouterCapabilities,
+    OpenRouterModel,
+    OpenRouterModelsResponse,
+    ModelSelectionResult,
+)
+
+from .model_registry import (
+    ModelRegistry,
+    RegistryStatus,
+)
+
 # Import calculation models (depends on others)
 from .calculation import (
     GlobalContext,
@@ -52,6 +72,22 @@ from .calculation import (
 
 # Export all models
 __all__ = [
+    # LLM Tiers
+    "LLMTier",
+    "TierCapability",
+    "ModelSelectionCriteria",
+
+    # OpenRouter
+    "OpenRouterPricing",
+    "OpenRouterCapabilities",
+    "OpenRouterModel",
+    "OpenRouterModelsResponse",
+    "ModelSelectionResult",
+
+    # Model Registry
+    "ModelRegistry",
+    "RegistryStatus",
+
     # Entities
     "EntityContext",
     "Person",

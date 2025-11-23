@@ -1,0 +1,130 @@
+{
+  "ROUTER": {
+    "description": "Fast/Cheap tier for intent recognition and lightweight classification",
+    "target_response_time": "<5 seconds",
+    "models": [
+      {
+        "id": "moonshotai/kimi-k2-thinking",
+        "name": "MoonshotAI Kimi K2 Thinking",
+        "response_time_seconds": 2.528,
+        "tokens_used": 47,
+        "context_length": 262144,
+        "pricing_input": 0.00000045,
+        "priority": 1,
+        "status": "active"
+      },
+      {
+        "id": "qwen/qwen-turbo",
+        "name": "Qwen Turbo",
+        "response_time_seconds": 4.403,
+        "tokens_used": 32,
+        "context_length": 1000000,
+        "pricing_input": 0.00000005,
+        "priority": 2,
+        "status": "active"
+      },
+      {
+        "id": "qwen/qwen-plus-2025-07-28",
+        "name": "Qwen Plus 0728",
+        "response_time_seconds": 3.835,
+        "tokens_used": 30,
+        "context_length": 1000000,
+        "pricing_input": 0.0000004,
+        "priority": 3,
+        "status": "active"
+      }
+    ]
+  },
+  "NARRATOR": {
+    "description": "Balanced tier for natural language generation and conversational responses",
+    "target_response_time": "2-6 seconds",
+    "models": [
+      {
+        "id": "qwen/qwen3-235b-a22b-thinking-2507",
+        "name": "Qwen3 235B A22B Thinking",
+        "response_time_seconds": 2.75,
+        "tokens_used": 31,
+        "context_length": 262144,
+        "pricing_input": 0.00000011,
+        "priority": 1,
+        "status": "active"
+      },
+      {
+        "id": "moonshotai/kimi-linear-48b-a3b-instruct",
+        "name": "Kimi Linear 48B A3B",
+        "response_time_seconds": 5.196,
+        "tokens_used": 29,
+        "context_length": 1048576,
+        "pricing_input": 0.0000005,
+        "priority": 2,
+        "status": "active"
+      },
+      {
+        "id": "deepseek/deepseek-v3.2-exp",
+        "name": "DeepSeek V3.2 Exp",
+        "response_time_seconds": 5.351,
+        "tokens_used": 39,
+        "context_length": 163840,
+        "pricing_input": 0.00000027,
+        "priority": 3,
+        "status": "active"
+      }
+    ]
+  },
+  "THINKER": {
+    "description": "Complex reasoning tier for strategic analysis and optimization",
+    "target_response_time": "5-8 seconds",
+    "models": [
+      {
+        "id": "deepseek/deepseek-r1-0528",
+        "name": "DeepSeek R1 0528",
+        "response_time_seconds": 5.908,
+        "tokens_used": 27,
+        "context_length": 163840,
+        "pricing_input": 0.0000002,
+        "priority": 1,
+        "status": "active"
+      },
+      {
+        "id": "deepseek/deepseek-r1",
+        "name": "DeepSeek R1",
+        "response_time_seconds": 6.42,
+        "tokens_used": 27,
+        "context_length": 163840,
+        "pricing_input": 0.0000003,
+        "priority": 2,
+        "status": "active"
+      },
+      {
+        "id": "minimax/minimax-m1",
+        "name": "MiniMax M1",
+        "response_time_seconds": 6.25,
+        "tokens_used": 470,
+        "context_length": 1000000,
+        "pricing_input": 0.0000004,
+        "priority": 3,
+        "status": "active",
+        "warning": "High token usage (470 tokens)"
+      }
+    ]
+  },
+  "FAILED": {
+    "description": "Models that failed testing and are not available",
+    "models": [
+      {
+        "id": "microsoft/mai-ds-r1",
+        "name": "Microsoft MAI DS R1",
+        "error": "HTTP 404: No endpoints found matching your data policy (Paid model training)",
+        "status": "failed"
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2025-11-23",
+    "test_method": "parallel_concurrent_requests",
+    "total_models_tested": 10,
+    "success_rate": 0.9,
+    "average_response_time": 4.738,
+    "cost_range": "0.00000005 - 0.0000005"
+  }
+}

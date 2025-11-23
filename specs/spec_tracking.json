@@ -317,5 +317,36 @@
     "purpose": "Internal reference for developers creating prompts. Provides comprehensive context about common interaction patterns in financial advice without exposing sensitive knowledge to external LLMs.",
     "related_files": [],
     "status": "active"
+  },
+  {
+    "file_path": "001-four-engine-architecture/design/llm_strategy.md",
+    "title": "LLM Tiered Routing Strategy",
+    "description": "Dynamic model selection system for optimal cost-performance trade-offs across three intelligence tiers",
+    "created_date": "2025-11-23",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "001-four-engine-architecture",
+    "category": "design",
+    "purpose": "Define the LLM tiered routing architecture with ROUTER, NARRATOR, and THINKER tiers, dynamic registry system, and algorithmic model selection for optimal cost-performance balance",
+    "related_files": [
+      "001-four-engine-architecture/design/architecture_integration_map.md",
+      "001-four-engine-architecture/design/interaction_architecture.md",
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ],
+    "status": "active"
+  },
+  {
+    "file_path": "conditional_rules/llm-prompt-management.md",
+    "title": "LLM Prompt Management Rules",
+    "description": "Comprehensive framework for managing LLM prompts and source materials with catalog tracking",
+    "created_date": "2025-11-21",
+    "created_timezone": "Australia/Brisbane",
+    "spec_area": "conditional_rules",
+    "category": "root",
+    "purpose": "Establish the framework for managing the probabilistic layer of the four-engine architecture. Defines location requirements, separation principles, catalog tracking, and validation rules for all LLM prompts and source materials.",
+    "related_files": [
+      "001-four-engine-architecture/plan.md",
+      "001-four-engine-architecture/design/workflows_and_modes.md"
+    ],
+    "status": "active"
   }
 ]

@@ -5,7 +5,7 @@ This module provides endpoints for audit trail and calculation traceability.
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from ..auth import get_current_user, ClerkUser
+from auth import get_current_user, ClerkUser
 
 router = APIRouter()
 

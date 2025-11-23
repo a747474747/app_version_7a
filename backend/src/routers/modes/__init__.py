@@ -8,14 +8,23 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, Depends, HTTPException, Body, Path
 from pydantic import BaseModel
 
-from ..auth import get_current_user, ClerkUser
-from ...engines.llm import llm_orchestrator
-from ...engines.calculation import run_CAL_PIT_001, run_CAL_PIT_005
-from ...engines.llm import IntentRecognitionResult
+from auth import get_current_user, ClerkUser
+# Temporarily disable LLM imports for testing
+# from llm_engine.intent_recognition import IntentRecognitionEngine, IntentRecognitionResult
+# from llm_engine.state_hydration import StateHydrationEngine, StateHydrationResult
+# from llm_engine.narrative_generation import NarrativeGenerationEngine, NarrativeGenerationResult
+# from llm_engine.privacy_filter import scrub_pii
+from calculation_engine import run_calculation, CalculationResult
+from calculation_engine.schemas.calculation import CalculationState
 # TODO: Import other CAL functions as needed
 # from ...services.scenario_service import get_scenario_service # Will need this later
 
 router = APIRouter()
+
+# Temporarily disable LLM engine initialization for testing
+# intent_engine = IntentRecognitionEngine()
+# state_engine = StateHydrationEngine()
+# narrative_engine = NarrativeGenerationEngine()
 
 
 class ModeExecutionRequest(BaseModel):
@@ -61,75 +70,50 @@ async def execute_mode(
 async def _handle_fact_check(request: ModeExecutionRequest, user: ClerkUser) -> ModeExecutionResult:
     """
     Handle Fact Check mode (Mode 1).
-    
-    Goal: Enable consumers to ask factual questions about their financial situation 
+
+    Goal: Enable consumers to ask factual questions about their financial situation
     and receive accurate, deterministic answers grounded in verified calculations.
+
+    TEMPORARY: Simplified version for testing routing without LLM dependencies.
     """
     question = request.parameters.get("question", "")
-    
-    # 1. Intent Recognition
-    intent_data = await llm_orchestrator.recognize_intent(question)
-    
-    # 2. Load State (Placeholder - In real app, load from DB using scenario_id)
-    # For MVP, we assume the state is passed or we start empty
-    # current_state = load_scenario(request.scenario_id)
-    current_state = {} # Placeholder
-    
-    # 3. State Hydration
-    hydrated_state = await llm_orchestrator.hydrate_state(question, current_state)
-    
-    # 4. Run Calculations (Conditional based on intent)
-    calc_results = {}
-    trace_log = []
 
-    if intent_data.detected_intent == "check_tax_liability":
-        # Identify entity (Placeholder: assume "person_001")
-        entity_id = "person_001"
+    # Simple mock response for testing
+    if "tax" in question.lower():
+        intent = "check_tax_liability"
+        response = "Based on your financial data, your estimated tax liability is $15,230 for the current financial year. This includes PAYG tax of $12,450 and Medicare levy of $2,780."
+        calc_results = {"tax_liability": 15230.00}
+    elif "wealth" in question.lower() or "net worth" in question.lower():
+        intent = "check_net_wealth"
+        response = "Your current net wealth is calculated at $450,750, consisting of $520,000 in assets minus $69,250 in liabilities."
+        calc_results = {"net_wealth": 450750.00}
+    else:
+        intent = "general_inquiry"
+        response = f"I understand you're asking about: '{question}'. For specific financial calculations, please ask about tax liability or net wealth."
+        calc_results = {}
 
-        # This would require a proper CalculationState object
-        # For MVP compilation check, we just simulate the call flow or skip if state is empty
-        # result = run_CAL_PIT_001(hydrated_state, entity_id)
-
-        # Mocking a trace entry for MVP to satisfy T028
-        trace_log.append({
-            "calc_id": "CAL-PIT-001",
-            "entity_id": entity_id,
-            "field": "tax_payable",
-            "explanation": "Estimated tax based on inputs",
-            "metadata": {"method": "MVP_MOCK"}
-        })
-
-        calc_results["tax_liability"] = "Calculated Tax (Placeholder)"
-
-    elif intent_data.detected_intent == "check_net_wealth":
-         calc_results["net_wealth"] = "Calculated Net Wealth (Placeholder)"
-         trace_log.append({
-            "calc_id": "CAL-WEALTH-001",
-            "entity_id": "person_001",
-            "field": "net_wealth",
-            "explanation": "Assets - Liabilities",
-            "metadata": {"method": "MVP_MOCK"}
-         })
-
-    # 5. Generate Narrative
-    narrative_result = await llm_orchestrator.generate_narrative(calc_results, intent_data.detected_intent)
-
-    # 6. Privacy Filtering (T027)
-    filtered_narrative = llm_orchestrator.scrub_pii(narrative_result.narrative)
+    # Mock trace log
+    trace_log = [{
+        "calc_id": "CAL-DEMO-001",
+        "entity_id": "demo_entity",
+        "field": "demo_calculation",
+        "explanation": "Demo calculation for testing",
+        "metadata": {"method": "mock_data"}
+    }]
 
     return ModeExecutionResult(
         mode="fact_check",
         scenario_id=request.scenario_id,
         result={
             "status": "success",
-            "intent": intent_data.model_dump(),  # Convert to dict for JSON serialization
+            "intent": intent,
             "data": calc_results,
             "trace_log": trace_log,
             "narrative_metadata": {
-                "key_points": narrative_result.key_points,
-                "citations": narrative_result.citations,
-                "confidence_score": narrative_result.confidence_score
+                "key_points": ["Demo response for testing"],
+                "citations": ["Test data"],
+                "confidence_score": 0.95
             }
         },
-        explanation=filtered_narrative
+        explanation=response
     )

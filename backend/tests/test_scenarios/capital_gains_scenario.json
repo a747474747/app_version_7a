@@ -1,0 +1,59 @@
+{
+  "name": "Capital Gains Tax Scenario",
+  "description": "Scenario for testing capital gains tax calculations",
+  "effective_date": "2025-07-01",
+  "projection_years": 1,
+  "global_context": {
+    "effective_date": "2025-07-01",
+    "projection_years": 1,
+    "inflation_rate": 0.03,
+    "market_return_rate": 0.08
+  },
+  "entities": {
+    "person_1": {
+      "type": "person",
+      "name": "Bob Wilson",
+      "date_of_birth": "1965-01-01",
+      "residency_status": "resident",
+      "relationship_status": "single"
+    }
+  },
+  "asset_context": {
+    "assets": {
+      "property_1": {
+        "type": "property",
+        "description": "Investment property",
+        "cost_base": 300000.00,
+        "market_value": 500000.00,
+        "ownership": [
+          {
+            "entity_id": "person_1",
+            "share": 1.0
+          }
+        ]
+      }
+    }
+  },
+  "cashflow_context": {
+    "flows": {
+      "person_1": {
+        "asset_disposals": [
+          {
+            "asset_id": "property_1",
+            "disposal_date": "2025-07-01",
+            "proceeds": 500000.00,
+            "cost_base": 300000.00
+          }
+        ]
+      }
+    }
+  },
+  "expected_results": {
+    "CAL-CGT-001": {
+      "capital_gain": 200000.00
+    },
+    "CAL-CGT-002": {
+      "discounted_gain": 100000.00
+    }
+  }
+}

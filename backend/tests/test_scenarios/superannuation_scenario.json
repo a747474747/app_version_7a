@@ -1,0 +1,48 @@
+{
+  "name": "Superannuation Contribution Scenario",
+  "description": "Scenario for testing superannuation contribution calculations",
+  "effective_date": "2025-07-01",
+  "projection_years": 1,
+  "global_context": {
+    "effective_date": "2025-07-01",
+    "projection_years": 1,
+    "inflation_rate": 0.03,
+    "market_return_rate": 0.08
+  },
+  "entities": {
+    "person_1": {
+      "type": "person",
+      "name": "Jane Doe",
+      "date_of_birth": "1975-01-01",
+      "residency_status": "resident",
+      "relationship_status": "married"
+    }
+  },
+  "cashflow_context": {
+    "flows": {
+      "person_1": {
+        "salary_wages_gross": 120000.00,
+        "employer_super_guarantee": 12000.00,
+        "personal_super_contribution": 5000.00,
+        "salary_sacrifice_super": 8000.00,
+        "personal_deductible_super": 3000.00
+      }
+    }
+  },
+  "expected_results": {
+    "CAL-SUP-002": {
+      "total_concessional": 22000.00
+    },
+    "CAL-SUP-003": {
+      "cap_utilisation": 22000.00,
+      "remaining_cap": 0.00,
+      "excess_contributions": 0.00
+    },
+    "CAL-SUP-007": {
+      "contributions_tax": 3300.00
+    },
+    "CAL-SUP-009": {
+      "net_contribution": 18700.00
+    }
+  }
+}

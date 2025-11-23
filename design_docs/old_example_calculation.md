@@ -13,7 +13,7 @@ base_tax for that entity, and
 
 (optionally) net_tax_payable if you want this CAL to act as a golden simple tax calc for early MVP.
 
-Save as e.g. backend/src/calcs/cal_pit_001_base_tax.py.
+Save as e.g. backend/calculation_engine/domains/tax_personal.py.
 
 ```python
 

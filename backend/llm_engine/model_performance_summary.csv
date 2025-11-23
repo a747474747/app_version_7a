@@ -1,0 +1,28 @@
+rank,model_id,name,response_time_seconds,tokens_used,context_length,pricing_input,performance_notes
+1,moonshotai/kimi-k2-thinking,MoonshotAI Kimi K2 Thinking,2.528,47,262144,0.00000045,Fastest model, trillion-parameter MoE, agentic reasoning
+2,qwen/qwen3-235b-a22b-thinking-2507,Qwen3 235B A22B Thinking,2.750,31,262144,0.00000011,High-performance MoE, complex reasoning tasks
+3,qwen/qwen-plus-2025-07-28,Qwen Plus 0728,3.835,30,1000000,0.0000004,1M context, hybrid reasoning, balanced performance
+4,qwen/qwen-turbo,Qwen Turbo,4.403,32,1000000,0.00000005,1M context, fastest speed, lowest cost
+5,moonshotai/kimi-linear-48b-a3b-instruct,Kimi Linear 48B A3B,5.196,29,1048576,0.0000005,1M+ context, linear attention architecture
+6,deepseek/deepseek-v3.2-exp,DeepSeek V3.2 Exp,5.351,39,163840,0.00000027,Experimental, sparse attention, intermediate architecture
+7,deepseek/deepseek-r1-0528,DeepSeek R1 0528,5.908,27,163840,0.0000002,May 2025 update, improved reasoning, token efficient
+8,minimax/minimax-m1,MiniMax M1,6.250,470,1000000,0.0000004,1M context, very high token usage (470 tokens)
+9,deepseek/deepseek-r1,DeepSeek R1,6.420,27,163840,0.0000003,Original R1, token efficient, flagship reasoning
+10,microsoft/mai-ds-r1,Microsoft MAI DS R1,FAILED,0,163840,0.0000003,Failed due to privacy policy restrictions
+
+SUMMARY:
+- Total models tested: 10
+- Successful: 9/10 (90% success rate)
+- Average response time: 4.738s
+- Fastest: 2.528s (kimi-k2-thinking)
+- Slowest: 6.420s (deepseek-r1)
+- Best token efficiency: 27 tokens (DeepSeek models)
+- Worst token efficiency: 470 tokens (minimax-m1)
+- Total test time: 8.379s
+
+KEY FINDINGS:
+- Moonshot AI Kimi models dominated top performance
+- Qwen models showed excellent speed-cost balance
+- DeepSeek models were most token-efficient
+- MiniMax M1 used excessive tokens (470 vs ~30 average)
+- Microsoft model failed due to privacy restrictions

@@ -48,7 +48,7 @@ description: "Task list for Four-Engine System Architecture implementation"
 - [x] T008 [P] [FR-009] Implement TraceLog mechanism in shared/schemas/orchestration.py with CAL-* ID traceability
 - [x] T009 [P] [FR-001, FR-004, SC-001] Build Calculation Engine core with MVP Core tier calculations (CAL-PIT-001 to 005, CAL-CGT-001 to 002, CAL-SUP-002 to 009, CAL-PFL-104)
 - [x] T009b [P] Implement 'RuleLoader' service to hydrate Calculation Engine parameters from external config files (YAML/JSON) rather than hardcoding
-- [x] T010 Implement Projection Engine for year-over-year calculations in backend/src/engines/calculation/
+- [x] T010 Implement Projection Engine for year-over-year calculations in backend/calculation_engine/
 - [x] T011 [P] Create database models for UserProfile, Scenario, Strategy, AdviceOutcome in backend/src/models/
 - [x] T012 [P] Set up database migration system with Alembic
 - [x] T013 [P] Implement basic CRUD operations for scenarios in backend/src/services/scenario_service.py
@@ -56,6 +56,10 @@ description: "Task list for Four-Engine System Architecture implementation"
 - [x] T015 [P] Add request validation and error handling middleware
 - [x] T016 [P] [SC-005] Implement health check endpoint (/health) following contracts/api-v1.yaml
 - [x] T016b [P] Build 'Dev Dashboard' (simple HTML/JS) to visualize real-time TraceLogs, Engine States, and Rule sets for debugging before building the full UI
+- [x] T016c [P] Implement debug endpoints for dev dashboard (/debug/trace-logs, /debug/engine-states, /debug/rules) in backend/src/routers/debug.py
+- [x] T016d [P] Create test scenarios with sample financial data for calculation testing in backend/tests/test_scenarios/
+- [x] T016e [P] Add calculation execution endpoints (/api/v1/calculations/run, /api/v1/calculations/run-batch) for triggering CAL-* functions
+- [x] T016f [P] Connect dev dashboard to live calculation data instead of static placeholders
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -69,22 +73,22 @@ description: "Task list for Four-Engine System Architecture implementation"
 
 ### Phase 2.35a: Structure & RuleLoader (Do this first)
 
-- [x] T017a Create the folder `backend/src/engines/calculation/domains/` and an empty `__init__.py` inside it.
-- [x] T017b [P] Create `backend/src/engines/calculation/registry.py`.
+- [x] T017a Create the folder `backend/calculation_engine/domains/` and an empty `__init__.py` inside it.
+- [x] T017b [P] Create `backend/calculation_engine/registry.py`.
 - [x] T017c [P] Create `backend/src/services/rule_loader.py`. Implement a `RuleLoader` class that loads configuration from a dummy dictionary for now (we will connect YAML later). It should have methods like `get_tax_brackets()` and `get_concessional_cap()`.
 
 ### Phase 2.35b: Migration (Do this second)
 
-- [x] T017d Create `backend/src/engines/calculation/domains/tax_personal.py`. Move `run_CAL_PIT_001`, `_002`, `_004`, `_005` from `__init__.py` to this file. Update them to use `RuleLoader` instead of hardcoded values.
-- [x] T017e [P] Create `backend/src/engines/calculation/domains/cgt.py`. Move `run_CAL_CGT_001`, `_002` to this file.
-- [x] T017f [P] Create `backend/src/engines/calculation/domains/superannuation.py`. Move `run_CAL_SUP_002`, `_003`, `_007`, `_008`, `_009` to this file.
-- [x] T017g [P] Create `backend/src/engines/calculation/domains/property.py`. Move `run_CAL_PFL_104` to this file.
+- [x] T017d Create `backend/calculation_engine/domains/tax_personal.py`. Move `run_CAL_PIT_001`, `_002`, `_004`, `_005` from `__init__.py` to this file. Update them to use `RuleLoader` instead of hardcoded values.
+- [x] T017e [P] Create `backend/calculation_engine/domains/cgt.py`. Move `run_CAL_CGT_001`, `_002` to this file.
+- [x] T017f [P] Create `backend/calculation_engine/domains/superannuation.py`. Move `run_CAL_SUP_002`, `_003`, `_007`, `_008`, `_009` to this file.
+- [x] T017g [P] Create `backend/calculation_engine/domains/property.py`. Move `run_CAL_PFL_104` to this file.
 
 ### Phase 2.35c: Wiring (Do this last)
 
-- [x] T017h Update `backend/src/engines/calculation/registry.py` to import these new modules and register all 12 functions in a `CALCULATION_REGISTRY` dict.
-- [x] T017i Refactor `backend/src/engines/calculation/__init__.py` to remove the actual logic and instead expose a generic `run_calculation(cal_id, ...)` function that delegates to the Registry.
-- [x] T017j Update `backend/src/engines/calculation/projection.py` to use the Registry lookup instead of importing functions directly.
+- [x] T017h Update `backend/calculation_engine/registry.py` to import these new modules and register all 12 functions in a `CALCULATION_REGISTRY` dict.
+- [x] T017i Refactor `backend/calculation_engine/__init__.py` to remove the actual logic and instead expose a generic `run_calculation(cal_id, ...)` function that delegates to the Registry.
+- [x] T017j Update `backend/calculation_engine/projection.py` to use the Registry lookup instead of importing functions directly.
 
 **Validation**:
 - [x] T017k Ensure all tests pass and that `run_CAL_PIT_001` can still be called via the Registry.
@@ -99,40 +103,42 @@ description: "Task list for Four-Engine System Architecture implementation"
 
 ### 2.5.1 Domain Knowledge Base Setup
 
-- [ ] T017 [FR-019] Create LLM source materials directory structure in /specs/001-four-engine-architecture/llm-source-materials/ following README.md
-- [ ] T018 [P] [FR-019] Create Australian Financial System primer in /specs/001-four-engine-architecture/llm-source-materials/australian-financial-system.md
-- [ ] T019 [P] [FR-019] Create Financial Advice Process guide in /specs/001-four-engine-architecture/llm-source-materials/financial-advice-process.md
-- [ ] T020 [P] [FR-019] Create Regulatory Environment overview in /specs/001-four-engine-architecture/llm-source-materials/regulatory-environment.md
-- [ ] T021 [P] [FR-019] Create Interaction Patterns library in /specs/001-four-engine-architecture/llm-source-materials/interaction-patterns.md
-- [ ] T022 [P] [FR-019] Create domain-specific knowledge bases in /specs/001-four-engine-architecture/llm-source-materials/domain-knowledge/ (tax-regime.md, superannuation.md, property-investment.md, retirement-planning.md, insurance.md)
-- [ ] T023 [FR-019] Create source materials catalog.json in /specs/001-four-engine-architecture/llm-source-materials/catalog.json with metadata tracking
+- [X] T017 [FR-019] Create LLM source materials directory structure in /specs/001-four-engine-architecture/llm-source-materials/ following README.md
+- [X] T018 [P] [FR-019] Create Australian Financial System primer in /specs/001-four-engine-architecture/llm-source-materials/australian-financial-system.md
+- [X] T019 [P] [FR-019] Create Financial Advice Process guide in /specs/001-four-engine-architecture/llm-source-materials/financial-advice-process.md
+- [X] T020 [P] [FR-019] Create Regulatory Environment overview in /specs/001-four-engine-architecture/llm-source-materials/regulatory-environment.md
+- [X] T021 [P] [FR-019] Create Interaction Patterns library in /specs/001-four-engine-architecture/llm-source-materials/interaction-patterns.md
+- [X] T022 [P] [FR-019] Create domain-specific knowledge bases in /specs/001-four-engine-architecture/llm-source-materials/domain-knowledge/ (tax-regime.md, superannuation.md, property-investment.md, retirement-planning.md, insurance.md)
+- [X] T023 [FR-019] Create source materials catalog.json in /specs/001-four-engine-architecture/llm-source-materials/catalog.json with metadata tracking
 
 ### 2.5.2 Prompt Management System
 
-- [ ] T024 [FR-019] Create LLM prompts directory structure in /specs/001-four-engine-architecture/llm-prompts/ following README.md
-- [ ] T025 [P] [FR-019] Set up prompt catalog system in /specs/001-four-engine-architecture/llm-prompts/catalog.json
-- [ ] T026 [P] [FR-019] Create core orchestrator prompts in /specs/001-four-engine-architecture/llm-prompts/core-orchestrator/ (intent-recognition.md, state-hydration.md, strategy-nomination.md, narrative-generation.md)
-- [ ] T027 [P] [FR-019] Create shared utilities in /specs/001-four-engine-architecture/llm-prompts/shared-utilities/ (privacy-filter.md, rag-retrieval.md, error-handling.md, conversation-context.md)
-- [ ] T028 [P] [FR-019] Create mode-specific prompt templates in /specs/001-four-engine-architecture/llm-prompts/mode-prompts/ for all 26 modes (mode-01-fact-check.md through mode-26-system-oracle.md)
-- [ ] T029 [FR-019] Implement prompt loading utilities in backend/src/services/prompt_service.py following README.md patterns
+- [X] T024 [FR-019] Create LLM prompts directory structure in /specs/001-four-engine-architecture/llm-prompts/ following README.md
+- [X] T025 [P] [FR-019] Set up prompt catalog system in /specs/001-four-engine-architecture/llm-prompts/catalog.json
+- [X] T026 [P] [FR-019] Create core orchestrator prompts in /specs/001-four-engine-architecture/llm-prompts/core-orchestrator/ (intent-recognition.md, state-hydration.md, strategy-nomination.md, narrative-generation.md)
+- [X] T027 [P] [FR-019] Create shared utilities in /specs/001-four-engine-architecture/llm-prompts/shared-utilities/ (privacy-filter.md, rag-retrieval.md, error-handling.md, conversation-context.md)
+- [X] T028 [P] [FR-019] Create mode-specific prompt templates in /specs/001-four-engine-architecture/llm-prompts/mode-prompts/ for all 26 modes (mode-01-fact-check.md through mode-26-system-oracle.md)
+- [X] T029 [FR-019] Implement prompt loading utilities in backend/src/services/prompt_service.py following README.md patterns
 
 ### 2.5.3 OpenRouter LLM Connection
 
-- [ ] T030 [FR-019] Implement OpenRouter client in backend/src/services/openrouter_client.py with error handling and rate limiting
-- [ ] T031 [FR-019] Create LLM service abstraction layer in backend/src/services/llm_service.py with connection testing
-- [ ] T032 [P] [FR-019] Add environment configuration for OpenRouter API key and model selection
-- [ ] T033 [P] [FR-019] Implement connection health checks and monitoring in backend/src/services/llm_service.py
-- [ ] T034 [FR-019] Create LLM response parsing and validation utilities in backend/src/utils/llm_parsing.py
-- [ ] T035 [FR-019] Add LLM cost tracking and usage monitoring in backend/src/services/llm_service.py
+- [x] T030 [FR-019] Implement OpenRouter client in backend/src/services/openrouter_client.py with error handling and rate limiting
+- [x] T031 [FR-019] Create LLM service abstraction layer in backend/src/services/llm_service.py with connection testing
+- [x] T032 [P] [FR-019] Add environment configuration for OpenRouter API key and model selection
+- [x] T033 [P] [FR-019] Implement connection health checks and monitoring in backend/src/services/llm_service.py
+- [x] T034 [FR-019] Create LLM response parsing and validation utilities in backend/src/utils/llm_parsing.py
+- [x] T035 [FR-019] Add LLM cost tracking and usage monitoring in backend/src/services/llm_service.py
 
 ### 2.5.4 Future Workflow Integration Patterns
 
-- [ ] T036 [FR-019] Create LLM Orchestrator base class in backend/src/engines/llm/orchestrator.py with prompt loading patterns
-- [ ] T037 [P] [FR-019] Implement state hydration patterns in backend/src/engines/llm/state_hydration.py for converting natural language to CalculationState
-- [ ] T038 [P] [FR-019] Build narrative generation templates in backend/src/engines/llm/narrative_generation.py for human-readable outputs
-- [ ] T039 [P] [FR-019] Create privacy filtering utilities in backend/src/engines/llm/privacy_filter.py for PII redaction
-- [ ] T040 [P] [FR-019] Implement intent recognition patterns in backend/src/engines/llm/intent_recognition.py for mode selection
-- [ ] T041 [FR-019] Add TraceLog integration for LLM operations with CAL-* ID tracking in backend/src/engines/llm/orchestrator.py
+- [x] T036 [FR-019] Create LLM Orchestrator base class in backend/llm_engine/orchestrator.py with prompt loading patterns
+- [x] T037 [P] [FR-019] Implement state hydration patterns in backend/llm_engine/state_hydration.py for converting natural language to CalculationState
+- [x] T038 [P] [FR-019] Build narrative generation templates in backend/llm_engine/narrative_generation.py for human-readable outputs
+- [x] T039 [P] [FR-019] Create privacy filtering utilities in backend/llm_engine/privacy_filter.py for PII redaction
+- [x] T040 [P] [FR-019] Implement intent recognition patterns in backend/llm_engine/intent_recognition.py for mode selection
+- [x] T041 [FR-019] Add TraceLog integration for LLM operations with CAL-* ID tracking in backend/llm_engine/orchestrator.py
+- [x] T041a [FR-019] Create dedicated LLM Engine folder structure: `backend/llm_engine/` with `__init__.py`
+- [x] T041b [FR-019] Move existing LLM components from `backend/src/engines/llm/` to `backend/llm_engine/` (if any exist)
 
 **Checkpoint**: LLM connection established and integrated into workflow patterns - all future LLM-dependent features can now be implemented
 
@@ -146,18 +152,18 @@ description: "Task list for Four-Engine System Architecture implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T042 [US1] Implement Person entity model in shared/schemas/entities.py with demographics and relationships
-- [ ] T043 [P] [US1] Implement Asset models (PropertyAsset, SuperAccount) in shared/schemas/assets.py
-- [ ] T044 [P] [US1] Implement Liability models (Loan) in shared/schemas/assets.py
-- [ ] T045 [P] [US1] Implement EntityContext and FinancialPositionContext in shared/schemas/entities.py
-- [ ] T046 [US1] Implement CashflowContext with EntityCashflow in shared/schemas/cashflow.py
-- [ ] T047 [US1] [IA MOD-001] [WM Mode 1] Create fact check endpoint (/api/v1/modes/fact-check) following contracts/api-v1.yaml
-- [ ] T048 [US1] [IA MOD-001] [WM Mode 1] Implement LLM Orchestrator intent recognition for fact questions in backend/src/engines/llm/ (MVP with proper IntentRecognitionResult schema)
-- [ ] T049 [US1] [IA MOD-001] [WM Mode 1] Build state hydration for basic financial data input in backend/src/engines/llm/
-- [ ] T050 [US1] [IA MOD-001] [WM Mode 1] Connect Calculation Engine to fact check endpoint for net wealth and tax calculations
-- [ ] T051 [US1] [IA MOD-001] [WM Mode 1] Add narrative generation for calculation results in backend/src/engines/llm/ (with NarrativeGenerationResult schema)
-- [ ] T052 [US1] [IA MOD-001] [WM Mode 1] Implement privacy filtering for fact check responses
-- [ ] T053 [US1] [IA MOD-001] [WM Mode 1] Add TraceLog integration for fact check calculations with CAL-* IDs
+- [x] T042 [US1] Implement Person entity model in shared/schemas/entities.py with demographics and relationships
+- [x] T043 [P] [US1] Implement Asset models (PropertyAsset, SuperAccount) in shared/schemas/assets.py
+- [x] T044 [P] [US1] Implement Liability models (Loan) in shared/schemas/assets.py
+- [x] T045 [P] [US1] Implement EntityContext and FinancialPositionContext in shared/schemas/entities.py
+- [x] T046 [US1] Implement CashflowContext with EntityCashflow in shared/schemas/cashflow.py
+- [x] T047 [US1] [IA MOD-001] [WM Mode 1] Create fact check endpoint (/api/v1/modes/fact-check) following contracts/api-v1.yaml
+- [x] T048 [US1] [IA MOD-001] [WM Mode 1] Implement LLM Orchestrator intent recognition for fact questions in backend/llm_engine/ (MVP with proper IntentRecognitionResult schema)
+- [x] T049 [US1] [IA MOD-001] [WM Mode 1] Build state hydration for basic financial data input in backend/llm_engine/
+- [x] T050 [US1] [IA MOD-001] [WM Mode 1] Connect Calculation Engine to fact check endpoint for net wealth and tax calculations
+- [x] T051 [US1] [IA MOD-001] [WM Mode 1] Add narrative generation for calculation results in backend/llm_engine/ (with NarrativeGenerationResult schema)
+- [x] T052 [US1] [IA MOD-001] [WM Mode 1] Implement privacy filtering for fact check responses
+- [x] T053 [US1] [IA MOD-001] [WM Mode 1] Add TraceLog integration for fact check calculations with CAL-* IDs
 
 **Checkpoint**: User Story 1 should be fully functional and independently testable
 
@@ -174,11 +180,13 @@ description: "Task list for Four-Engine System Architecture implementation"
 - [ ] T054 [US2] [IA MOD-002] [WM Mode 4] Extend CalculationState with scenario management in shared/schemas/calculation.py
 - [ ] T055 [US2] [IA MOD-003] [WM Mode 3] Implement Strategy model in shared/schemas/orchestration.py with target metrics and constraints
 - [ ] T056 [US2] [IA MOD-002] [WM Mode 4] Create scenario comparison endpoint (/api/v1/scenarios/compare) following contracts/api-v1.yaml
-- [ ] T057 [US2] [IA MOD-003] [WM Mode 3] Build Strategy Engine for basic optimization loops in backend/src/engines/strategy/
+- [ ] T057 [US2] [IA MOD-003] [WM Mode 3] Build Strategy Engine for basic optimization loops in backend/strategy_engine/
+- [ ] T057a [US2] Create dedicated Strategy Engine folder structure: `backend/strategy_engine/` with `__init__.py`
+- [ ] T057b [US2] Move existing Strategy components from `backend/src/engines/strategy/` to `backend/strategy_engine/` (if any exist)
 - [ ] T058 [US2] [IA MOD-002] [WM Mode 4] Implement scenario creation and storage with database persistence
 - [ ] T059 [US2] [IA MOD-002] [WM Mode 4] Add scenario modification capabilities for "what-if" analysis
 - [ ] T060 [US2] [IA MOD-002] [WM Mode 4] Connect Projection Engine to scenario analysis for multi-year outcomes
-- [ ] T061 [US2] [IA MOD-003] [WM Mode 3] Implement side-by-side comparison narratives in backend/src/engines/llm/
+- [ ] T061 [US2] [IA MOD-003] [WM Mode 3] Implement side-by-side comparison narratives in backend/llm_engine/
 - [ ] T062 [US2] [IA MOD-003] [WM Mode 3] Add educational explanations for strategy impacts
 - [ ] T063 [US2] [IA MOD-002] [WM Mode 4] Extend TraceLog for scenario comparison operations
 
@@ -195,9 +203,11 @@ description: "Task list for Four-Engine System Architecture implementation"
 ### Implementation for User Story 3
 
 - [ ] T064 [US3] [IA MOD-004] [WM Mode 6] Implement AdviceOutcome model for compliance results in shared/schemas/orchestration.py
-- [ ] T065 [US3] [IA MOD-004] [WM Mode 6] Build Advice Engine for regulatory compliance checking in backend/src/engines/advice/
+- [ ] T065 [US3] [IA MOD-004] [WM Mode 6] Build Advice Engine for regulatory compliance checking in backend/advice_engine/
+- [ ] T065a [US3] Create dedicated Advice Engine folder structure: `backend/advice_engine/` with `__init__.py`
+- [ ] T065b [US3] Move existing Advice components from `backend/src/engines/advice/` to `backend/advice_engine/` (if any exist)
 - [ ] T066 [US3] [IA MOD-004] [WM Mode 6] Create comprehensive planning endpoint (/api/v1/modes/comprehensive-plan) following contracts/api-v1.yaml
-- [ ] T067 [US3] [IA MOD-004] [WM Mode 6] Implement Best Interest Duty (BID) validation rules in backend/src/engines/advice/
+- [ ] T067 [US3] [IA MOD-004] [WM Mode 6] Implement Best Interest Duty (BID) validation rules in backend/advice_engine/
 - [ ] T068 [US3] [IA MOD-004] [WM Mode 6] Add multi-domain strategy optimization (debt, super, tax, investment)
 - [ ] T069 [US3] [IA MOD-004] [WM Mode 6] Build compliance checking integration with Strategy Engine
 - [ ] T070 [US3] [IA MOD-004] [WM Mode 14] Implement structured action plans and milestone tracking
