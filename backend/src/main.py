@@ -92,6 +92,17 @@ app.include_router(api_router, prefix="/api/v1", tags=["api"])
 # This allows dashboard to access /debug/* endpoints directly
 app.include_router(debug_router, prefix="/debug", tags=["Debug"])
 
+# Mount LLM debug router at root level for dev dashboard (if available)
+try:
+    from shared.dev_routers.llm_debug import router as llm_debug_router
+    # Router already has prefix="/debug/llm", so mount at root
+    app.include_router(llm_debug_router, tags=["LLM Debug"])
+    print("LLM debug router mounted at /debug/llm")
+except ImportError as e:
+    print(f"WARNING: LLM debug router not available: {e}")
+except Exception as e:
+    print(f"WARNING: LLM debug router failed to load: {e}")
+
 
 @app.get("/")
 async def root():

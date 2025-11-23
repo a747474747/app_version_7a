@@ -754,6 +754,21 @@
         let autoRefreshInterval = null;
         let backendUrl = 'http://localhost:8000';
 
+        // Detect if running from file:// protocol
+        const isFileProtocol = window.location.protocol === 'file:';
+        
+        // If running from file://, warn user about CORS restrictions
+        if (isFileProtocol) {
+            console.warn('Dashboard opened via file:// protocol. CORS restrictions may prevent API calls.');
+            console.warn('For best results, use: http://localhost:8000/dev-dashboard/');
+            
+            // Show a warning banner
+            const warningBanner = document.createElement('div');
+            warningBanner.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: white; padding: 10px; text-align: center; z-index: 10000; font-weight: bold;';
+            warningBanner.innerHTML = '⚠️ Opened via file:// - API calls may be blocked by CORS. Use <a href="http://localhost:8000/dev-dashboard/" style="color: white; text-decoration: underline;">http://localhost:8000/dev-dashboard/</a> instead.';
+            document.body.insertBefore(warningBanner, document.body.firstChild);
+        }
+
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             refreshData();
@@ -788,6 +803,14 @@
                 // Check backend health
                 const healthResponse = await fetch(`${backendUrl}/health`);
                 const isHealthy = healthResponse.ok;
+                
+                // If opened via file:// and request failed, it's likely CORS
+                if (!isHealthy && isFileProtocol) {
+                    console.error('CORS Error: Browser blocked request from file:// protocol');
+                    document.getElementById('backendStatus').textContent = 'CORS Blocked (use http://localhost:8000/dev-dashboard/)';
+                    document.getElementById('backendStatus').previousElementSibling.className = 'status-indicator status-error';
+                    return;
+                }
 
                 document.getElementById('backendStatus').textContent =
                     isHealthy ? 'Healthy' : 'Unhealthy';
@@ -806,7 +829,13 @@
                 document.getElementById('systemStatus').appendChild(registryStatus);
 
             } catch (error) {
-                document.getElementById('backendStatus').textContent = 'Offline';
+                // Check if it's a CORS error from file:// protocol
+                if (isFileProtocol && (error.message.includes('CORS') || error.message.includes('Failed to fetch') || error.name === 'TypeError')) {
+                    document.getElementById('backendStatus').textContent = 'CORS Blocked (use http://localhost:8000/dev-dashboard/)';
+                    showError('CORS Error: Browser blocked API requests from file:// protocol. Please use http://localhost:8000/dev-dashboard/ instead.');
+                } else {
+                    document.getElementById('backendStatus').textContent = 'Offline';
+                }
                 document.getElementById('backendStatus').previousElementSibling.className =
                     'status-indicator status-error';
             }

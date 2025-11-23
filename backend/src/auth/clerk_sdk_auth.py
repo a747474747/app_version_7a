@@ -257,3 +257,4 @@ def require_scope(scope: str):
         return user
     return scope_dependency
 
+

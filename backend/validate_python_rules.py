@@ -18,6 +18,31 @@ from pathlib import Path
 from typing import Dict, List, Set, Tuple
 from datetime import datetime
 
+# Fix Windows console encoding for Unicode/emoji support
+if sys.platform == 'win32':
+    try:
+        # Try to set UTF-8 encoding for stdout/stderr
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except Exception:
+        # If that fails, we'll use ASCII-safe fallbacks
+        pass
+
+# Safe print function that handles encoding errors gracefully
+def safe_print(message: str, fallback: str = None):
+    """Print a message, falling back to ASCII-safe version on encoding errors."""
+    try:
+        print(message)
+    except UnicodeEncodeError:
+        # Fall back to ASCII-safe version or provided fallback
+        if fallback:
+            print(fallback)
+        else:
+            # Remove emojis and special characters
+            safe_message = message.encode('ascii', errors='ignore').decode('ascii')
+            print(safe_message)
+
 
 class PythonRuleValidator:
     """Validator for Python Scripts Rule compliance."""
@@ -40,7 +65,7 @@ class PythonRuleValidator:
 
     def validate(self) -> bool:
         """Run all validation checks. Returns True if all pass."""
-        print("🔍 Validating Python Scripts Rule compliance...")
+        safe_print("🔍 Validating Python Scripts Rule compliance...", "[*] Validating Python Scripts Rule compliance...")
 
         self.errors = []
         self.warnings = []
@@ -55,20 +80,20 @@ class PythonRuleValidator:
 
         # Report results
         if self.errors:
-            print(f"❌ {len(self.errors)} errors found:")
+            safe_print(f"❌ {len(self.errors)} errors found:", f"[ERROR] {len(self.errors)} errors found:")
             for error in self.errors:
                 print(f"  - {error}")
 
         if self.warnings:
-            print(f"⚠️  {len(self.warnings)} warnings:")
+            safe_print(f"⚠️  {len(self.warnings)} warnings:", f"[WARNING] {len(self.warnings)} warnings:")
             for warning in self.warnings:
                 print(f"  - {warning}")
 
         if not self.errors:
-            print("✅ All Python Scripts Rule validations passed!")
+            safe_print("✅ All Python Scripts Rule validations passed!", "[OK] All Python Scripts Rule validations passed!")
             return True
         else:
-            print("❌ Python Scripts Rule violations found!")
+            safe_print("❌ Python Scripts Rule violations found!", "[FAIL] Python Scripts Rule violations found!")
             return False
 
     def _validate_python_files_location(self):

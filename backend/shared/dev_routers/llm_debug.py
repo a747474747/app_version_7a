@@ -9,8 +9,14 @@ from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from llm_engine.model_registry import get_model_registry_service
-from calculation_engine.schemas.llm_tiers import LLMTier
+# Try to import LLM engine components, but allow graceful degradation
+try:
+    from llm_engine.model_registry import get_model_registry_service
+    from calculation_engine.schemas.llm_tiers import LLMTier
+    LLM_ENGINE_AVAILABLE = True
+except ImportError as e:
+    LLM_ENGINE_AVAILABLE = False
+    print(f"WARNING: LLM engine not available for debug router: {e}")
 
 router = APIRouter(prefix="/debug/llm", tags=["llm-debug"])
 
@@ -79,6 +85,12 @@ async def test_tier_selection(request: TierSelectionTestRequest) -> TierSelectio
     This endpoint simulates the model selection process and returns
     detailed information about which model would be chosen and why.
     """
+    if not LLM_ENGINE_AVAILABLE:
+        raise HTTPException(
+            status_code=503, 
+            detail="LLM engine not available - import errors prevented loading"
+        )
+    
     try:
         # Validate tier
         try:
@@ -145,6 +157,17 @@ async def get_registry_status() -> Dict[str, Any]:
     Returns information about registry health, model counts,
     and cache status for debugging purposes.
     """
+    if not LLM_ENGINE_AVAILABLE:
+        return {
+            "error": "LLM engine not available - import errors prevented loading",
+            "registry_service_available": False,
+            "total_models": 0,
+            "models_by_tier": {},
+            "last_updated": None,
+            "is_stale": True,
+            "cache_file_exists": False
+        }
+    
     try:
         registry_service = get_model_registry_service()
         status = await registry_service.get_registry_status()
@@ -178,6 +201,12 @@ async def refresh_registry() -> Dict[str, Any]:
     This endpoint triggers an immediate refresh of the model catalog,
     bypassing the cache TTL. Useful for testing registry updates.
     """
+    if not LLM_ENGINE_AVAILABLE:
+        raise HTTPException(
+            status_code=503, 
+            detail="LLM engine not available - import errors prevented loading"
+        )
+    
     try:
         registry_service = get_model_registry_service()
         await registry_service.force_refresh()
@@ -205,6 +234,26 @@ async def get_llm_health() -> Dict[str, Any]:
     Returns connection status, model availability, and performance metrics.
     This is used by the development dashboard for LLM health monitoring.
     """
+    if not LLM_ENGINE_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "error": "LLM engine not available - import errors prevented loading",
+            "connection": {
+                "models_available": 0,
+                "registry_initialized": False,
+                "response_time_ms": None
+            },
+            "usage": {
+                "total_requests": 0,
+                "uptime_percentage": 0.0,
+                "error_rate": 100.0
+            },
+            "models": {
+                "total": 0,
+                "by_tier": {"router": 0, "narrator": 0, "thinker": 0}
+            }
+        }
+    
     try:
         registry_service = get_model_registry_service()
         registry = await registry_service.get_registry()
@@ -248,3 +297,72 @@ async def get_llm_health() -> Dict[str, Any]:
                 "by_tier": {"router": 0, "narrator": 0, "thinker": 0}
             }
         }
+
+
+@router.get("/trace-logs")
+async def get_llm_trace_logs() -> Dict[str, Any]:
+    """
+    Get LLM trace logs for debugging.
+    
+    Returns trace entries related to LLM operations including
+    prompt loading, model selection, and response generation.
+    """
+    try:
+        # TODO: Implement actual LLM trace log storage/retrieval
+        # For now, return empty structure matching the expected format
+        return {
+            "entries": [],
+            "total_count": 0,
+            "last_updated": None,
+            "note": "LLM trace logs not yet implemented"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get LLM trace logs: {str(e)}")
+
+
+@router.get("/usage")
+async def get_llm_usage() -> Dict[str, Any]:
+    """
+    Get LLM usage metrics and statistics.
+    
+    Returns information about token usage, request counts, costs,
+    and performance metrics for LLM operations.
+    """
+    # Return structure matching dashboard expectations
+    base_response = {
+        "total_requests": 0,
+        "successful_requests": 0,
+        "total_tokens_used": 0,
+        "total_cost_usd": 0.0,
+        "throughput_requests_per_minute": 0.0,
+        "requests_by_tier": {
+            "router": 0,
+            "narrator": 0,
+            "thinker": 0
+        },
+        "tokens_by_tier": {
+            "router": 0,
+            "narrator": 0,
+            "thinker": 0
+        },
+        "cost_by_tier": {
+            "router": 0.0,
+            "narrator": 0.0,
+            "thinker": 0.0
+        },
+        "cost_by_model": {},
+        "average_response_time_ms": 0,
+        "error_rate": 0.0
+    }
+    
+    if not LLM_ENGINE_AVAILABLE:
+        base_response["note"] = "LLM engine not available - usage tracking not yet implemented"
+        return base_response
+    
+    try:
+        # TODO: Implement actual usage tracking from LLM service
+        # For now, return empty structure matching the expected format
+        base_response["note"] = "Usage tracking not yet implemented"
+        return base_response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get LLM usage: {str(e)}")
