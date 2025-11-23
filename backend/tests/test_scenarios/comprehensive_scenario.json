@@ -1,0 +1,94 @@
+{
+  "name": "Comprehensive Financial Scenario",
+  "description": "Complete scenario covering income tax, superannuation, and property investment",
+  "effective_date": "2025-07-01",
+  "projection_years": 1,
+  "global_context": {
+    "effective_date": "2025-07-01",
+    "projection_years": 1,
+    "inflation_rate": 0.03,
+    "market_return_rate": 0.08
+  },
+  "entities": {
+    "person_1": {
+      "type": "person",
+      "name": "Alex Johnson",
+      "date_of_birth": "1985-01-01",
+      "residency_status": "resident",
+      "relationship_status": "single"
+    }
+  },
+  "asset_context": {
+    "assets": {
+      "investment_property": {
+        "type": "property",
+        "description": "Rental investment property",
+        "cost_base": 400000.00,
+        "market_value": 450000.00,
+        "ownership": [
+          {
+            "entity_id": "person_1",
+            "share": 1.0
+          }
+        ]
+      }
+    },
+    "loan_1": {
+      "type": "loan",
+      "description": "Investment property loan",
+      "principal": 300000.00,
+      "interest_rate": 0.055,
+      "term_years": 30,
+      "ownership": [
+        {
+          "entity_id": "person_1",
+          "share": 1.0
+        }
+      ]
+    }
+  },
+  "cashflow_context": {
+    "flows": {
+      "person_1": {
+        "salary_wages_gross": 95000.00,
+        "salary_wages_tax_withheld": 19000.00,
+        "employer_super_guarantee": 9500.00,
+        "personal_super_contribution": 4000.00,
+        "salary_sacrifice_super": 6000.00,
+        "rental_income": 25000.00,
+        "property_interest_expense": 16500.00,
+        "property_other_expenses": 5000.00
+      }
+    }
+  },
+  "expected_results": {
+    "CAL-PIT-001": {
+      "tax_payable": 20797.00
+    },
+    "CAL-PIT-002": {
+      "medicare_levy": 1185.60
+    },
+    "CAL-PIT-004": {
+      "tax_offsets": 700.00
+    },
+    "CAL-PIT-005": {
+      "net_tax_payable": 20282.60
+    },
+    "CAL-SUP-002": {
+      "total_concessional": 19500.00
+    },
+    "CAL-SUP-003": {
+      "cap_utilisation": 19500.00,
+      "remaining_cap": 0.00
+    },
+    "CAL-SUP-007": {
+      "contributions_tax": 2925.00
+    },
+    "CAL-SUP-009": {
+      "net_contribution": 16575.00
+    },
+    "CAL-PFL-104": {
+      "negative_gearing_benefit": 3960.00
+    }
+  }
+}

@@ -4,7 +4,7 @@
 
 **Purpose**: Define the modular structure for the deterministic Calculation Engine to ensure auditability, testability, and scalability.
 
-**Applies to**: `backend/src/engines/calculation/`
+**Applies to**: `backend/calculation_engine/`
 
 
 
@@ -30,11 +30,9 @@ The engine MUST follow this strict hierarchy:
 
 ```text
 
-backend/src/engines/calculation/
+backend/calculation_engine/
 
 ├── __init__.py            # Public API (exposes `run_calculation`)
-
-├── core.py                # Shared mathematical utilities (tax scales, rounding)
 
 ├── registry.py            # Maps "CAL-ID" strings to functions
 
@@ -42,17 +40,37 @@ backend/src/engines/calculation/
 
 │   ├── __init__.py
 
-│   ├── tax_personal.py    # CAL-PIT-* (PAYG, Medicare)
+│   ├── tax_personal.py    # CAL-PIT-* (PAYG, Medicare, offsets, net tax)
 
 │   ├── tax_company.py     # CAL-CIT-* (Company Tax)
 
-│   ├── superannuation.py  # CAL-SUP-* (Concessional Caps, Div293)
+│   ├── superannuation.py  # CAL-SUP-* (Concessional caps, contributions tax, Div293)
 
-│   ├── cgt.py             # CAL-CGT-* (Capital Gains)
+│   ├── cgt.py             # CAL-CGT-* (Capital gains/loss, CGT discount)
 
 │   ├── property.py        # CAL-PRP-* (Negative Gearing)
 
 │   └── retirement.py      # CAL-RPT-* (Age Pension)
+
+├── schemas/               # Pydantic models for calculation inputs/outputs
+
+│   ├── __init__.py
+
+│   ├── calculation.py     # CalculationState, ProjectionOutput
+
+│   ├── entities.py        # Entity models
+
+│   ├── assets.py          # Asset and liability models
+
+│   ├── cashflow.py        # Cashflow models
+
+│   └── orchestration.py   # TraceEntry, TraceLog
+
+├── utils/                 # Calculation utilities
+
+│   ├── calculation_state.py  # State management helpers
+
+│   └── calculation_trace.py  # Trace logging helpers
 
 └── projection.py          # Orchestrator for multi-year loops
 
@@ -138,7 +156,7 @@ We need to insert the refactoring phase into your plan. Since you are partway th
 
 **Implementation Tasks**:
 
-1.  **Create Directory Structure**: Set up `backend/src/engines/calculation/domains/`.
+1.  **Create Directory Structure**: Set up `backend/calculation_engine/domains/`.
 
 2.  **Implement RuleLoader**: Build service to read `specs/rules/*.yaml` instead of hardcoding values (Completes T009b).
 

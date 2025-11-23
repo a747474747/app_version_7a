@@ -7,7 +7,10 @@ environment variables and application settings.
 
 import os
 from typing import Optional, List
-from pydantic import BaseSettings, validator
+from pydantic import validator, Field
+from pydantic_settings import BaseSettings
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
 
 
 class DatabaseSettings(BaseSettings):
@@ -38,14 +41,15 @@ class DatabaseSettings(BaseSettings):
 class ClerkSettings(BaseSettings):
     """Clerk authentication settings."""
 
-    secret_key: str
-    publishable_key: str
+    secret_key: Optional[str] = None
+    publishable_key: Optional[str] = None
 
-    @validator("secret_key", "publishable_key")
-    def validate_clerk_keys(cls, v):
-        if not v or v.startswith("placeholder"):
-            raise ValueError("Clerk keys must be properly configured")
-        return v
+    def __init__(self, **data):
+        super().__init__(**data)
+        # If publishable_key is not set, try NEXT_PUBLIC version
+        if not self.publishable_key:
+            import os
+            self.publishable_key = os.getenv('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY')
 
     class Config:
         env_prefix = "CLERK_"
@@ -55,16 +59,29 @@ class LLMSettings(BaseSettings):
     """LLM and AI service settings."""
 
     # OpenRouter configuration
-    openrouter_api_key: str
+    openrouter_api_key: Optional[str] = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
 
     # Model configurations
     default_model: str = "anthropic/claude-3-haiku"
     embedding_model: str = "text-embedding-ada-002"
 
+    # Alternative models for different use cases
+    calculation_model: str = "anthropic/claude-3-haiku"  # For deterministic math validation
+    reasoning_model: str = "anthropic/claude-3-sonnet"   # For complex reasoning
+    creative_model: str = "anthropic/claude-3-haiku"     # For narrative generation
+
     # Performance limits
     max_tokens: int = 4096
     temperature: float = 0.1  # Low temperature for factual responses
+
+    # Rate limiting
+    requests_per_minute: int = 50
+    requests_per_hour: int = 1000
+
+    # Cost tracking
+    enable_cost_tracking: bool = True
+    cost_tracking_currency: str = "USD"
 
     class Config:
         env_prefix = "LLM_"
@@ -140,8 +157,8 @@ class AppSettings(BaseSettings):
 
     # Component settings
     database: DatabaseSettings = DatabaseSettings()
-    clerk: ClerkSettings
-    llm: LLMSettings
+    clerk: Optional[ClerkSettings] = ClerkSettings()
+    llm: Optional[LLMSettings] = None
     engines: EngineSettings = EngineSettings()
     api: APISettings = APISettings()
     security: SecuritySettings = SecuritySettings()
@@ -159,9 +176,10 @@ class AppSettings(BaseSettings):
         return v
 
     class Config:
-        env_file = ".env"
+        env_file = [".env", "../.env.local"]
         env_file_encoding = "utf-8"
         case_sensitive = False
+        extra = "ignore"  # Ignore extra env vars that belong to nested models
 
 
 # Global settings instance
@@ -181,3 +199,22 @@ def is_development() -> bool:
 def is_production() -> bool:
     """Check if running in production environment."""
     return settings.environment == "production"
+
+
+# Database setup for development
+_engine = create_engine(
+    "sqlite:///./dev_database.db",  # Simple SQLite database for development
+    connect_args={"check_same_thread": False},
+    echo=settings.database.echo,
+)
+
+_SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+
+
+def get_db() -> Session:
+    """Get database session for dependency injection."""
+    db = _SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

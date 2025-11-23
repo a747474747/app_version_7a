@@ -5,7 +5,7 @@ This module provides endpoints for conversational AI interactions.
 """
 
 from fastapi import APIRouter, Depends
-from ..auth import get_current_user, ClerkUser
+from auth import get_current_user, ClerkUser
 
 router = APIRouter()
 

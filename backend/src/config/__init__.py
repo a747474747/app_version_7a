@@ -17,6 +17,7 @@ from .settings import (
     is_development,
     is_production,
     settings,
+    get_db,
 )
 
 __all__ = [
@@ -31,4 +32,5 @@ __all__ = [
     "is_development",
     "is_production",
     "settings",
+    "get_db",
 ]

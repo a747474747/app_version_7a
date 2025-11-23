@@ -154,7 +154,19 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Content-Security-Policy"] = "default-src 'self'"
+        
+        # Relax CSP for dev dashboard (allows inline styles and scripts)
+        if request.url.path.startswith("/dev-dashboard"):
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self' http://localhost:8000; "
+                "style-src 'self' 'unsafe-inline'; "
+                "script-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data:; "
+                "font-src 'self' data:"
+            )
+        else:
+            # Strict CSP for API endpoints
+            response.headers["Content-Security-Policy"] = "default-src 'self'"
 
         # Add API versioning header
         response.headers["X-API-Version"] = "v1"

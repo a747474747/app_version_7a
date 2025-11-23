@@ -12,8 +12,8 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from ..models.scenario import Scenario
-from ..models.user_profile import UserProfile
+from models.scenario import Scenario
+from models.user_profile import UserProfile
 from calculation_engine.schemas.calculation import CalculationState
 
 

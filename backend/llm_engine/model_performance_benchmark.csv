@@ -1,0 +1,11 @@
+model_id,name,response_time_seconds,tokens_used,success,status,benchmark_date,benchmark_type,test_prompt
+deepseek/deepseek-r1,DeepSeek R1,6.420,27,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+deepseek/deepseek-r1-0528,DeepSeek R1 0528,5.908,27,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+moonshotai/kimi-linear-48b-a3b-instruct,MoonshotAI Kimi Linear 48B,5.196,29,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+minimax/minimax-m1,MiniMax M1,6.250,470,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+qwen/qwen-turbo,Qwen Turbo,4.403,32,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+qwen/qwen-plus-2025-07-28,Qwen Plus 0728,3.835,30,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+deepseek/deepseek-v3.2-exp,DeepSeek V3.2 Exp,5.351,39,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+moonshotai/kimi-k2-thinking,MoonshotAI Kimi K2 Thinking,2.528,47,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+qwen/qwen3-235b-a22b-thinking-2507,Qwen3 235B A22B Thinking,2.750,31,true,success,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."
+microsoft/mai-ds-r1,Microsoft MAI DS R1,,0,false,failed_privacy_policy,2025-11-23,simple_speed_test,"Hello! Just testing response speed. Count to 3."

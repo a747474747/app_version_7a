@@ -129,3 +129,6 @@ local.properties
 
 # Specify
 .specify/
+
+# Duplicate CSV files in root (should only exist in backend/llm_engine/)
+openrouter_models.csv

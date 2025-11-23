@@ -5,7 +5,7 @@ This module provides endpoints for regulatory compliance checking and advice gen
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from ..auth import get_current_user, ClerkUser
+from auth import get_current_user, ClerkUser
 
 router = APIRouter()
 

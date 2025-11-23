@@ -545,7 +545,7 @@ This task list is optimized for execution via multiple agent chats in Cursor:
 
 #### Traceability Infrastructure
 
-- [ ] T021-001 [P] [US1] [US2] @agent-1 Infrastructure: Implement @trace_calculation decorator in backend/src/engines/calc/decorators.py. This must automatically append TraceEntry objects to a context-scoped TraceLog for every CAL execution.
+- [ ] T021-001 [P] [US1] [US2] @agent-1 Infrastructure: Implement @trace_calculation decorator in backend/calculation_engine/decorators.py. This must automatically append TraceEntry objects to a context-scoped TraceLog for every CAL execution.
 
 ---
 

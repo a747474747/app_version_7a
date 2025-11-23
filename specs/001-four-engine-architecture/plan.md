@@ -4,6 +4,7 @@
 **Created**: November 21, 2025
 **Status**: Draft
 **Input**: User description: "create the spec from this:@design/interaction_architecture.md @calculation_catalog.md"
+**References**: `@specs/001-four-engine-architecture/design/architecture_integration_map.md` (Architecture Integration)
 
 ---
 
@@ -66,7 +67,51 @@ This implementation builds a **Four-Engine Architecture** for financial advice s
 | **SC-009**: Optimistic UI updates < 100ms | TanStack Query optimistic updates |
 | **SC-010**: Authoritative educational citations | RAG integration |
 
-### 1.5 Design References & Blueprints
+### 1.5 Backend Architecture & Folder Structure
+
+**Four-Engine Folder Architecture**: Each computational engine has its own dedicated backend folder for clear separation of concerns and independent development/deployment:
+
+```
+backend/
+├── calculation_engine/        # ← Calculation Engine (Deterministic)
+│   ├── domains/               # Tax, CGT, Super, Property calculations
+│   ├── schemas/               # Pydantic models for calc I/O
+│   ├── utils/                 # Calculation utilities & tracing
+│   ├── registry.py            # CAL-* ID to function mapping
+│   ├── projection.py          # Year-over-year projections
+│   └── __init__.py            # Engine entry point
+├── llm_engine/               # ← LLM Orchestrator (Probabilistic)
+│   ├── orchestrator.py        # Main orchestration logic
+│   ├── state_hydration.py     # Natural language → CalculationState
+│   ├── narrative_generation.py# CalculationState → human readable
+│   ├── intent_recognition.py  # Mode selection logic
+│   └── privacy_filter.py      # PII redaction utilities
+├── strategy_engine/          # ← Strategy Engine (Optimization)
+│   └── [optimization loops, scenario comparison]
+├── advice_engine/            # ← Advice Engine (Compliance)
+│   └── [regulatory validation, BID checks]
+├── src/                      # ← Shared FastAPI application
+│   ├── main.py               # FastAPI app & routing
+│   ├── routers/              # API endpoints
+│   ├── services/             # Business logic services
+│   ├── models/               # Database models
+│   ├── auth/                 # Authentication middleware
+│   ├── utils/                # Shared utilities
+│   └── engines/              # ← LEGACY: Will be migrated to dedicated folders
+│       ├── llm/              # → migrate to llm_engine/
+│       ├── strategy/         # → migrate to strategy_engine/
+│       └── advice/           # → migrate to advice_engine/
+└── [other backend infrastructure: tests/, alembic/, etc.]
+```
+
+**Key Architectural Decisions:**
+- **Engine Isolation**: Each engine in its own folder enables independent testing, deployment, and scaling
+- **Clear Boundaries**: No cross-engine imports - engines communicate via defined interfaces
+- **Migration Path**: Existing engines in `backend/src/engines/` will be migrated to dedicated folders (`llm_engine/`, `strategy_engine/`, `advice_engine/`)
+- **Shared Infrastructure**: `src/` contains FastAPI app, database models, and common services
+- **Domain Separation**: Calculation Engine isolated from probabilistic LLM operations
+
+### 1.6 Design References & Blueprints
 
 This section provides access to the architectural blueprints and pattern libraries that guide the four-engine implementation:
 
@@ -356,7 +401,7 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 ### Implementation Tasks
 
 **Phase 2.1: Engine Foundation (The "Golden Four")**
-- Implement CalculationState and ProjectionOutput models in backend/src/models (shared) directory, distinct from backend/src/engines/calc directory, to avoid circular dependencies if the Strategy Engine needs to import them
+- Implement CalculationState and ProjectionOutput models in shared/schemas/ directory, distinct from backend/calculation_engine/ directory, to avoid circular dependencies if the Strategy Engine needs to import them
 - Create TraceLog mechanism with CAL-* ID traceability
 - Build Calculation Engine core implementing MVP Core tier calculations from calculation_catalog.md:
   - CAL-PIT-001 to 005 (PAYG & Net Tax)
@@ -392,7 +437,7 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 
 **Implementation Tasks**:
 
-1.  **Create Directory Structure**: Set up `backend/src/engines/calculation/domains/`.
+1.  **Create Directory Structure**: Set up `backend/calculation_engine/domains/`.
 
 2.  **Implement RuleLoader**: Build service to read `specs/rules/*.yaml` instead of hardcoding values (Completes T009b).
 
@@ -476,9 +521,35 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 - Implement Hypothesis-Driven Logic Factory (LLM writes the math code)
 - Integrate RAG for educational responses
 
-**Phase 2.5: LLM Connection & Future Workflow Integration**
+**Phase 2.5: LLM Tiered Routing Strategy & Orchestrator Connectivity**
 
-### 2.5.1 Domain Knowledge Base Setup
+### 2.5.1 LLM Tiered Routing Strategy Implementation
+**Implement dynamic model selection system for optimal cost-performance trade-offs:**
+
+**Reference:** `@specs/001-four-engine-architecture/design/llm_strategy.md`
+
+**Three Intelligence Tiers:**
+- **ROUTER** (Fast/Cheap): Intent recognition, lightweight classification (sub-second responses)
+- **NARRATOR** (Fluency/Tone): Natural language generation, conversational responses (2-5 second responses)
+- **THINKER** (Complex Reasoning): Multi-step analysis, strategic optimization (5-15 second responses)
+
+**Dynamic Registry System:**
+- **Model Registry Service**: Fetches complete OpenRouter catalog daily, caches locally with 24h TTL
+- **Algorithmic Selection**: Multi-criteria scoring based on cost, performance, and capabilities
+- **Fallback Mechanisms**: Graceful degradation when preferred models unavailable
+
+**Backend Implementation Tasks:**
+- Create tier enums and OpenRouter API schemas in `backend/calculation_engine/schemas/`
+- Build Model Registry Service (`backend/llm_engine/model_registry.py`)
+- Implement Tier Selector Logic (`backend/llm_engine/tier_selector.py`)
+- Update OpenRouter Client with dynamic model selection
+
+**Quality Assurance:**
+- Automated model availability and performance validation
+- Cost threshold monitoring and budget guardrails
+- Selection algorithm testing and optimization
+
+### 2.5.2 Domain Knowledge Base Setup
 **Create comprehensive internal source materials for LLM prompt development:**
 
 - Create Australian Financial System primer (`/specs/001-four-engine-architecture/llm-source-materials/australian-financial-system.md`)
@@ -517,7 +588,7 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 
 **Purpose**: These materials provide comprehensive context for developers creating and maintaining LLM prompts, ensuring consistent understanding of Australian financial services without exposing sensitive internal knowledge to external LLMs.
 
-### 2.5.2 Prompt Management System Setup
+### 2.5.3 Prompt Management System Setup
 **Create structured system for managing LLM prompts:**
 
 - Create prompt directory structure:
@@ -541,12 +612,14 @@ Consolidated findings with decisions, rationale, and alternatives considered for
 
 **Purpose**: Ensure prompts are separated from scripts, catalogued, reusable, and aligned with the 26 operational modes defined in workflows_and_modes.md.
 
-### 2.5.3 LLM Orchestrator Implementation
-- Implement LLM Orchestrator (intent classification)
-- Add state hydration capabilities
-- Create narrative generation templates
-- Implement Hypothesis-Driven Logic Factory (LLM writes the math code)
-- Integrate RAG for educational responses
+### 2.5.4 LLM Orchestrator Implementation
+- Implement LLM Orchestrator with tiered routing integration:
+  - **Intent Recognition**: Uses ROUTER tier for fast mode classification
+  - **State Hydration**: Uses NARRATOR tier for conversational parsing
+  - **Strategy Nomination**: Uses THINKER tier for complex optimization
+  - **Narrative Generation**: Uses NARRATOR tier for human-readable explanations
+- Add Hypothesis-Driven Logic Factory (LLM writes the math code)
+- Integrate RAG for educational responses using tiered routing
 
 **Phase 2.6: API Layer**
 - Build FastAPI endpoints following contracts

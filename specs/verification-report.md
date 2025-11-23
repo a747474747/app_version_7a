@@ -77,8 +77,8 @@ This report validates that the architectural changes did not break any existing 
 
 | Task | Description | Status | Verification |
 |------|-------------|--------|--------------|
-| T017a | Created backend/src/engines/calculation/domains/ | ✅ | Directory exists as backend/calculation_engine/domains/ |
-| T017b | Created backend/src/engines/calculation/registry.py | ✅ | Registry exists with CALCULATION_REGISTRY dict |
+| T017a | Created backend/calculation_engine/domains/ | ✅ | Directory exists as backend/calculation_engine/domains/ |
+| T017b | Created backend/calculation_engine/registry.py | ✅ | Registry exists with CALCULATION_REGISTRY dict |
 | T017c | RuleLoader service implementation | ✅ | RuleLoader class loads from config/rules/ directory |
 | T017d | tax_personal.py with CAL-PIT-001,002,004,005 | ✅ | Functions implemented and use RuleLoader |
 | T017e | cgt.py with CAL-CGT-001,002 | ✅ | Functions implemented |
